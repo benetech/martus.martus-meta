@@ -3,11 +3,11 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
@@ -192,7 +192,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	MockMartusServer testServer;
 	NetworkInterfaceForNonSSL testServerInterface;
 	NetworkInterface testSSLServerInterface;
-	UiLocalization localization;
+	UiBasicLocalization localization;
 	MockMartusApp app;
 	Bulletin b0;
 	Bulletin b1;

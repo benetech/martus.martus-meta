@@ -3,11 +3,11 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
@@ -203,7 +203,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	NetworkInterfaceForNonSSL testServerInterface;
 	NetworkInterface testSSLServerInterface;
 	MockMartusApp app;
-	UiLocalization localization;
+	UiBasicLocalization localization;
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;

@@ -5,7 +5,6 @@ import java.util.Vector;
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinSummary;
-import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
@@ -17,6 +16,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.test.TestCaseEnhanced;
@@ -647,7 +647,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	String title1 = "This is a cool title";
 	String title2 = "Even cooler";
 
-	static UiLocalization localization;
+	static UiBasicLocalization localization;
 	private static MockMartusSecurity mockSecurityForApp;
 	private static MockMartusSecurity mockSecurityForServer;
 
