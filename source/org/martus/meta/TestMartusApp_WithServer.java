@@ -640,7 +640,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("retrieve all", NetworkInterfaceConstants.OK, retriever.getResult());
 		assertEquals("not back to three?", 3, store.getBulletinCount());
 		
-		Bulletin b3got = store.findBulletinByUniversalId(b3.getUniversalId());
+		Bulletin b3got = store.getBulletinRevision(b3.getUniversalId());
 		assertEquals("missing author?", b3.get(Bulletin.TAGAUTHOR), b3got.get(Bulletin.TAGAUTHOR));
 		
 		TRACE_END();

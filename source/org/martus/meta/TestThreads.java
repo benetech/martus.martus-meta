@@ -375,7 +375,7 @@ System.out.flush();
 					BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase(db, null, zip, security);
 					zip.close();
 
-					Bulletin b = store.findBulletinByUniversalId(headerKey.getUniversalId());
+					Bulletin b = store.getBulletinRevision(headerKey.getUniversalId());
 					assertTrue("import didn't work?", store.doesBulletinRevisionExist(headerKey.getUniversalId()));
 					store.destroyBulletin(b);
 				}
