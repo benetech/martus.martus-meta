@@ -31,7 +31,7 @@ import java.io.Writer;
 import java.util.zip.ZipFile;
 
 import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.BulletinStore;
+import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.test.MockBulletinStore;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
@@ -158,7 +158,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		BulletinStore store;
+		ClientBulletinStore store;
 	}
 	
 	class ExportThreadFactory extends ThreadFactory
@@ -181,7 +181,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		BulletinStore store;
+		ClientBulletinStore store;
 		Bulletin b;
 	}
 	
@@ -202,7 +202,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		BulletinStore store;		
+		ClientBulletinStore store;		
 	}
 	
 	class PacketWriteThreadFactory extends ThreadFactory
@@ -222,7 +222,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		BulletinStore store;		
+		ClientBulletinStore store;		
 	}
 	
 	class FolderListThreadFactory extends ThreadFactory
@@ -242,7 +242,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		BulletinStore store;
+		ClientBulletinStore store;
 		int nextId;	
 	}
 	
@@ -263,7 +263,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		BulletinStore store;
+		ClientBulletinStore store;
 	}
 	
 	abstract class TestingThread extends Thread
@@ -278,7 +278,7 @@ public class TestThreads extends TestCaseEnhanced
 
 	class BulletinTester extends TestingThread
 	{
-		BulletinTester(BulletinStore storeToUse, int copiesToDo) throws Exception
+		BulletinTester(ClientBulletinStore storeToUse, int copiesToDo) throws Exception
 		{
 			store = storeToUse;
 			copies = copiesToDo;
@@ -307,7 +307,7 @@ System.out.flush();
 			}
 		}
 		
-		BulletinStore store;
+		ClientBulletinStore store;
 		int copies;
 		String folderName;
 		Bulletin[] bulletins;
@@ -315,7 +315,7 @@ System.out.flush();
 
 	class Exporter extends TestingThread
 	{
-		Exporter(BulletinStore store, Bulletin bulletinToExport, int copiesToExport) throws Exception
+		Exporter(ClientBulletinStore store, Bulletin bulletinToExport, int copiesToExport) throws Exception
 		{
 			bulletin = bulletinToExport;
 			file = createTempFile();
@@ -348,7 +348,7 @@ System.out.flush();
 
 	class Importer extends TestingThread
 	{
-		Importer(BulletinStore storeToUse, int copiesToDo) throws Exception
+		Importer(ClientBulletinStore storeToUse, int copiesToDo) throws Exception
 		{
 			copies = copiesToDo;
 			store = storeToUse;
@@ -386,7 +386,7 @@ System.out.flush();
 			}
 		}
 		
-		BulletinStore store;
+		ClientBulletinStore store;
 		File file;
 		int copies;
 		Database db;
@@ -396,7 +396,7 @@ System.out.flush();
 
 	class PacketWriter extends TestingThread
 	{
-		PacketWriter(BulletinStore storeToUse, int copiesToDo) throws Exception
+		PacketWriter(ClientBulletinStore storeToUse, int copiesToDo) throws Exception
 		{
 			
 			copies = copiesToDo;
@@ -431,7 +431,7 @@ System.out.flush();
 
 	class FolderListTester extends TestingThread
 	{
-		FolderListTester(BulletinStore storeToUse, int copiesToDo, int id) throws Exception
+		FolderListTester(ClientBulletinStore storeToUse, int copiesToDo, int id) throws Exception
 		{
 			store = storeToUse;
 			copies = copiesToDo;
@@ -470,14 +470,14 @@ System.out.flush();
 			}
 		}
 		
-		BulletinStore store;
+		ClientBulletinStore store;
 		int copies;
 		String folderName;
 	}
 
 	class FolderContentsTester extends TestingThread
 	{
-		FolderContentsTester(BulletinStore storeToUse, int copiesToDo) throws Exception
+		FolderContentsTester(ClientBulletinStore storeToUse, int copiesToDo) throws Exception
 		{
 			store = storeToUse;
 			copies = copiesToDo;
@@ -521,7 +521,7 @@ System.out.flush();
 			}
 		}
 		
-		BulletinStore store;
+		ClientBulletinStore store;
 		int copies;
 		String folderName;
 		Bulletin[] bulletins;

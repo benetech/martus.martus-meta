@@ -30,7 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
 import org.martus.client.core.BackgroundUploader;
-import org.martus.client.core.BulletinStore;
+import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
@@ -117,7 +117,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	public void testRetrieveMyDraftsMarksAllAsOnServer() throws Exception
 	{
 		MartusApp app = appWithServer;
-		BulletinStore store = app.getStore();
+		ClientBulletinStore store = app.getStore();
 		
 		Bulletin b1 = createAndUploadPrivateSealed(app, sampleSummary1);
 		Bulletin b2 = createAndUploadPublicSealed(app, sampleSummary2);
@@ -144,7 +144,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	public void testRetrieveMySealedBulletinsMarksAllAsOnServer() throws Exception
 	{
 		MartusApp app = appWithServer;
-		BulletinStore store = app.getStore();
+		ClientBulletinStore store = app.getStore();
 		
 		Bulletin b1 = createAndUploadPrivateSealed(app, sampleSummary1);
 		Bulletin b2 = createAndUploadPublicSealed(app, sampleSummary2);
@@ -193,7 +193,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
 		model.initialize(null);
 
-		BulletinStore hqStore = hqApp.getStore();
+		ClientBulletinStore hqStore = hqApp.getStore();
 		assertTrue("b1 not on?", hqStore.isProbablyOnServer(b1));
 		assertTrue("b2 not on?", hqStore.isProbablyOnServer(b2));
 		assertFalse("b3 now on?", hqStore.isProbablyOnServer(b3));
@@ -233,7 +233,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(hqApp, localization);
 		model.initialize(null);
 
-		BulletinStore hqStore = hqApp.getStore();
+		ClientBulletinStore hqStore = hqApp.getStore();
 		assertFalse("b1 now on?", hqStore.isProbablyOnServer(b1));
 		assertFalse("b2 now on?", hqStore.isProbablyOnServer(b2));
 		assertTrue("b3 not on?", hqStore.isProbablyOnServer(b3));
@@ -372,7 +372,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b1 = createAndUploadPrivateSealed(appWithServer, sampleSummary1);
 		long b1LastDateSaved = b1.getBulletinHeaderPacket().getLastSavedTime();
 
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		int b1Size = MartusUtilities.getBulletinSize(store.getDatabase(),b1.getBulletinHeaderPacket());
 		store.destroyBulletin(b1);
 
@@ -743,7 +743,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		Bulletin b = createBulletin(app, title, allPrivate, sealed);
 		uploadBulletin(app, b);
-		BulletinStore store = app.getStore();
+		ClientBulletinStore store = app.getStore();
 		assertFalse("new bulletin is marked as being on the server?", store.isProbablyOnServer(b));
 		assertFalse("new bulletin is marked as being not on the server?", store.isProbablyNotOnServer(b));
 		return b;
@@ -771,7 +771,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	private void deleteBulletin(MartusApp app, Bulletin b) throws IOException
 	{
-		BulletinStore store = app.getStore();
+		ClientBulletinStore store = app.getStore();
 		store.destroyBulletin(b);
 	}
 

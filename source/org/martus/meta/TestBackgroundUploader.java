@@ -31,7 +31,7 @@ import java.util.Vector;
 
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.BulletinStore;
+import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.BackgroundUploader.UploadResult;
 import org.martus.client.test.MockMartusApp;
@@ -260,7 +260,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 	Bulletin createAndUploadSampleBulletin() throws Exception
 	{
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		mockServer.allowUploads(appWithServer.getAccountId());
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setSealed();

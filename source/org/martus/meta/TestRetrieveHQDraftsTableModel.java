@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.BulletinStore;
+import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
@@ -71,12 +71,12 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
 		fieldApp1 = MockMartusApp.create(fieldSecurity1);
-		final BulletinStore store1 = fieldApp1.getStore();
+		final ClientBulletinStore store1 = fieldApp1.getStore();
 		Database db1 = store1.getDatabase();
 
 		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2);
-		final BulletinStore store2 = fieldApp2.getStore();
+		final ClientBulletinStore store2 = fieldApp2.getStore();
 		Database db2 = store2.getDatabase();
 
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());

@@ -32,7 +32,7 @@ import java.util.Vector;
 
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.BulletinStore;
+import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
@@ -130,7 +130,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testBasics");
 
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		assertNotNull("BulletinStore", store);
 		TRACE_END();
 	}
@@ -545,7 +545,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("upload b2", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
 		assertEquals("upload b3", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b3));
 
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		store.removeBulletinFromStore(b1.getUniversalId());
 		store.removeBulletinFromStore(b2.getUniversalId());
 		store.removeBulletinFromStore(b3.getUniversalId());
@@ -571,7 +571,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
 		
 		appWithServer.getStore().deleteAllData();
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		assertEquals("No bulletins", 0, store.getBulletinCount());
 
 		Vector empty = new Vector();
@@ -591,7 +591,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
 	
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 
 		Bulletin b1 = appWithServer.createBulletin();
 		b1.setSealed();
@@ -653,7 +653,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Bulletin b = createAndUploadSampleBulletin();
 		
 		appWithServer.serverChunkSize = 100;
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		appWithServer.retrieveOneBulletinToFolder(b.getUniversalId(), store.getFolderDiscarded(), null);
 		
 		appWithServer.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
@@ -677,7 +677,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(Base64.encode(bulletinBytes));
 		mockServer.downloadResponse = response;
 		
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		store.setIsNotOnServer(b);
 		appWithServer.retrieveOneBulletinToFolder(b.getUniversalId(), appWithServer.getFolderDiscarded(), null);
 		assertTrue("didn't set on server?", store.isProbablyOnServer(b));
@@ -1120,7 +1120,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_BEGIN("testIsDraftOutboxEmpty");
 		File file = appWithServer.getUploadInfoFile();
 		file.delete();
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 
 		store.deleteAllData();
 		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
@@ -1141,7 +1141,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_BEGIN("testIsSealedOutboxEmpty");
 		File file = appWithServer.getUploadInfoFile();
 		file.delete();
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 
 		store.deleteAllData();
 		BulletinFolder sealedOutbox = appWithServer.getFolderSealedOutbox();
@@ -1235,7 +1235,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	Bulletin createAndUploadSampleBulletin() throws Exception
 	{
-		BulletinStore store = appWithServer.getStore();
+		ClientBulletinStore store = appWithServer.getStore();
 		mockServer.allowUploads(appWithServer.getAccountId());
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setSealed();
