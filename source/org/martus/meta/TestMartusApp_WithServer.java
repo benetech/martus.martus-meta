@@ -217,7 +217,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		final String serverCompliance2 = "Compliant2";
 		
 		MockMartusApp app = MockMartusApp.create();
-		app.security =mockSecurityForApp;
+		app.setSecurity(mockSecurityForApp);
 		app.setServerInfo(server1, key1, serverCompliance1);
 		assertEquals("Didn't set Configinfo name", server1, app.getConfigInfo().getServerName());
 		assertEquals("Didn't set Configinfo key", key1, app.getConfigInfo().getServerPublicKey());
