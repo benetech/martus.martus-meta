@@ -99,16 +99,16 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	{
 		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_DATE));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_SIZE));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetColumnClass()
 	{
 		assertEquals(Boolean.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
 		assertEquals(String.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_TITLE));
-		assertEquals(String.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_DATE));
-		assertEquals(Integer.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_SIZE));
+		assertEquals(String.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(Integer.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testRowCount()
@@ -127,9 +127,9 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 2,DeleteMyServerDraftsTableModel.COLUMN_TITLE);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,DeleteMyServerDraftsTableModel.COLUMN_TITLE));
 
-		assertEquals("Date Saved", dateSaved1, modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_DATE));
-		modelWithData.setValueAt("today", 1,DeleteMyServerDraftsTableModel.COLUMN_DATE);
-		assertEquals("keep title", dateSaved1, modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_DATE));
+		assertEquals("Date Saved", dateSaved1, modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		modelWithData.setValueAt("today", 1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED);
+		assertEquals("keep title", dateSaved1, modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
 	}
 	
 	public void testSetAllFlags()

@@ -95,8 +95,8 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	{
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_RETRIEVE_FLAG));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_DATE));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_SIZE));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetColumnCount()
@@ -115,16 +115,16 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	{
 		assertEquals("flag", true, modelWithData.isCellEditable(1,RetrieveMyTableModel.COLUMN_RETRIEVE_FLAG));
 		assertEquals("title", false, modelWithData.isCellEditable(1,RetrieveMyTableModel.COLUMN_TITLE));
-		assertEquals("size", false, modelWithData.isCellEditable(1,RetrieveMyTableModel.COLUMN_DATE));
-		assertEquals("date", false, modelWithData.isCellEditable(1,RetrieveMyTableModel.COLUMN_SIZE));
+		assertEquals("size", false, modelWithData.isCellEditable(1,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals("date", false, modelWithData.isCellEditable(1,RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetColumnClass()
 	{
 		assertEquals(Boolean.class, modelWithData.getColumnClass(RetrieveMyTableModel.COLUMN_RETRIEVE_FLAG));
 		assertEquals(String.class, modelWithData.getColumnClass(RetrieveMyTableModel.COLUMN_TITLE));
-		assertEquals(String.class, modelWithData.getColumnClass(RetrieveMyTableModel.COLUMN_DATE));
-		assertEquals(Integer.class, modelWithData.getColumnClass(RetrieveMyTableModel.COLUMN_SIZE));
+		assertEquals(String.class, modelWithData.getColumnClass(RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(Integer.class, modelWithData.getColumnClass(RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -137,17 +137,17 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 2,RetrieveMyTableModel.COLUMN_TITLE);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_TITLE));
 
-		assertEquals("b0 size", new Integer(b0Size/1000), modelWithData.getValueAt(0,RetrieveMyTableModel.COLUMN_SIZE));
-		assertEquals("b1 size", new Integer(b1Size/1000), modelWithData.getValueAt(1,RetrieveMyTableModel.COLUMN_SIZE));
-		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_SIZE));
+		assertEquals("b0 size", new Integer(b0Size/1000), modelWithData.getValueAt(0,RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals("b1 size", new Integer(b1Size/1000), modelWithData.getValueAt(1,RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
 
-		assertEquals("start date1", "", modelWithData.getValueAt(0,RetrieveMyTableModel.COLUMN_DATE));
-		modelWithData.setValueAt("some date1", 0,RetrieveMyTableModel.COLUMN_DATE);
-		assertEquals("keep date1", "", modelWithData.getValueAt(0,RetrieveMyTableModel.COLUMN_DATE));
+		assertEquals("start date1", "", modelWithData.getValueAt(0,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
+		modelWithData.setValueAt("some date1", 0,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED);
+		assertEquals("keep date1", "", modelWithData.getValueAt(0,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
 
-		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_DATE));
-		modelWithData.setValueAt("some date2", 2,RetrieveMyTableModel.COLUMN_DATE);
-		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_DATE));
+		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
+		modelWithData.setValueAt("some date2", 2,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED);
+		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
 	}
 	
 
