@@ -47,6 +47,7 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
@@ -104,6 +105,11 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b2.set(Bulletin.TAGAUTHOR, author2);
 		b2.setAllPrivate(true);
 		b2.setAuthorizedToReadKeys(hqKeys);
+		BulletinHistory history2 = new BulletinHistory();
+		history2.add(b1.getLocalId());
+		historyId = UniversalId.createFromAccountAndLocalId(b2.getAccount(), b1.getLocalId());
+		b2.setHistory(history2);
+		
 		fieldApp2.getStore().saveBulletin(b2);
 		b2Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b2.getBulletinHeaderPacket());
 	
@@ -113,6 +119,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQTableModel(hqApp, localization);
 		modelWithData.initialize(null);
+		modelWithData.setAllFlags(false);
 
 		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
@@ -229,12 +236,14 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	public void testGetIdList()
 	{
 		modelWithData.setAllFlags(false);
-		Vector emptyList = modelWithData.getUniversalIdList();
+		Vector emptyList = modelWithData.getSelectedUidsLatestVersion();
+		assertEquals(0, emptyList.size());
+		emptyList = modelWithData.getSelectedUidsFullHistory();
 		assertEquals(0, emptyList.size());
 		
 		modelWithData.setAllFlags(true);
 
-		Vector fullList = modelWithData.getUniversalIdList();
+		Vector fullList = modelWithData.getSelectedUidsLatestVersion();
 		assertEquals(3, fullList.size());
 		assertNotEquals("hq account ID0?", hqApp.getAccountId(), ((UniversalId)fullList.get(0)).getAccountId());
 		assertNotEquals("hq account ID1?", hqApp.getAccountId(), ((UniversalId)fullList.get(1)).getAccountId());
@@ -244,12 +253,32 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertContains("b1 Uid not in list?", b1.getUniversalId(), fullList);
 		assertContains("b2 Uid not in list?", b2.getUniversalId(), fullList);
 
+		Vector fullHistoryList = modelWithData.getSelectedUidsFullHistory();
+		assertEquals(4, fullHistoryList.size());
+		assertNotEquals("hq account ID0 fullHistoryList?", hqApp.getAccountId(), ((UniversalId)fullHistoryList.get(0)).getAccountId());
+		assertNotEquals("hq account ID1 fullHistoryList?", hqApp.getAccountId(), ((UniversalId)fullHistoryList.get(1)).getAccountId());
+		assertNotEquals("hq account ID2 fullHistoryList?", hqApp.getAccountId(), ((UniversalId)fullHistoryList.get(2)).getAccountId());
+		assertNotEquals("hq account ID3 fullHistoryList?", hqApp.getAccountId(), ((UniversalId)fullHistoryList.get(3)).getAccountId());
+
+		assertContains("b0 Uid not in list?", b0.getUniversalId(), fullHistoryList);
+		assertContains("b1 Uid not in list?", b1.getUniversalId(), fullHistoryList);
+		assertContains("b2 Uid not in list?", b2.getUniversalId(), fullHistoryList);
+		assertContains("history Uid not in list?", historyId, fullHistoryList);
+
+		
 		modelWithData.setValueAt(new Boolean(false), 1, 0);
-		Vector twoList = modelWithData.getUniversalIdList();
+		Vector twoList = modelWithData.getSelectedUidsLatestVersion();
 
 		assertEquals(2, twoList.size());
 		assertEquals("b0 id", fullList.get(0), twoList.get(0));
 		assertEquals("b2 id", fullList.get(2), twoList.get(1));
+
+		Vector fullHistoryListTwo = modelWithData.getSelectedUidsFullHistory();
+
+		assertEquals(3, fullHistoryListTwo.size());
+		assertEquals("b0 id", fullHistoryList.get(0), fullHistoryListTwo.get(0));
+		assertEquals("b2 id", fullHistoryList.get(2), fullHistoryListTwo.get(1));
+		assertEquals("history id", fullHistoryList.get(3), fullHistoryListTwo.get(2));
 	}
 
 	class MockServer extends MockMartusServer
@@ -287,7 +316,10 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 							BulletinSummary.fieldDelimeter + 
 							b2Size + 
 							BulletinSummary.fieldDelimeter + 
-							dateSavedInMillis2);
+							dateSavedInMillis2 +
+							BulletinSummary.fieldDelimeter + 
+							b2.getHistory().get(0)
+							);
 				result.add(list);
 				return result;
 			}
@@ -359,6 +391,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	static Bulletin b0;
 	static Bulletin b1;
 	static Bulletin b2;
+	static UniversalId historyId;
 
 	static RetrieveHQTableModel modelWithData;
 	static RetrieveHQTableModel modelWithoutData;

@@ -40,6 +40,7 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NonSSLNetworkAPI;
+import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
@@ -71,6 +72,10 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		app.getStore().saveBulletin(b1);
 		b2 = app.createBulletin();
 		b2.set(Bulletin.TAGTITLE, title2);
+		BulletinHistory history2 = new BulletinHistory();
+		history2.add(b1.getLocalId());
+		historyId = UniversalId.createFromAccountAndLocalId(b2.getAccount(), b1.getLocalId());
+		b2.setHistory(history2);
 		app.getStore().saveBulletin(b2);
 
 		testServer = new MockServer();
@@ -172,15 +177,23 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	public void testGetIdList()
 	{
 		modelWithData.setAllFlags(false);
-		Vector emptyList = modelWithData.getUniversalIdList();
+		Vector emptyList = modelWithData.getSelectedUidsLatestVersion();
+		assertEquals(0, emptyList.size());
+		emptyList = modelWithData.getSelectedUidsFullHistory();
 		assertEquals(0, emptyList.size());
 		
 		modelWithData.setAllFlags(true);
 		modelWithData.setValueAt(new Boolean(false), 1, 0);
-		Vector twoList = modelWithData.getUniversalIdList();
+		Vector twoList = modelWithData.getSelectedUidsLatestVersion();
 		assertEquals(2, twoList.size());
 		assertEquals("b0 id", b0.getUniversalId(), twoList.get(0));
 		assertEquals("b2 id", b2.getUniversalId(), twoList.get(1));
+
+		Vector fullList = modelWithData.getSelectedUidsFullHistory();
+		assertEquals(3, fullList.size());
+		assertEquals("b0 id full History", b0.getUniversalId(), fullList.get(0));
+		assertEquals("b2 id full History", b2.getUniversalId(), fullList.get(1));
+		assertEquals("History id full History", historyId, fullList.get(2));
 	}
 
 	class MockServer extends MockMartusServer
@@ -214,7 +227,10 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 						BulletinSummary.fieldDelimeter + 
 						b2Size + 
 						BulletinSummary.fieldDelimeter + 
-						dateSavedInMillis2);
+						dateSavedInMillis2 +
+						BulletinSummary.fieldDelimeter + 
+						b2.getHistory().get(0)
+					);
 				result.add(list);
 				Vector sizes = new Vector();
 				if(retrieveTags.size() == 1)
@@ -272,6 +288,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
+	UniversalId historyId;
 
 	RetrieveMyTableModel modelWithData;
 	RetrieveMyTableModel modelWithoutData;

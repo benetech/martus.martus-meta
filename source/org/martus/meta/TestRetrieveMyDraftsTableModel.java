@@ -41,6 +41,7 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NonSSLNetworkAPI;
+import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
@@ -73,6 +74,10 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		app.getStore().saveBulletin(b1);
 		b2 = app.createBulletin();
 		b2.set(Bulletin.TAGTITLE, title2);
+		BulletinHistory history2 = new BulletinHistory();
+		history2.add(b1.getLocalId());
+		historyId = UniversalId.createFromAccountAndLocalId(b2.getAccount(), b1.getLocalId());
+		b2.setHistory(history2);
 		b2.setDraft();
 		app.getStore().saveBulletin(b2);
 
@@ -170,14 +175,22 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	public void testGetIdList()
 	{
 		modelWithData.setAllFlags(false);
-		Vector emptyList = modelWithData.getUniversalIdList();
+		Vector emptyList = modelWithData.getSelectedUidsLatestVersion();
+		assertEquals(0, emptyList.size());
+		emptyList = modelWithData.getSelectedUidsFullHistory();
 		assertEquals(0, emptyList.size());
 		
 		modelWithData.setAllFlags(true);
-		modelWithData.setValueAt(new Boolean(false), 1, modelWithData.COLUMN_RETRIEVE_FLAG);
-		Vector twoList = modelWithData.getUniversalIdList();
+		modelWithData.setValueAt(new Boolean(false), 0, modelWithData.COLUMN_RETRIEVE_FLAG);
+		Vector twoList = modelWithData.getSelectedUidsLatestVersion();
 		assertEquals(1, twoList.size());
-		assertEquals("b0 id", b0.getUniversalId(), twoList.get(0));
+		assertEquals("b2 id", b2.getUniversalId(), twoList.get(0));
+		
+		Vector fullVersionList = modelWithData.getSelectedUidsFullHistory();
+		assertEquals(2, fullVersionList.size());
+		assertEquals("b2 id not in FullHistory list", b2.getUniversalId(), twoList.get(0));
+		assertContains("History Uid not in Full Historylist?", historyId, fullVersionList);
+		
 	}
 
 	class MockServer extends MockMartusServer
@@ -210,7 +223,9 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 						BulletinSummary.fieldDelimeter + 
 						b2Size + 
 						BulletinSummary.fieldDelimeter + 
-						dateSavedInMillis2);
+						dateSavedInMillis2 +
+						BulletinSummary.fieldDelimeter +
+						b2.getHistory().get(0));
 
 				
 				result.add(list);
@@ -262,6 +277,8 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
+	
+	UniversalId historyId;
 	
 	RetrieveMyDraftsTableModel modelWithData;
 	RetrieveMyDraftsTableModel modelWithoutData;
