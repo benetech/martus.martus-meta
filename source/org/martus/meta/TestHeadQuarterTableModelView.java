@@ -52,18 +52,20 @@ public class TestHeadQuarterTableModelView extends TestCaseEnhanced
 			return;
 		localization = new MockUiLocalization();
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
-		app = MockMartusApp.create(appSecurityAndHQ);
+		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
 		modelWithData = new HeadQuartersTableModelView(localization);
 		key1 = new HQKey(publicCode1, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized);
-		HeadQuarterEntry entry1 = new HeadQuarterEntry(app, localization, key1);
+		app.setHQLabelsIfPresent(HQKeysAuthorized);
+		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
 		
 		key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(app, localization, key2);
+		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
+		key2.setLabel(app.getHQLabelIfPresent(key2));
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
 		modelWithoutData = new HeadQuartersTableModelView(localization);

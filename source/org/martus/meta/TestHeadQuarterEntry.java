@@ -57,21 +57,22 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 	{
 		MartusCrypto appSecurityAndHQ = MockMartusSecurity.createHQ();
 		MockUiLocalization localization = new MockUiLocalization();
-		MockMartusApp app = MockMartusApp.create(appSecurityAndHQ);
+		MockMartusApp app = MockMartusApp.create(appSecurityAndHQ, localization);
 
 		String publicCode1 = "123.436";
 		String label1 = "key1 label";
 		HQKey key1 = new HQKey(publicCode1, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized);
-		HeadQuarterEntry entry1 = new HeadQuarterEntry(app, localization, key1);
+		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		entry1.setSelected(false);
 		assertEquals(label1, entry1.getLabel());
 		assertEquals(key1, entry1.getKey());
 		assertFalse("Entry is selected?", entry1.isSelected());
 		
 		HQKey key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(app, localization, key2);
+		key2.setLabel(app.getHQLabelIfPresent(key2));
+		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		entry2.setSelected(true);
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, entry2.getLabel());
