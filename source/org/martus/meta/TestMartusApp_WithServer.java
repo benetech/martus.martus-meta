@@ -324,7 +324,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		String clientId = appWithServer.getAccountId();
 		mockSecurityForApp.loadSampleAccount();
-		mockServer.serverForClients.addMagicWord(sampleMagicWord);
+		mockServer.serverForClients.addMagicWordForTesting(sampleMagicWord, null);
 		
 		assertEquals("can upload already?", false, mockServer.canClientUpload(clientId));
 		assertEquals("wrong word worked?", false, appWithServer.requestServerUploadRights("wrong word"));
@@ -336,7 +336,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("right word failed?", true, appWithServer.requestServerUploadRights(sampleMagicWord));
 		assertEquals("still can't upload?", true, mockServer.canClientUpload(clientId));
 		assertEquals("empty word failed after right word passed?", true, appWithServer.requestServerUploadRights(""));
-		mockServer.serverForClients.addMagicWord(null);
+		mockServer.serverForClients.addMagicWordForTesting(null, null);
 	}
 	
 	class MockMartusServerChunks extends MockMartusServer 
