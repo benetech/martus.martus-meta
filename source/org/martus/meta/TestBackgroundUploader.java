@@ -112,7 +112,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		createSealedBulletin(appWithoutServer);
 		UploadResult result = uploaderWithoutServer.backgroundUpload();
 		assertNull("No server", result.result);
-		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderOutbox().getBulletinCount());
+		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderSealedOutbox().getBulletinCount());
 		TRACE_END();
 	}
 
@@ -131,7 +131,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testBackgroundUploadNothingToSend");
 		mockSecurityForApp.loadSampleAccount();
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
+		BulletinFolder outbox = appWithServer.getFolderSealedOutbox();
 
 		assertEquals("Empty outbox", 0, outbox.getBulletinCount());
 		UploadResult result = uploaderWithServer.backgroundUpload();
@@ -144,7 +144,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadSealedWorked");
 		mockSecurityForApp.loadSampleAccount();
 		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
+		BulletinFolder outbox = appWithServer.getFolderSealedOutbox();
 		
 		mockServer.allowUploads(appWithServer.getAccountId());
 		mockServer.loadBannedClients();
@@ -152,7 +152,6 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		UploadResult result = uploaderWithServer.backgroundUpload();
 		assertEquals("Should work", NetworkInterfaceConstants.OK, result.result);
 		assertEquals("It was sent", 0, outbox.getBulletinCount());
-		assertEquals("It was sent", 1, appWithServer.getFolderSent().getBulletinCount());
 
 		assertEquals("Again Empty outbox", NetworkInterfaceConstants.OK, result.result);
 		mockServer.serverForClients.clearCanUploadList();
@@ -185,7 +184,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadSealedFail");
 		mockSecurityForApp.loadSampleAccount();
 		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
+		BulletinFolder outbox = appWithServer.getFolderSealedOutbox();
 
 		createSealedBulletin(appWithServer);
 		String FAILRESULT = "Some error tag would go here";
@@ -240,9 +239,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		assertEquals(logged.getLocalId(), line1);
 		String line2 = reader.readLine();
 		assertEquals(serverName, line2);
-		String line3 = reader.readLine();
-		assertEquals(logged.get(Bulletin.TAGTITLE), line3);
 		reader.close();
+		logFile.delete();
 		
 		TRACE_END();
 	}
@@ -275,7 +273,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		b.setSealed();
 		b.set(Bulletin.TAGTITLE, "test title");
 		app.getStore().saveBulletin(b);
-		app.getFolderOutbox().add(b);
+		app.getFolderSealedOutbox().add(b);
 		return b;
 	}
 
