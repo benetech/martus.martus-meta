@@ -41,6 +41,7 @@ import junit.framework.TestSuite;
 
 import org.martus.client.core.ClientFileDatabase;
 import org.martus.common.StandardFieldSpecs;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.SessionKey;
 import org.martus.common.database.Database;
@@ -420,6 +421,6 @@ public class TestSpeed extends TestCaseEnhanced
 		"26DMVRb1/aPs/+znmibqcRWXllj9UrjBlpHzqpjYLNuFCxhVN5dCezEFhLZU" +
 		"v9WPkKQixP7NxafdxT0=";
 	
-	static MartusSecurity security;
+	static MartusCrypto security;
 	static final char[] password = "password".toCharArray();
 }
