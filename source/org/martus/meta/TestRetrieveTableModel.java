@@ -49,16 +49,13 @@ import org.martus.common.BulletinSummary.WrongValueCount;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
-import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.crypto.MartusCrypto.DecryptionException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
-import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -361,17 +358,15 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b3 = createAndUploadPrivateDraft(fieldOfficeApp, sampleSummary3);
 		Bulletin b4 = createAndUploadPublicDraft(fieldOfficeApp, sampleSummary4);
 		
-		Database hqDatabase = hqApp.getWriteableDatabase();
-		MartusCrypto fieldOfficeSecurity = fieldOfficeApp.getSecurity();
-		BulletinSaver.saveToClientDatabase(b1, hqDatabase, false, fieldOfficeSecurity);
-		BulletinSaver.saveToClientDatabase(b2, hqDatabase, false, fieldOfficeSecurity);
-		BulletinSaver.saveToClientDatabase(b3, hqDatabase, false, fieldOfficeSecurity);
-		BulletinSaver.saveToClientDatabase(b4, hqDatabase, false, fieldOfficeSecurity);
+		ClientBulletinStore hqStore = hqApp.getStore();
+		hqStore.saveBulletinForTesting(b1);
+		hqStore.saveBulletinForTesting(b2);
+		hqStore.saveBulletinForTesting(b3);
+		hqStore.saveBulletinForTesting(b4);
 
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
 		model.initialize(null);
 
-		ClientBulletinStore hqStore = hqApp.getStore();
 		assertTrue("b1 not on?", hqStore.isProbablyOnServer(b1));
 		assertTrue("b2 not on?", hqStore.isProbablyOnServer(b2));
 		assertFalse("b3 now on?", hqStore.isProbablyOnServer(b3));
@@ -402,17 +397,15 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b3 = createAndUploadPrivateDraft(fieldOfficeApp, sampleSummary3);
 		Bulletin b4 = createAndUploadPublicDraft(fieldOfficeApp, sampleSummary4);
 		
-		Database hqDatabase = hqApp.getWriteableDatabase();
-		MartusCrypto fieldOfficeSecurity = fieldOfficeApp.getSecurity();
-		BulletinSaver.saveToClientDatabase(b1, hqDatabase, false, fieldOfficeSecurity);
-		BulletinSaver.saveToClientDatabase(b2, hqDatabase, false, fieldOfficeSecurity);
-		BulletinSaver.saveToClientDatabase(b3, hqDatabase, false, fieldOfficeSecurity);
-		BulletinSaver.saveToClientDatabase(b4, hqDatabase, false, fieldOfficeSecurity);
+		ClientBulletinStore hqStore = hqApp.getStore();
+		hqStore.saveBulletinForTesting(b1);
+		hqStore.saveBulletinForTesting(b2);
+		hqStore.saveBulletinForTesting(b3);
+		hqStore.saveBulletinForTesting(b4);
 
 		RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(hqApp, localization);
 		model.initialize(null);
 
-		ClientBulletinStore hqStore = hqApp.getStore();
 		assertFalse("b1 now on?", hqStore.isProbablyOnServer(b1));
 		assertFalse("b2 now on?", hqStore.isProbablyOnServer(b2));
 		assertTrue("b3 not on?", hqStore.isProbablyOnServer(b3));
