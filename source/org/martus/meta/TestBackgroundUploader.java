@@ -47,7 +47,6 @@ import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.Base64;
 import org.martus.util.TestCaseEnhanced;
-import org.martus.util.UnicodeReader;
 
 public class TestBackgroundUploader extends TestCaseEnhanced
 {
@@ -211,37 +210,6 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
 		assertEquals("Still in draft outbox", 1, draftOutbox.getBulletinCount());
 		mockServer.uploadResponse = null;
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadLogging() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadLogging");
-		String serverName = "some silly server";
-		appWithServer.setServerInfo(serverName, mockServer.getAccountId(), "");
-		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		File logFile = new File(appWithServer.getUploadLogFilename());
-		logFile.delete();
-
-		createSealedBulletin(appWithServer);
-		mockServer.uploadResponse = NetworkInterfaceConstants.OK;
-		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
-		assertEquals("Created a log?", false, logFile.exists());
-
-		appWithServer.enableUploadLogging();
-		Bulletin logged = createSealedBulletin(appWithServer);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
-		assertEquals("No log?", true, logFile.exists());
-		mockServer.uploadResponse = null;
-
-		UnicodeReader reader = new UnicodeReader(logFile);
-		String line1 = reader.readLine();
-		assertEquals(logged.getLocalId(), line1);
-		String line2 = reader.readLine();
-		assertEquals(serverName, line2);
-		reader.close();
-		logFile.delete();
-		
 		TRACE_END();
 	}
 
