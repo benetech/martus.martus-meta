@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2001-2004, Beneficent
+monitoring software. Copyright (C) 2001-2005, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -58,6 +58,9 @@ public class TestMetaQuick extends TestCaseEnhanced
 		suite.addTestSuite(TestDatabase.class);
 		suite.addTestSuite(TestDatabaseHiddenRecords.class);
 		suite.addTestSuite(TestDeleteDraftsTableModel.class);
+		suite.addTestSuite(TestHeadQuarterEntry.class);
+		suite.addTestSuite(TestHeadQuarterTableModelEdit.class);
+		suite.addTestSuite(TestHeadQuarterTableModelView.class);
 		suite.addTestSuite(TestMartusApp_WithServer.class);
 		suite.addTestSuite(TestRetrieveHQDraftsTableModel.class);
 		suite.addTestSuite(TestRetrieveHQTableModel.class);
