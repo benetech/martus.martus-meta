@@ -58,8 +58,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		TRACE_BEGIN("setUp");
-		
 		if(mockSecurityForApp == null)
 			mockSecurityForApp = MockMartusSecurity.createClient();
 		
@@ -102,6 +102,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 		appWithoutServer.deleteAllFiles();
 		appWithServer.deleteAllFiles();
+		super.tearDown();
 	}
 
 	public void testBackgroundUploadSealedWithBadPort() throws Exception

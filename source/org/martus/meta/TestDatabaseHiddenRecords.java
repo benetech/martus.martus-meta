@@ -22,6 +22,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 
 	protected void setUp() throws Exception
 	{
+		super.setUp();
 		security = MockMartusSecurity.createServer(); 
 		tempDirectory = createTempFile();
 		tempDirectory.delete();
@@ -43,6 +44,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 	{
 		fileDatabase.deleteAllData();
 		tempDirectory.delete();
+		super.tearDown();
 	}
 
 	public void testBasics() throws Exception

@@ -29,6 +29,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		MartusCrypto appSecurity = MockMartusSecurity.createClient();
 		localization = new MockUiLocalization();
 		app = MockMartusApp.create(appSecurity);
@@ -63,7 +64,8 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	{
 		testServer.deleteAllFiles();
     	app.deleteAllFiles();
-	}
+    	super.tearDown();
+    }
 
 	public void testGetColumnName() throws Exception
 	{

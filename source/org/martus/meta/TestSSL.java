@@ -23,6 +23,7 @@ public class TestSSL extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		if(mockSecurityForServer == null)
 		{
 			int[] nonSslPorts = {1988};
@@ -47,6 +48,7 @@ public class TestSSL extends TestCaseEnhanced
 	{
 		mockServer.deleteAllFiles();
 		serverForClients.prepareToShutdown();
+		super.tearDown();
 	}
 
 	

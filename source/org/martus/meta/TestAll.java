@@ -5,7 +5,7 @@ import junit.framework.TestSuite;
 
 import org.martus.client.test.TestClient;
 import org.martus.common.test.TestCommon;
-import org.martus.server.core.TestServer;
+import org.martus.server.main.TestServer;
 
 public class TestAll extends java.lang.Object 
 {

@@ -32,6 +32,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
 		localization = new MockUiLocalization();
 		hqApp = MockMartusApp.create(hqSecurity);
@@ -103,7 +104,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
     	fieldApp1.deleteAllFiles();
     	fieldApp2.deleteAllFiles();
     	hqApp.deleteAllFiles();
-	}
+    	super.tearDown();
+    }
 
 	public void testGetColumnName()
 	{

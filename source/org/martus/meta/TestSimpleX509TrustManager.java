@@ -21,6 +21,7 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		if(securityForSSL == null)
 		{
 			securityForSSL = MockMartusSecurity.createClient();

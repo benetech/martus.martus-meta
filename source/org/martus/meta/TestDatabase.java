@@ -34,6 +34,7 @@ public class TestDatabase extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		mockDb = new MockServerDatabase();
 		security = MockMartusSecurity.createClient();
 
@@ -59,6 +60,7 @@ public class TestDatabase extends TestCaseEnhanced
 		serverFileDb.deleteAllData();
 		assertTrue("cleanup failed1?", goodDir1.delete());
 		assertTrue("cleanup failed2?", goodDir2.delete());
+		super.tearDown();
 	}
 	
 	public void TRACE(String text)

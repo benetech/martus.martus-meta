@@ -33,6 +33,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		if(localization == null)
 			localization = new MockUiLocalization();
 	 
@@ -73,6 +74,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithServer.deleteAllFiles();
 		appWithAccount.deleteAllFiles();
 		mockServer.deleteAllFiles();
+		super.tearDown();
 	}
 	
 	public void testGetMyBulletinSummariesWithServerError() throws Exception
