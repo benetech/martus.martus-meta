@@ -138,11 +138,11 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(3));
-		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(4));
+		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(RetrieveHQTableModel.COLUMN_TITLE));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(RetrieveHQTableModel.COLUMN_AUTHOR));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(RetrieveHQTableModel.COLUMN_DATE));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(RetrieveHQTableModel.COLUMN_SIZE));
 	}
 	
 	public void testGetColumnCount()
@@ -159,51 +159,51 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	
 	public void testIsCellEditable()
 	{
-		assertEquals("flag", true, modelWithData.isCellEditable(1,0));
-		assertEquals("title", false, modelWithData.isCellEditable(1,1));
-		assertEquals("author", false, modelWithData.isCellEditable(1,2));
-		assertEquals("size", false, modelWithData.isCellEditable(1,3));
-		assertEquals("date", false, modelWithData.isCellEditable(1,4));
+		assertEquals("flag", true, modelWithData.isCellEditable(1,RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG));
+		assertEquals("title", false, modelWithData.isCellEditable(1,RetrieveHQTableModel.COLUMN_TITLE));
+		assertEquals("author", false, modelWithData.isCellEditable(1,RetrieveHQTableModel.COLUMN_AUTHOR));
+		assertEquals("size", false, modelWithData.isCellEditable(1,RetrieveHQTableModel.COLUMN_DATE));
+		assertEquals("date", false, modelWithData.isCellEditable(1,RetrieveHQTableModel.COLUMN_SIZE));
 	}
 	
 	public void testGetColumnClass()
 	{
-		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
-		assertEquals(String.class, modelWithData.getColumnClass(1));
-		assertEquals(String.class, modelWithData.getColumnClass(2));
-		assertEquals(Integer.class, modelWithData.getColumnClass(3));
-		assertEquals(String.class, modelWithData.getColumnClass(4));
+		assertEquals(Boolean.class, modelWithData.getColumnClass(RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG));
+		assertEquals(String.class, modelWithData.getColumnClass(RetrieveHQTableModel.COLUMN_TITLE));
+		assertEquals(String.class, modelWithData.getColumnClass(RetrieveHQTableModel.COLUMN_AUTHOR));
+		assertEquals(String.class, modelWithData.getColumnClass(RetrieveHQTableModel.COLUMN_DATE));
+		assertEquals(Integer.class, modelWithData.getColumnClass(RetrieveHQTableModel.COLUMN_SIZE));
 	}
 	
 	public void testGetAndSetValueAt()
 	{
 		Vector authors = new Vector();
-		authors.add(modelWithData.getValueAt(0,2));
-		authors.add(modelWithData.getValueAt(1,2));
-		authors.add(modelWithData.getValueAt(2,2));
+		authors.add(modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_AUTHOR));
+		authors.add(modelWithData.getValueAt(1,RetrieveHQTableModel.COLUMN_AUTHOR));
+		authors.add(modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_AUTHOR));
 		assertContains("Author 0 missing?", b0.get(Bulletin.TAGAUTHOR), authors);
 		assertContains("Author 1 missing?", b1.get(Bulletin.TAGAUTHOR), authors);
 		assertContains("Author 2 missing?", b2.get(Bulletin.TAGAUTHOR), authors);
 		
-		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
-		modelWithData.setValueAt(new Boolean(true), 0,0);
-		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
+		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG)).booleanValue());
+		modelWithData.setValueAt(new Boolean(true), 0,RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG);
+		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG)).booleanValue());
 
-		assertEquals("start title", title2, modelWithData.getValueAt(2,1));
-		modelWithData.setValueAt(title2+title2, 2,1);
-		assertEquals("keep title", title2, modelWithData.getValueAt(2,1));
+		assertEquals("start title", title2, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_TITLE));
+		modelWithData.setValueAt(title2+title2, 2,RetrieveHQTableModel.COLUMN_TITLE);
+		assertEquals("keep title", title2, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_TITLE));
 		
-		assertEquals("B0 Size incorrect minimum not 1?", 1, ((Integer)modelWithData.getValueAt(0,3)).intValue());
-		assertEquals("B1 Size incorrect", RetrieveTableModel.getSizeInKbytes(b1Size), modelWithData.getValueAt(1,3));
-		assertEquals("B2 Size incorrect", RetrieveTableModel.getSizeInKbytes(b2Size), modelWithData.getValueAt(2,3));
+		assertEquals("B0 Size incorrect minimum not 1?", 1, ((Integer)modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_SIZE)).intValue());
+		assertEquals("B1 Size incorrect", RetrieveTableModel.getSizeInKbytes(b1Size), modelWithData.getValueAt(1,RetrieveHQTableModel.COLUMN_SIZE));
+		assertEquals("B2 Size incorrect", RetrieveTableModel.getSizeInKbytes(b2Size), modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_SIZE));
 
-		assertEquals("start date1", "", modelWithData.getValueAt(0,4));
-		modelWithData.setValueAt("some date1", 0,4);
-		assertEquals("keep date1", "", modelWithData.getValueAt(0,4));
+		assertEquals("start date1", "", modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_DATE));
+		modelWithData.setValueAt("some date1", 0,RetrieveHQTableModel.COLUMN_DATE);
+		assertEquals("keep date1", "", modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_DATE));
 
-		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,4));
-		modelWithData.setValueAt("some date2", 2,4);
-		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,4));
+		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_DATE));
+		modelWithData.setValueAt("some date2", 2,RetrieveHQTableModel.COLUMN_DATE);
+		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_DATE));
 	}
 	
 	public void testSetAllFlags()
@@ -213,11 +213,11 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		
 		modelWithData.setAllFlags(true);
 		for(int allTrueCounter = 0; allTrueCounter < modelWithData.getRowCount(); ++allTrueCounter)
-			assertEquals("all true" + allTrueCounter, t, modelWithData.getValueAt(0,0));
+			assertEquals("all true" + allTrueCounter, t, modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG));
 
 		modelWithData.setAllFlags(false);
 		for(int allFalseCounter = 0; allFalseCounter < modelWithData.getRowCount(); ++allFalseCounter)
-			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,0));
+			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_RETRIEVE_FLAG));
 	}
 	
 	public void testGetIdList()
