@@ -58,6 +58,7 @@ public class TestThreads extends TestCaseEnhanced
 		final int iterations = 5;
 		ThreadFactory factory = new BulletinThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
+		factory.tearDown();
 	}
 
 	
@@ -67,6 +68,7 @@ public class TestThreads extends TestCaseEnhanced
 		final int iterations = 10;
 		ThreadFactory factory = new PacketWriteThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
+		factory.tearDown();
 	}
 	
 	public void testThreadedExporting() throws Throwable
@@ -75,6 +77,7 @@ public class TestThreads extends TestCaseEnhanced
 		final int iterations = 10;
 		ThreadFactory factory = new ExportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
+		factory.tearDown();
 	}
 
 	public void testThreadedImporting() throws Throwable
@@ -83,6 +86,7 @@ public class TestThreads extends TestCaseEnhanced
 		final int iterations = 10;
 		ThreadFactory factory = new ImportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
+		factory.tearDown();
 	}
 	
 	public void testThreadedFolderListActivity() throws Throwable
@@ -127,6 +131,7 @@ public class TestThreads extends TestCaseEnhanced
 	abstract class ThreadFactory
 	{
 		abstract TestingThread createThread(int copies) throws Exception;
+		abstract void tearDown() throws Exception;
 	}
 	
 	class BulletinThreadFactory extends ThreadFactory
@@ -148,6 +153,11 @@ public class TestThreads extends TestCaseEnhanced
 			return new BulletinTester(store, copies);
 		}
 
+		void tearDown() throws Exception
+		{
+			store.deleteAllData();
+		}
+
 		BulletinStore store;
 	}
 	
@@ -166,6 +176,11 @@ public class TestThreads extends TestCaseEnhanced
 			return new Exporter(store, b, copies);
 		}
 		
+		void tearDown() throws Exception
+		{
+			store.deleteAllData();
+		}
+
 		BulletinStore store;
 		Bulletin b;
 	}
@@ -182,6 +197,11 @@ public class TestThreads extends TestCaseEnhanced
 			return new Importer(store, copies);
 		}
 
+		void tearDown() throws Exception
+		{
+			store.deleteAllData();
+		}
+
 		BulletinStore store;		
 	}
 	
@@ -195,6 +215,11 @@ public class TestThreads extends TestCaseEnhanced
 		TestingThread createThread(int copies) throws Exception
 		{
 			return new PacketWriter(store, copies);
+		}
+
+		void tearDown() throws Exception
+		{
+			store.deleteAllData();
 		}
 
 		BulletinStore store;		
