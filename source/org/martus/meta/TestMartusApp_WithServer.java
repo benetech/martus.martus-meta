@@ -680,7 +680,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockServer.downloadResponse = response;
 		
 		ClientBulletinStore store = appWithServer.getStore();
-		store.setIsNotOnServer(b);
+		assertFalse("we don't know it is on server.", store.isProbablyOnServer(b));
 		appWithServer.retrieveOneBulletinToFolder(b.getUniversalId(), appWithServer.getFolderDiscarded(), null);
 		assertTrue("didn't set on server?", store.isProbablyOnServer(b));
 		assertFalse("didn't clear not on server?", store.isProbablyNotOnServer(b));
