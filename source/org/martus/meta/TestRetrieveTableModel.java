@@ -527,7 +527,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithAccount.getAccountId(), hqApp.getAccountId());
-		appWithAccount.setHQKey(hqApp.getAccountId());
+		Vector keys = new Vector();
+		keys.add(hqApp.getAccountId());
+		appWithAccount.setAndSaveHQKeys(keys);
 
 		String sampleSummary1 = "this is a basic summary";
 		String sampleSummary2 = "another silly summary";
