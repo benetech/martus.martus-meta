@@ -1,3 +1,28 @@
+/*
+
+The Martus(tm) free, social justice documentation and
+monitoring software. Copyright (C) 2001-2003, Beneficent
+Technology, Inc. (Benetech).
+
+Martus is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version with the additions and exceptions described in the
+accompanying Martus license file entitled "license.txt".
+
+It is distributed WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, including warranties of fitness of purpose or
+merchantability.  See the accompanying Martus License and
+GPL license for more details on the required license terms
+for this software.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+*/
 package org.martus.meta;
 
 import java.io.File;
@@ -65,16 +90,18 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		final int threadCount = 10;
 		final int iterations = 10;
-		ThreadFactory factory = new FolderListThreadFactory();
+		FolderListThreadFactory factory = new FolderListThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
+		factory.tearDown();
 	}
 
 	public void testThreadedFolderContentsActivity() throws Throwable
 	{
 		final int threadCount = 5;
 		final int iterations = 5;
-		ThreadFactory factory = new FolderContentsThreadFactory();
+		FolderContentsThreadFactory factory = new FolderContentsThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
+		factory.tearDown();
 	}
 
 	private void launchTestThreads(ThreadFactory factory, int threadCount, int iterations) throws Throwable
@@ -200,6 +227,11 @@ public class TestThreads extends TestCaseEnhanced
 		{
 			return new FolderListTester(store, copies, nextId++);
 		}
+		
+		void tearDown() throws Exception
+		{
+			store.deleteAllData();
+		}
 
 		BulletinStore store;
 		int nextId;	
@@ -219,6 +251,11 @@ public class TestThreads extends TestCaseEnhanced
 		TestingThread createThread(int copies) throws Exception
 		{
 			return new FolderContentsTester(store, copies);
+		}
+		
+		void tearDown() throws Exception 
+		{
+			store.deleteAllData();
 		}
 
 		BulletinStore store;

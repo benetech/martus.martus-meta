@@ -819,7 +819,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		catch (WrongAccountException ignoreExpectedException)
 		{
 		}
-
+		app.deleteAllFiles();
 	}
 
 	public void testPutContactInfo() throws Exception
@@ -866,6 +866,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		{
 		}
 		gateway.throwSigError = false;
+		app.deleteAllFiles();
 	}
 
 
