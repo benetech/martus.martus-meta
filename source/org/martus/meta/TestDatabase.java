@@ -58,8 +58,8 @@ public class TestDatabase extends TestCaseEnhanced
 		mockDb.deleteAllData();
 		clientFileDb.deleteAllData();
 		serverFileDb.deleteAllData();
-		assertTrue("cleanup failed1?", goodDir1.delete());
-		assertTrue("cleanup failed2?", goodDir2.delete());
+		assertFalse("cleanup failed1?", goodDir1.exists());
+		assertFalse("cleanup failed2?", goodDir2.exists());
 		super.tearDown();
 	}
 	
