@@ -7,6 +7,7 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
+import org.martus.common.network.SimpleX509TrustManager;
 import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerForClients;
@@ -61,18 +62,26 @@ public class TestSSL extends TestCaseEnhanced
 	
 	public void verifyBadCertBeforeGoodCertHasBeenAccepted()
 	{
+		SimpleX509TrustManager trustManager = proxy1.getSimpleX509TrustManager();
+		assertNull("Already trusted?", trustManager.getExpectedPublicKey());
+
 		proxy1.getSimpleX509TrustManager().setExpectedPublicCode("Not a valid code");
+		trustManager.clearCalledCheckServerTrusted();
 		assertNull("accepted bad cert?", proxy1.getServerInfo(new Vector()));
+		assertTrue("Never checked ssl cert!", trustManager.wasCheckServerTrustedCalled());
 	}
 	
 	public void verifyGoodCertAndItWillNotBeReverifiedThisSession()
 	{
-		proxy1.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
+		String serverAccountId = mockSecurityForServer.getPublicKeyString();
+		SimpleX509TrustManager trustManager = proxy1.getSimpleX509TrustManager();
+		trustManager.setExpectedPublicKey(serverAccountId);
 
 		Vector parameters = new Vector();
 		NetworkResponse result = new NetworkResponse(proxy1.getServerInfo(parameters));
 		assertEquals(NetworkInterfaceConstants.OK, result.getResultCode());
 		assertEquals(NetworkInterfaceConstants.VERSION, result.getResultVector().get(0));
+		assertEquals(serverAccountId, trustManager.getExpectedPublicKey());
 
 		NetworkResponse response = new NetworkResponse(proxy1.getServerInfo(new Vector()));
 		assertEquals(NetworkInterfaceConstants.OK, response.getResultCode());
