@@ -29,6 +29,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.xml.TestSimpleXmlParser;
 
 public class TestMetaQuick extends TestCaseEnhanced
 {
@@ -66,6 +67,9 @@ public class TestMetaQuick extends TestCaseEnhanced
 		suite.addTestSuite(TestScrubFile.class);
 		suite.addTestSuite(TestSimpleX509TrustManager.class);
 		suite.addTestSuite(TestSSL.class);
+		
+		// from org.martus.utils
+		suite.addTestSuite(TestSimpleXmlParser.class);
 		
 		return suite;
 	}	
