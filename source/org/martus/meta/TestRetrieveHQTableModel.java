@@ -142,17 +142,18 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(modelWithData.COLUMN_RETRIEVE_FLAG));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(modelWithData.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(modelWithData.COLUMN_AUTHOR));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(modelWithData.COLUMN_LAST_DATE_SAVED));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(modelWithData.COLUMN_BULLETIN_SIZE));
+		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(3));
+		assertEquals(localization.getFieldLabel("BulletinVersionNumber"), modelWithData.getColumnName(4));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(5));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(5, modelWithoutData.getColumnCount());
-		assertEquals(5, modelWithData.getColumnCount());
+		assertEquals(6, modelWithoutData.getColumnCount());
+		assertEquals(6, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()

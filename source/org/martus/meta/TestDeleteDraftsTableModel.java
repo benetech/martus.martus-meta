@@ -92,16 +92,17 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 
 	public void testGetColumnCount()
 	{
-		assertEquals(4, modelWithoutData.getColumnCount());
-		assertEquals(4, modelWithData.getColumnCount());
+		assertEquals(5, modelWithoutData.getColumnCount());
+		assertEquals(5, modelWithData.getColumnCount());
 	}
 	
 	public void testGetColumnName()
 	{
-		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(modelWithData.COLUMN_DELETE_FLAG));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(modelWithData.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(modelWithData.COLUMN_LAST_DATE_SAVED));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(modelWithData.COLUMN_BULLETIN_SIZE));
+		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(0));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(2));
+		assertEquals(localization.getFieldLabel("BulletinVersionNumber"), modelWithData.getColumnName(3));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(4));
 	}
 	
 	public void testGetColumnClass()
@@ -110,6 +111,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_TITLE));
 		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_LAST_DATE_SAVED));
 		assertEquals(Integer.class, modelWithData.getColumnClass(modelWithData.COLUMN_BULLETIN_SIZE));
+		assertEquals(Integer.class, modelWithData.getColumnClass(modelWithData.COLUMN_VERSION_NUMBER));
 	}
 	
 	public void testRowCount()
