@@ -44,6 +44,8 @@ import org.martus.common.network.NonSSLNetworkAPI;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.MockServerForClients;
+import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 import org.martus.util.TestCaseEnhanced;
@@ -188,29 +190,43 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
+		public ServerForClients createServerForClients()
 		{
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.OK);
-			Vector list = new Vector();
-			list.add(b0.getLocalId() + "=" +  b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
-			list.add(b1.getLocalId() + "=" +  b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
-			list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
-					b2.getFieldDataPacket().getLocalId() +
-					MartusConstants.regexEqualsDelimeter + 
-					b2Size + 
-					MartusConstants.regexEqualsDelimeter + 
-					dateSavedInMillis2);
-			result.add(list);
-			Vector sizes = new Vector();
-			if(retrieveTags.size() == 1)
+			return new LocalMockServerForClients(this);
+		}
+		
+		class LocalMockServerForClients extends MockServerForClients
+		{
+			LocalMockServerForClients(MockMartusServer coreServer)
 			{
-				sizes.add(new Integer(b0Size));
-				sizes.add(new Integer(b1Size));
-				sizes.add(new Integer(b2Size));
+				super(coreServer);
 			}
-			result.add(sizes);
-			return result;
+
+			public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
+			{
+				Vector result = new Vector();
+				result.add(NetworkInterfaceConstants.OK);
+				Vector list = new Vector();
+				list.add(b0.getLocalId() + "=" +  b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
+				list.add(b1.getLocalId() + "=" +  b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
+				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+						b2.getFieldDataPacket().getLocalId() +
+						MartusConstants.regexEqualsDelimeter + 
+						b2Size + 
+						MartusConstants.regexEqualsDelimeter + 
+						dateSavedInMillis2);
+				result.add(list);
+				Vector sizes = new Vector();
+				if(retrieveTags.size() == 1)
+				{
+					sizes.add(new Integer(b0Size));
+					sizes.add(new Integer(b1Size));
+					sizes.add(new Integer(b2Size));
+				}
+				result.add(sizes);
+				return result;
+			}
+			
 		}
 		
 		public Vector getPacket(String hqAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId)

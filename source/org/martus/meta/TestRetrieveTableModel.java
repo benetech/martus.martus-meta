@@ -315,7 +315,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector desiredResult = new Vector();
 
 		desiredResult.add(NetworkInterfaceConstants.REJECTED);
-		mockServer.listMyResponse = desiredResult;
+		((MockServerForClients)mockServer.serverForClients).listMyResponse = desiredResult;
 		try
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, localization);
@@ -327,7 +327,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
-		mockServer.listMyResponse = null;
+		((MockServerForClients)mockServer.serverForClients).listMyResponse = null;
 	}
 
 	public void testGetMySummaries() throws Exception
@@ -470,7 +470,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector desiredResult = new Vector();
 
 		desiredResult.add(NetworkInterfaceConstants.REJECTED);
-		mockServer.listMyResponse = desiredResult;
+		((MockServerForClients)mockServer.serverForClients).listMyResponse =  desiredResult;
 		try
 		{
 			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer, localization);
@@ -482,7 +482,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
-		mockServer.listMyResponse = null;
+		((MockServerForClients)mockServer.serverForClients).listMyResponse =  null;
 	}
 
 	public void testGetMyDraftSummaries() throws Exception
@@ -783,27 +783,6 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 
 
-	class MockServer extends MockMartusServer
-	{
-		MockServer() throws Exception
-		{
-			super();
-		}
-		
-		public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
-		{
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.OK);
-			Vector list = new Vector();
-			list.add(b0.getLocalId() + "= " + b0.get(Bulletin.TAGTITLE) + "=3000");
-			list.add(b1.getLocalId() + "= " + b1.get(Bulletin.TAGTITLE) + "=3200");
-			list.add(b2.getLocalId() + "= " + b2.get(Bulletin.TAGTITLE) + "=3100");
-			result.add(list);
-			return result;
-		}
-		
-	}
-	
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
 		MockServerInterfaceHandler(ServerForClientsInterface serverToUse)
