@@ -44,6 +44,7 @@ import org.martus.common.ProgressMeterInterface;
 import org.martus.common.VersionBuildDate;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.clientside.ClientSideNetworkGateway;
 import org.martus.common.clientside.Exceptions.ServerCallFailedException;
@@ -1033,6 +1034,34 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_END();
 	}
 
+	public void testRetrieveHeaderPacket() throws Exception
+	{
+		TRACE_BEGIN("testRetrievePublicDataPacket");
+
+		String accountId = appWithServer.getAccountId();
+		mockServer.allowUploads(accountId);
+
+		Bulletin b1 = appWithServer.createBulletin();
+		UniversalId uid = b1.getUniversalId();		
+		b1.setAllPrivate(true);
+
+		b1.setDraft();
+		appWithServer.getStore().saveBulletin(b1);
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		
+		BulletinHeaderPacket bhpDraft = appWithServer.retrieveHeaderPacketFromServer(uid);
+		assertEquals(BulletinConstants.STATUSDRAFT, bhpDraft.getStatus());
+		
+		b1.setSealed();
+		appWithServer.getStore().saveBulletin(b1);
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		
+		BulletinHeaderPacket bhpSealed = appWithServer.retrieveHeaderPacketFromServer(uid);
+		assertEquals(BulletinConstants.STATUSSEALED, bhpSealed.getStatus());
+		
+	}
+
+	
 	public void testRetrievePublicDataPacket() throws Exception
 	{
 		TRACE_BEGIN("testRetrievePublicDataPacket");
@@ -1059,8 +1088,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		String fdpId1 = b1.getFieldDataPacket().getLocalId();		
 		String fdpId2 = b2.getFieldDataPacket().getLocalId();		
 
-		FieldDataPacket fdp1 = appWithServer.retrieveFieldDataPacketFromServer(accountId, b1.getLocalId(), fdpId1);
-		FieldDataPacket fdp2 = appWithServer.retrieveFieldDataPacketFromServer(accountId, b2.getLocalId(), fdpId2);
+		FieldDataPacket fdp1 = appWithServer.retrieveFieldDataPacketFromServer(b1.getUniversalId(), fdpId1);
+		FieldDataPacket fdp2 = appWithServer.retrieveFieldDataPacketFromServer(b2.getUniversalId(), fdpId2);
 
 		String title1 = fdp1.get(Bulletin.TAGTITLE);
 		String title2 = fdp2.get(Bulletin.TAGTITLE);
@@ -1075,7 +1104,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_BEGIN("testRetrievePublicDataPacketErrors");
 		try
 		{
-			appWithServer.retrieveFieldDataPacketFromServer("account", "123", "xyz");
+			UniversalId bogusUid = UniversalId.createFromAccountAndLocalId("account", "123");
+			appWithServer.retrieveFieldDataPacketFromServer(bogusUid, "xyz");
 			fail("Didn't throw Error for bad ID?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -1086,7 +1116,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		{
 			Bulletin b1 = appWithServer.createBulletin();
 			String fdpId1 = b1.getFieldDataPacket().getLocalId();		
-			appWithServer.retrieveFieldDataPacketFromServer(appWithServer.getAccountId(), b1.getLocalId(), fdpId1);
+			appWithServer.retrieveFieldDataPacketFromServer(b1.getUniversalId(), fdpId1);
 			fail("Didn't throw Error for bad Missing Packet on Server");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -1095,7 +1125,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		TRACE_END();
 	}
-
 	
 	public void testGetFieldOfficeAccounts() throws Exception
 	{
