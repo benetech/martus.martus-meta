@@ -1130,7 +1130,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		Bulletin b = appWithServer.createBulletin();
 		appWithServer.getStore().saveBulletin(b);
-		store.addBulletinToFolder(b.getUniversalId(), draftOutbox);
+		store.addBulletinToFolder(draftOutbox, b.getUniversalId());
 		assertEquals("Draft file got created somehow?", false, file.exists());
 		assertEquals("Draft outbox empty", 1, draftOutbox.getBulletinCount());
 		assertEquals("No file and draft outbox contains data", false, appWithServer.isDraftOutboxEmpty());
@@ -1152,7 +1152,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Bulletin b = appWithServer.createBulletin();
 		b.setSealed();
 		appWithServer.getStore().saveBulletin(b);
-		store.addBulletinToFolder(b.getUniversalId(), sealedOutbox);
+		store.addBulletinToFolder(sealedOutbox, b.getUniversalId());
 		assertEquals("Sealed file got created somehow?", false, file.exists());
 		assertEquals("Sealed outbox empty", 1, sealedOutbox.getBulletinCount());
 		assertEquals("No file and sealed outbox contains data", false, appWithServer.isSealedOutboxEmpty());

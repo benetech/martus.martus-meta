@@ -501,16 +501,16 @@ System.out.flush();
 					UniversalId uid = b.getUniversalId();
 					BulletinFolder f = store.findFolder(folderName);
 					assertEquals("Already in?", false, f.contains(b));
-					store.addBulletinToFolder(uid, f);
+					store.addBulletinToFolder(f, uid);
 					assertEquals("Not added?", true, f.contains(b));
 					store.discardBulletin(f, b);
 					assertEquals("Not discarded?", false, f.contains(b));
 					store.moveBulletin(b, store.getFolderDiscarded(), f);
 					assertEquals("Not moved back?", true, f.contains(b));
-					store.removeBulletinFromFolder(b, f);
+					store.removeBulletinFromFolder(f, b);
 					assertEquals("Not removed?", false, f.contains(b));
 					assertEquals("Not orphan?", true, store.isOrphan(b));
-					store.addBulletinToFolder(uid, f);
+					store.addBulletinToFolder(f, uid);
 				}
 			}
 			catch (Throwable e)
