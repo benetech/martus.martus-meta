@@ -167,7 +167,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 			ReadableDatabase db = getApp().getStore().getDatabase();
 			Vector tags = BulletinSummary.getNormalRetrieveTags();
-			String summaryString = SummaryCollector.extractSummary(bhp, db, tags);
+			String summaryString = SummaryCollector.extractSummary(bhp, db, tags, mockServer.getLogger());
 			try
 			{
 				return BulletinSummary.createFromString(bhp.getAccountId(), summaryString);
@@ -292,7 +292,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		Vector tags = BulletinSummary.getNormalRetrieveTags();
-		String b1SummaryString = SummaryCollector.extractSummary(bhp, db, tags);
+		String b1SummaryString = SummaryCollector.extractSummary(bhp, db, tags, mockServer.getLogger());
 		BulletinSummary b1Summary = BulletinSummary.createFromString(b.getAccount(), b1SummaryString);
 		return b1Summary;
 	}
