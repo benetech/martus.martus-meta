@@ -44,6 +44,7 @@ import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
+import org.martus.common.BulletinSummary.WrongValueCount;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
@@ -58,6 +59,7 @@ import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.database.Database;
 import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
@@ -66,6 +68,7 @@ import org.martus.server.forclients.MockServerForClients;
 import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
+import org.martus.server.forclients.SummaryCollector;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestRetrieveTableModel extends TestCaseEnhanced
@@ -119,6 +122,67 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		super.tearDown();
 	}
 	
+	public void testIsDownloadableNormal() throws Exception
+	{
+		MartusApp app = appWithServer;
+		ClientBulletinStore store = app.getStore();
+		Database db = store.getDatabase();
+
+		Bulletin b1 = createBulletin(app, sampleSummary1, true, true);
+
+		RetrieveMyTableModel model = new RetrieveMyTableModel(app, localization);
+		model.initialize(null);
+		assertFalse("plain bulletin exists downloadable?", model.isDownloadable(createSummary(b1, db)));
+		store.destroyBulletin(b1);
+		assertTrue("plain bulletin deleted not downloadable?", model.isDownloadable(createSummary(b1, db)));
+
+	}
+	
+	public void testIsDownloadable() throws Exception
+	{
+		MartusApp app = appWithServer;
+		ClientBulletinStore store = app.getStore();
+		Database db = store.getDatabase();
+
+		Bulletin original = createBulletin(app, sampleSummary2, true, true);
+		Bulletin clone = app.createBulletin();
+		clone.createDraftCopyOf(original, db);
+		clone.set(Bulletin.TAGTITLE, sampleSummary3);
+		clone.setSealed();
+		store.saveBulletin(clone);
+		
+		RetrieveMyTableModel model = new RetrieveMyTableModel(app, localization);
+		model.initialize(null);
+
+		assertFalse("latest bulletin exists downloadable?", model.isDownloadable(createSummary(clone, db)));
+		assertFalse("older bulletin exists downloadable?", model.isDownloadable(createSummary(original, db)));
+
+		// clone is local but ancestor is not
+		store.deleteBulletinRevision(original.getUniversalId());
+		assertFalse("latest bulletin exists still downloadable?", model.isDownloadable(createSummary(clone, db)));
+		assertFalse("older bulletin downloadable over clone?", model.isDownloadable(createSummary(original, db)));
+
+		// neither clone nor ancestor is local
+		store.deleteBulletinRevision(clone.getUniversalId());
+		assertTrue("latest bulletin not downloadable?", model.isDownloadable(createSummary(clone, db)));
+		assertTrue("older bulletin not downloadable?", model.isDownloadable(createSummary(original, db)));
+		
+		// ancestor is local but clone is not
+		store.saveBulletin(original);
+		assertTrue("latest bulletin not downloadable?", model.isDownloadable(createSummary(clone, db)));
+		assertFalse("older bulletin exists still downloadable?", model.isDownloadable(createSummary(original, db)));
+
+	}
+	
+	private BulletinSummary createSummary(Bulletin b, Database db) throws WrongValueCount
+	{
+		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
+		Vector tags = BulletinSummary.getNormalRetrieveTags();
+		String b1SummaryString = SummaryCollector.extractSummary(bhp, db, tags);
+		BulletinSummary b1Summary = BulletinSummary.createFromString(b.getAccount(), b1SummaryString);
+		return b1Summary;
+	}
+
 	public void testRetrieveMyDraftsMarksAllAsOnServer() throws Exception
 	{
 		MartusApp app = appWithServer;
