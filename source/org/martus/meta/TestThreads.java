@@ -456,6 +456,7 @@ System.out.flush();
 		{
 			try 
 			{
+				boolean DONT_SAVE_FOLDERS = false;
 				for(int i=0; i < copies; ++i)
 				{
 					Bulletin b = bulletins[i];
@@ -464,11 +465,11 @@ System.out.flush();
 					assertEquals("Already in?", false, f.contains(b));
 					store.addBulletinToFolder(uid, f);
 					assertEquals("Not added?", true, f.contains(b));
-					store.discardBulletin(f, b);
+					store.discardBulletin(f, b, DONT_SAVE_FOLDERS);
 					assertEquals("Not discarded?", false, f.contains(b));
 					store.moveBulletin(b, store.getFolderDiscarded(), f);
 					assertEquals("Not moved back?", true, f.contains(b));
-					store.removeBulletinFromFolder(b, f);
+					store.removeBulletinFromFolder(b, f, DONT_SAVE_FOLDERS);
 					assertEquals("Not removed?", false, f.contains(b));
 					assertEquals("Not orphan?", true, store.isOrphan(b));
 					store.addBulletinToFolder(uid, f);
