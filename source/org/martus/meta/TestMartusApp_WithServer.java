@@ -18,6 +18,7 @@ import org.martus.client.test.NoServerNetworkInterfaceHandler;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
+import org.martus.common.VersionBuildDate;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
@@ -142,7 +143,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals(secondNewsItem, twoNewsResponseWithVersionLabelValid.get(1));
 
 		mockServer.newsVersionLabelToCheck = "";
-		mockServer.newsVersionBuildDateToCheck = MartusUtilities.getVersionDate();
+		mockServer.newsVersionBuildDateToCheck = VersionBuildDate.getVersionBuildDate();
 		Vector twoNewsResponseWithBuildDateValid = appWithServer.getNewsFromServer();
 		assertEquals(2, twoNewsResponseWithBuildDateValid.size());
 		assertEquals(firstNewsItem, twoNewsResponseWithBuildDateValid.get(0));
