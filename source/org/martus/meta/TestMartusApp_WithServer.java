@@ -135,6 +135,64 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_END();
 	}
 	
+	public void testDownloadFieldOfficeBulletins() throws Exception
+	{
+		TRACE_BEGIN("testDownloadFieldOfficeBulletins");
+	
+		MockMartusSecurity hqSecurity = MockMartusSecurity.createHQ();	
+		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
+		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
+		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
+		HQKeys keys = new HQKeys();
+		HQKey key = new HQKey(hqApp.getAccountId());
+		keys.add(key);
+		appWithServer.setAndSaveHQKeys(keys);
+	
+		String sampleSummary1 = "this is a basic summary";
+		String sampleSummary2 = "another silly summary";
+		String sampleSummary3 = "not my HQ";
+		
+		Bulletin b1 = appWithServer.createBulletin();
+		b1.setAllPrivate(true);
+		b1.set(Bulletin.TAGTITLE, sampleSummary1);
+		b1.setSealed();
+		appWithServer.setHQKeysInBulletin(b1);
+		appWithServer.getStore().saveBulletin(b1);
+		
+		Bulletin b2 = appWithServer.createBulletin();
+		b2.setAllPrivate(false);
+		b2.set(Bulletin.TAGTITLE, sampleSummary2);
+		b2.setSealed();
+		appWithServer.setHQKeysInBulletin(b2);
+		appWithServer.getStore().saveBulletin(b2);
+		
+		Bulletin b3 = appWithServer.createBulletin();
+		b3.set(Bulletin.TAGTITLE, sampleSummary3);
+		b3.setSealed();
+		appWithServer.getStore().saveBulletin(b3);
+	
+		mockServer.allowUploads(appWithServer.getAccountId());
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
+	
+		Vector uidList = new Vector();
+		uidList.add(b1.getUniversalId());
+		uidList.add(b2.getUniversalId());
+		Retriever retriever = new Retriever(hqApp, null);	
+		retriever.retrieveBulletins(uidList, hqApp.createFolderRetrievedFieldOffice());
+		assertEquals("retrieve field office bulletins failed?", NetworkInterfaceConstants.OK, retriever.getResult());
+	
+		uidList.clear();
+		uidList.add(b3.getUniversalId());
+		retriever.retrieveBulletins(uidList, hqApp.createFolderRetrievedFieldOffice());
+		assertEquals("retrieve non-field office bulletins worked?", NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
+	
+		hqApp.deleteAllFiles();
+		TRACE_END();
+	}
+
+
 	public void testGetNewsFromServer() throws Exception
 	{
 		Vector noServerResult = appWithoutServer.getNewsFromServer();
@@ -1057,64 +1115,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_END();
 	}
 	
-	public void testDownloadFieldOfficeBulletins() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldOfficeBulletins");
-
-		MockMartusSecurity hqSecurity = MockMartusSecurity.createHQ();	
-		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
-		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
-		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
-		HQKeys keys = new HQKeys();
-		HQKey key = new HQKey(hqApp.getAccountId());
-		keys.add(key);
-		appWithServer.setAndSaveHQKeys(keys);
-
-		String sampleSummary1 = "this is a basic summary";
-		String sampleSummary2 = "another silly summary";
-		String sampleSummary3 = "not my HQ";
-		
-		Bulletin b1 = appWithServer.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setSealed();
-		appWithServer.setHQKeysInBulletin(b1);
-		appWithServer.getStore().saveBulletin(b1);
-		
-		Bulletin b2 = appWithServer.createBulletin();
-		b2.setAllPrivate(false);
-		b2.set(Bulletin.TAGTITLE, sampleSummary2);
-		b2.setSealed();
-		appWithServer.setHQKeysInBulletin(b2);
-		appWithServer.getStore().saveBulletin(b2);
-		
-		Bulletin b3 = appWithServer.createBulletin();
-		b3.set(Bulletin.TAGTITLE, sampleSummary3);
-		b3.setSealed();
-		appWithServer.getStore().saveBulletin(b3);
-
-		mockServer.allowUploads(appWithServer.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
-
-		Vector uidList = new Vector();
-		uidList.add(b1.getUniversalId());
-		uidList.add(b2.getUniversalId());
-		Retriever retriever = new Retriever(hqApp, null);	
-		retriever.retrieveBulletins(uidList, hqApp.createFolderRetrievedFieldOffice());
-		assertEquals("retrieve field office bulletins failed?", NetworkInterfaceConstants.OK, retriever.getResult());
-
-		uidList.clear();
-		uidList.add(b3.getUniversalId());
-		retriever.retrieveBulletins(uidList, hqApp.createFolderRetrievedFieldOffice());
-		assertEquals("retrieve non-field office bulletins worked?", NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
-
-		hqApp.deleteAllFiles();
-		TRACE_END();
-	}
-
-
 	public void testIsDraftOutboxEmpty() throws Exception
 	{
 		TRACE_BEGIN("testIsDraftOutboxEmpty");

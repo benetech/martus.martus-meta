@@ -34,9 +34,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
-import org.martus.client.core.ClientFileDatabase;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.ClientFileDatabase;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.FileDatabase;
@@ -1037,7 +1037,7 @@ public class TestDatabase extends TestCaseEnhanced
 	{
 		String result = "";
 		for(int i = 0; i < 200; ++i)
-			result += "The length of this string must not �� divide into blocksize!!!";
+			result += "The length of this string must not ?????? divide into blocksize!!!";
 		return result;
 	}
 

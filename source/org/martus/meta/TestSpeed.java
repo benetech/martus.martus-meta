@@ -39,11 +39,11 @@ import java.io.Writer;
 
 import junit.framework.TestSuite;
 
-import org.martus.client.core.ClientFileDatabase;
 import org.martus.common.StandardFieldSpecs;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.SessionKey;
+import org.martus.common.database.ClientFileDatabase;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.AttachmentPacket;
