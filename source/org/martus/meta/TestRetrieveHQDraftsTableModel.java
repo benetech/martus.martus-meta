@@ -33,6 +33,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		if(localization!=null)
+			return;
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
 		localization = new MockUiLocalization();
 		hqApp = MockMartusApp.create(hqSecurity);
@@ -272,20 +274,20 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	String author1 = "Betty 1";
 	String author2 = "Donna 2";
 
-	MockMartusServer testServer;
-	NetworkInterface testSSLServerInterface;
-	MockMartusApp fieldApp1;
-	MockMartusApp fieldApp2;
-	MockMartusApp hqApp;
-	MockUiLocalization localization;
+	static MockMartusServer testServer;
+	static NetworkInterface testSSLServerInterface;
+	static MockMartusApp fieldApp1;
+	static MockMartusApp fieldApp2;
+	static MockMartusApp hqApp;
+	static MockUiLocalization localization;
 	
-	Bulletin b0;
-	Bulletin b1;
-	Bulletin b2;
-	int b0Size;
-	int b1Size;
-	int b2Size;
+	static Bulletin b0;
+	static Bulletin b1;
+	static Bulletin b2;
+	static int b0Size;
+	static int b1Size;
+	static int b2Size;
 
-	RetrieveHQDraftsTableModel modelWithData;
-	RetrieveHQDraftsTableModel modelWithoutData;
+	static RetrieveHQDraftsTableModel modelWithData;
+	static RetrieveHQDraftsTableModel modelWithoutData;
 }
