@@ -620,8 +620,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(Base64.encode(bulletinBytes));
 		mockServer.downloadResponse = response;
 		
+		BulletinStore store = appWithServer.getStore();
+		store.setIsNotOnServer(b);
 		appWithServer.retrieveOneBulletinToFolder(b.getUniversalId(), appWithServer.getFolderDiscarded(), null);
-		
+		assertTrue("didn't set on server?", store.isProbablyOnServer(b));
+		assertFalse("didn't clear not on server?", store.isProbablyNotOnServer(b));
 		mockServer.setDownloadResponseReal();
 		
 		TRACE_END();
