@@ -525,8 +525,8 @@ public class TestDatabase extends TestCaseEnhanced
 
 	private void internalTestGetRecordSize(Database db) throws Exception
 	{
-		DatabaseKey shortKey = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
-		DatabaseKey shortKey2 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
+		DatabaseKey shortKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
+		DatabaseKey shortKey2 = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";			
 		db.writeRecord(shortKey, testString);
 		
@@ -622,7 +622,7 @@ public class TestDatabase extends TestCaseEnhanced
 		db.visitAllRecords(counter);
 		assertEquals(db.toString()+"count wrong?", 2, counter.count);
 
-		File interimFile = db.getOutgoingInterimFile(smallKey);
+		File interimFile = db.getOutgoingInterimFile(smallKey.getUniversalId());
 		interimFile.deleteOnExit();
 		UnicodeWriter writer1 = new UnicodeWriter(interimFile);
 		writer1.write("just some stuff");
@@ -666,9 +666,9 @@ public class TestDatabase extends TestCaseEnhanced
 
 		String account1 = "account1";
 		String account2 = "account2";
-		DatabaseKey key1 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix(account1, "x"));
-		DatabaseKey key2 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix(account2, "x"));
-		DatabaseKey key3 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix(account1, "x"));
+		DatabaseKey key1 = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix(account1, "x"));
+		DatabaseKey key2 = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix(account2, "x"));
+		DatabaseKey key3 = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix(account1, "x"));
 
 		counter.clear();
 		db.visitAllAccounts(counter);
@@ -857,7 +857,7 @@ public class TestDatabase extends TestCaseEnhanced
 
 	private void internalTestGetIncomingInterimFile(Database db) throws Exception
 	{
-		File interim = db.getIncomingInterimFile(smallKey);
+		File interim = db.getIncomingInterimFile(smallKey.getUniversalId());
 		assertNotNull(db.toString()+"file is null?", interim);
 		assertEquals(db.toString()+"interim file exists?", false, interim.exists());
 		UnicodeWriter writer = new UnicodeWriter(interim);
@@ -866,7 +866,7 @@ public class TestDatabase extends TestCaseEnhanced
 		long fileSize = interim.length();
 		assertNotEquals(db.toString()+"Zero length?", 0, fileSize);
 		
-		File interimSame = db.getIncomingInterimFile(smallKey);
+		File interimSame = db.getIncomingInterimFile(smallKey.getUniversalId());
 		assertEquals(db.toString()+"Not the same file?", interim, interimSame);
 		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
 
@@ -876,7 +876,7 @@ public class TestDatabase extends TestCaseEnhanced
 	
 	private void internalTestGetOutgoingInterimFile(Database db) throws Exception
 	{
-		File interim = db.getOutgoingInterimFile(smallKey);
+		File interim = db.getOutgoingInterimFile(smallKey.getUniversalId());
 		assertNotNull(db.toString()+"file is null?", interim);
 		assertEquals(db.toString()+"interim file exists?", false, interim.exists());
 		UnicodeWriter writer = new UnicodeWriter(interim);
@@ -885,7 +885,7 @@ public class TestDatabase extends TestCaseEnhanced
 		long fileSize = interim.length();
 		assertNotEquals(db.toString()+"Zero length?", 0, fileSize);
 		
-		File interimSame = db.getOutgoingInterimFile(smallKey);
+		File interimSame = db.getOutgoingInterimFile(smallKey.getUniversalId());
 		assertEquals(db.toString()+"Not the same file?", interim, interimSame);
 		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
 
@@ -895,7 +895,7 @@ public class TestDatabase extends TestCaseEnhanced
 	
 	private void internalTestGetOutgoingInterimPublicOnlyFile(Database db) throws Exception
 	{
-		File interim = db.getOutgoingInterimPublicOnlyFile(smallKey);
+		File interim = db.getOutgoingInterimPublicOnlyFile(smallKey.getUniversalId());
 		assertNotNull(db.toString()+"file is null?", interim);
 		assertEquals(db.toString()+"interim file exists?", false, interim.exists());
 		UnicodeWriter writer = new UnicodeWriter(interim);
@@ -904,7 +904,7 @@ public class TestDatabase extends TestCaseEnhanced
 		long fileSize = interim.length();
 		assertNotEquals(db.toString()+"Zero length?", 0, fileSize);
 		
-		File interimSame = db.getOutgoingInterimPublicOnlyFile(smallKey);
+		File interimSame = db.getOutgoingInterimPublicOnlyFile(smallKey.getUniversalId());
 		assertEquals(db.toString()+"Not the same file?", interim, interimSame);
 		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
 
@@ -915,8 +915,7 @@ public class TestDatabase extends TestCaseEnhanced
 	private void internalTestQuarantine(Database db) throws Exception
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();
-		DatabaseKey draftKey = new DatabaseKey(uid);
-		draftKey.setDraft();
+		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
 
 		assertFalse(db.toString()+" draft already in quarantine?", db.isInQuarantine(draftKey));
 		db.moveRecordToQuarantine(draftKey);
@@ -929,8 +928,7 @@ public class TestDatabase extends TestCaseEnhanced
 		assertTrue(db.toString()+" draft not moved to quarantine?", db.isInQuarantine(draftKey));
 		assertFalse(db.toString()+" draft not removed from main db?", db.doesRecordExist(draftKey));
 		
-		DatabaseKey sealedKey = new DatabaseKey(uid);
-		sealedKey.setSealed();
+		DatabaseKey sealedKey = DatabaseKey.createSealedKey(uid);
 		assertFalse(db.toString()+" sealed already in quarantine?", db.isInQuarantine(sealedKey));
 		db.writeRecord(sealedKey, smallString);
 		db.moveRecordToQuarantine(sealedKey);
@@ -1044,8 +1042,8 @@ public class TestDatabase extends TestCaseEnhanced
 	}
 
 	MockMartusSecurity security;
-	DatabaseKey smallKey = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("small account", "x"));
-	DatabaseKey largeKey = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("large account", "x"));
+	DatabaseKey smallKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("small account", "x"));
+	DatabaseKey largeKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("large account", "x"));
 	String smallString = "How are you doing?";
 	String smallString2 = "Just another string 123";
 	String largeString = buildLargeString();

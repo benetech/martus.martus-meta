@@ -320,7 +320,7 @@ public class TestSpeed extends TestCaseEnhanced
 		fileToAttach.delete();
 		assertFalse("fileToAttach exists?", fileToAttach.exists());
 
-		DatabaseKey key = new DatabaseKey(ap.getUniversalId());
+		DatabaseKey key = DatabaseKey.createLegacyKey(ap.getUniversalId());
 		InputStreamWithSeek xmlIn = db.openInputStream(key, security);
 		
 		Stopwatch verifyTimer = new Stopwatch();

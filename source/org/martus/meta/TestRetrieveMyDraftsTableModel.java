@@ -37,6 +37,7 @@ import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NonSSLNetworkAPI;
@@ -84,7 +85,8 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		modelWithoutData = new RetrieveMyDraftsTableModel(app, localization);
 		modelWithoutData.initialize(null);
 		app.getStore().deleteAllData();
-		assertFalse("deleteAllData didn't?", app.getStore().doesBulletinRevisionExist(b0.getUniversalId()));
+		DatabaseKey key = b0.getDatabaseKeyForLocalId(b0.getLocalId());
+		assertFalse("deleteAllData didn't?", app.getStore().doesBulletinRevisionExist(key));
 		modelWithData = new RetrieveMyDraftsTableModel(app, localization);
 		modelWithData.initialize(null);
 	}

@@ -59,6 +59,7 @@ import org.martus.common.crypto.MartusCrypto.DecryptionException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -177,13 +178,13 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			
 			ClientBulletinStore store = getApp().getStore();
 			if(!keep.getUniversalId().equals(parent.getUniversalId()))
-				store.deleteBulletinRevision(parent.getUniversalId());
+				store.deleteBulletinRevision(DatabaseKey.createLegacyKey(parent.getUniversalId()));
 			if(!keep.getUniversalId().equals(son.getUniversalId()))
-				store.deleteBulletinRevision(son.getUniversalId());
+				store.deleteBulletinRevision(DatabaseKey.createLegacyKey(son.getUniversalId()));
 			if(!keep.getUniversalId().equals(daughter.getUniversalId()))
-				store.deleteBulletinRevision(daughter.getUniversalId());
+				store.deleteBulletinRevision(DatabaseKey.createLegacyKey(daughter.getUniversalId()));
 			if(!keep.getUniversalId().equals(granddaughter.getUniversalId()))
-				store.deleteBulletinRevision(granddaughter.getUniversalId());
+				store.deleteBulletinRevision(DatabaseKey.createLegacyKey(granddaughter.getUniversalId()));
 		}
 		
 		MockMartusApp app;
@@ -266,12 +267,12 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		assertFalse("older bulletin exists downloadable?", model.isDownloadable(createSummary(original, db)));
 
 		// clone is local but ancestor is not
-		store.deleteBulletinRevision(original.getUniversalId());
+		store.deleteBulletinRevision(original.getDatabaseKeyForLocalId(original.getLocalId()));
 		assertFalse("latest bulletin exists still downloadable?", model.isDownloadable(createSummary(clone, db)));
 		assertFalse("older bulletin downloadable over clone?", model.isDownloadable(createSummary(original, db)));
 
 		// neither clone nor ancestor is local
-		store.deleteBulletinRevision(clone.getUniversalId());
+		store.deleteBulletinRevision(clone.getDatabaseKeyForLocalId(clone.getLocalId()));
 		assertTrue("latest bulletin not downloadable?", model.isDownloadable(createSummary(clone, db)));
 		assertTrue("older bulletin not downloadable?", model.isDownloadable(createSummary(original, db)));
 		

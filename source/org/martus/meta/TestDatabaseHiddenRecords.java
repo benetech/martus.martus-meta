@@ -125,7 +125,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		}
 		try
 		{
-			db.getOutgoingInterimFile(key);
+			db.getOutgoingInterimFile(key.getUniversalId());
 			fail("Should have thrown for getOutgoingInterimFile");
 		}
 		catch(RecordHiddenException ignoreExpectedException)
@@ -177,7 +177,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		}
 		try
 		{
-			db.getIncomingInterimFile(key);
+			db.getIncomingInterimFile(key.getUniversalId());
 			fail("Should have thrown for getIncomingInterimFile");
 		}
 		catch(RecordHiddenException ignoreExpectedException)
@@ -233,7 +233,10 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 	{
 		String accountId = key.getAccountId();
 		UniversalId visibleUid = UniversalId.createFromAccountAndLocalId(accountId, "Y");
-		DatabaseKey visibleKey = new DatabaseKey(visibleUid);
+		DatabaseKey visibleKey = DatabaseKey.createSealedKey(visibleUid);
+		if(key.isDraft())
+			visibleKey.setDraft();
+		
 		db.writeRecord(visibleKey, "some data");
 		writeAndHideRecord(db, key);
 		

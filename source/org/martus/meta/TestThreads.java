@@ -292,12 +292,12 @@ public class TestThreads extends TestCaseEnhanced
 				for(int i=0; i < copies; ++i)
 				{
 					Bulletin b = store.createEmptyBulletin();
-					UniversalId uid = b.getUniversalId();
+					DatabaseKey key = b.getDatabaseKeyForLocalId(b.getLocalId());
 
 					store.saveBulletin(b);
-					assertTrue("not found after save?", store.doesBulletinRevisionExist(uid));
+					assertTrue("not found after save?", store.doesBulletinRevisionExist(key));
 					store.destroyBulletin(b);
-					assertFalse("found after remove?", store.doesBulletinRevisionExist(uid));
+					assertFalse("found after remove?", store.doesBulletinRevisionExist(key));
 				}
 			}
 			catch (Throwable e)
@@ -377,7 +377,7 @@ System.out.flush();
 					zip.close();
 
 					Bulletin b = store.getBulletinRevision(headerKey.getUniversalId());
-					assertTrue("import didn't work?", store.doesBulletinRevisionExist(headerKey.getUniversalId()));
+					assertTrue("import didn't work?", store.doesBulletinRevisionExist(headerKey));
 					store.destroyBulletin(b);
 				}
 			} 
