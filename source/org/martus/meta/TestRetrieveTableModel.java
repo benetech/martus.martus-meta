@@ -251,7 +251,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
 		BulletinSummary s2 = (BulletinSummary)result.get(1);
-
+		
 		Bulletin bulletins[] = new Bulletin[] {b1, b2};
 		BulletinSummary summaries[] = new BulletinSummary[] {s1, s2};
 		boolean found[] = new boolean[bulletins.length];
@@ -274,6 +274,38 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		assertTrue("Missing 2?", found[1]);
 	}
 
+	public void testGetMySummariesDataRetrieved() throws Exception
+	{
+		String sampleSummary1 = "this is a basic summary";
+		
+		Bulletin b1 = appWithAccount.createBulletin();
+		b1.setAllPrivate(true);
+		b1.set(Bulletin.TAGTITLE, sampleSummary1);
+		b1.setSealed();
+		appWithAccount.getStore().saveBulletin(b1);
+		BulletinStore store = appWithAccount.getStore();
+		int b1Size = MartusUtilities.getBulletinSize(store.getDatabase(),b1.getBulletinHeaderPacket());
+		long b1LastDateSaved = b1.getBulletinHeaderPacket().getLastSavedTime();
+		
+		mockServer.allowUploads(appWithAccount.getAccountId());
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+		store.destroyBulletin(b1);
+
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
+		model.initialize(null);
+		model.checkIfErrorOccurred();
+		Vector result = model.getDownloadableSummaries();
+		assertEquals("wrong count?", 1, result.size());
+		
+		BulletinSummary s1 = (BulletinSummary)result.get(0);
+		
+		assertEquals(b1.getAccount(), s1.getAccountId());
+		assertEquals(b1.getLocalId(), s1.getLocalId());
+		assertEquals(sampleSummary1, s1.getTitle());
+		assertEquals(b1Size, s1.getSize());
+		assertEquals(BulletinSummary.getLastDateTimeSaved(new Long(b1LastDateSaved).toString()), s1.getDateTimeSaved());
+	}
+	
 	public void testGetAllMySummaries() throws Exception
 	{
 		String sampleSummary1 = "1 basic summary";

@@ -31,7 +31,9 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
@@ -83,7 +85,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		hqKey.add(hqApp.getAccountId());
 		b0.setAuthorizedToReadKeys(hqKey);
 		fieldApp1.getStore().saveBulletin(b0);
-		b0Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b0.getBulletinHeaderPacket());
+		b0Size = 20;
 
 		b1 = fieldApp1.createBulletin();
 		b1.set(Bulletin.TAGTITLE, title1);
@@ -140,12 +142,13 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(3));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(4));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(4, modelWithoutData.getColumnCount());
-		assertEquals(4, modelWithData.getColumnCount());
+		assertEquals(5, modelWithoutData.getColumnCount());
+		assertEquals(5, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -160,6 +163,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals("title", false, modelWithData.isCellEditable(1,1));
 		assertEquals("author", false, modelWithData.isCellEditable(1,2));
 		assertEquals("size", false, modelWithData.isCellEditable(1,3));
+		assertEquals("date", false, modelWithData.isCellEditable(1,4));
 	}
 	
 	public void testGetColumnClass()
@@ -168,6 +172,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals(String.class, modelWithData.getColumnClass(1));
 		assertEquals(String.class, modelWithData.getColumnClass(2));
 		assertEquals(Integer.class, modelWithData.getColumnClass(3));
+		assertEquals(String.class, modelWithData.getColumnClass(4));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -188,9 +193,17 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 2,1);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,1));
 		
-		assertTrue("B0 Size too small", ((Integer)(modelWithData.getValueAt(0,3))).intValue() > 1);
-		assertTrue("B1 Size too small", ((Integer)(modelWithData.getValueAt(1,3))).intValue() > 1);
-		assertTrue("B2 Size too small", ((Integer)(modelWithData.getValueAt(2,3))).intValue() > 1);
+		assertEquals("B0 Size incorrect minimum not 1?", 1, ((Integer)modelWithData.getValueAt(0,3)).intValue());
+		assertEquals("B1 Size incorrect", RetrieveTableModel.getSizeInKbytes(b1Size), modelWithData.getValueAt(1,3));
+		assertEquals("B2 Size incorrect", RetrieveTableModel.getSizeInKbytes(b2Size), modelWithData.getValueAt(2,3));
+
+		assertEquals("start date1", "", modelWithData.getValueAt(0,4));
+		modelWithData.setValueAt("some date1", 0,4);
+		assertEquals("keep date1", "", modelWithData.getValueAt(0,4));
+
+		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,4));
+		modelWithData.setValueAt("some date2", 2,4);
+		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,4));
 	}
 	
 	public void testSetAllFlags()
@@ -249,9 +262,14 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 			if(authorAccountId.equals(b0.getAccount()))
 				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
 			if(authorAccountId.equals(b1.getAccount()))
-				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=" + b0Size);
+				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
 			if(authorAccountId.equals(b2.getAccount()))
-				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId() + "=" + b0Size);
+				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+						b2.getFieldDataPacket().getLocalId() +
+						MartusConstants.regexEqualsDelimeter + 
+						b2Size + 
+						MartusConstants.regexEqualsDelimeter + 
+						dateSavedInMillis2);
 			result.add(list);
 			return result;
 		}
@@ -298,13 +316,19 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 
 	}
 	
-	String title0 = "cool title";
-	String title1 = "This is a cool title";
-	String title2 = "Even cooler";
+	final static String title0 = "cool title";
+	final static String title1 = "This is a cool title";
+	final static String title2 = "Even cooler";
+	final static String dateSavedInMillis2 = "1083873923190";
+	final static String dateSaved2="05/06/2004 1:05 PM";
 
-	String author0 = "Fred 0";
-	String author1 = "Betty 1";
-	String author2 = "Donna 2";
+	final static String author0 = "Fred 0";
+	final static String author1 = "Betty 1";
+	final static String author2 = "Donna 2";
+
+	static int b0Size;
+	static int b1Size;
+	static int b2Size;
 
 	static MockMartusServer testServer;
 	static NetworkInterface testSSLServerInterface;
@@ -316,9 +340,6 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	static Bulletin b0;
 	static Bulletin b1;
 	static Bulletin b2;
-	static int b0Size;
-	static int b1Size;
-	static int b2Size;
 
 	static RetrieveHQTableModel modelWithData;
 	static RetrieveHQTableModel modelWithoutData;

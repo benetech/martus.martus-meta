@@ -31,6 +31,7 @@ import java.util.Vector;
 
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.MartusConstants;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
@@ -95,12 +96,13 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(3));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(3, modelWithoutData.getColumnCount());
-		assertEquals(3, modelWithData.getColumnCount());
+		assertEquals(4, modelWithoutData.getColumnCount());
+		assertEquals(4, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -114,6 +116,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		assertEquals("flag", true, modelWithData.isCellEditable(1,0));
 		assertEquals("title", false, modelWithData.isCellEditable(1,1));
 		assertEquals("size", false, modelWithData.isCellEditable(1,2));
+		assertEquals("date", false, modelWithData.isCellEditable(1,3));
 	}
 	
 	public void testGetColumnClass()
@@ -121,6 +124,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
 		assertEquals(Integer.class, modelWithData.getColumnClass(2));
+		assertEquals(String.class, modelWithData.getColumnClass(3));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -136,6 +140,14 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		assertEquals("b0 size", new Integer(b0Size/1000), modelWithData.getValueAt(0,2));
 		assertEquals("b1 size", new Integer(b1Size/1000), modelWithData.getValueAt(1,2));
 		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(2,2));
+
+		assertEquals("start date1", "", modelWithData.getValueAt(0,3));
+		modelWithData.setValueAt("some date1", 0,3);
+		assertEquals("keep date1", "", modelWithData.getValueAt(0,3));
+
+		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,3));
+		modelWithData.setValueAt("some date2", 2,3);
+		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,3));
 	}
 	
 
@@ -181,7 +193,12 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 			Vector list = new Vector();
 			list.add(b0.getLocalId() + "=" +  b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
 			list.add(b1.getLocalId() + "=" +  b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
-			list.add(b2.getLocalId() + "=" +  b2.getFieldDataPacket().getLocalId() + "=" + b2Size);
+			list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+					b2.getFieldDataPacket().getLocalId() +
+					MartusConstants.regexEqualsDelimeter + 
+					b2Size + 
+					MartusConstants.regexEqualsDelimeter + 
+					dateSavedInMillis2);
 			result.add(list);
 			Vector sizes = new Vector();
 			if(retrieveTags.size() == 1)
@@ -222,8 +239,13 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		}
 	}
 	
-	String title1 = "This is a cool title";
-	String title2 = "Even cooler";
+	final static String title1 = "This is a cool title";
+	final static String title2 = "Even cooler";
+	final static String dateSavedInMillis2 = "1083873923190";
+	final static String dateSaved2="05/06/2004 1:05 PM";
+	final static int b0Size = 3000;
+	final static int b1Size = 5000;
+	final static int b2Size = 8000;
 
 	MockMartusServer testServer;
 	NetworkInterfaceForNonSSL testServerInterface;
@@ -233,9 +255,6 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
-	int b0Size = 3000;
-	int b1Size = 5000;
-	int b2Size = 8000;
 
 	RetrieveMyTableModel modelWithData;
 	RetrieveMyTableModel modelWithoutData;

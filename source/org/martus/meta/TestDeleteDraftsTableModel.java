@@ -31,6 +31,7 @@ import java.util.Vector;
 
 import org.martus.client.swingui.tablemodels.DeleteMyServerDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.MartusConstants;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
@@ -90,8 +91,8 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 
 	public void testGetColumnCount()
 	{
-		assertEquals(3, modelWithoutData.getColumnCount());
-		assertEquals(3, modelWithData.getColumnCount());
+		assertEquals(4, modelWithoutData.getColumnCount());
+		assertEquals(4, modelWithData.getColumnCount());
 	}
 	
 	public void testGetColumnName()
@@ -99,6 +100,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(3));
 	}
 	
 	public void testGetColumnClass()
@@ -106,6 +108,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
 		assertEquals(Integer.class, modelWithData.getColumnClass(2));
+		assertEquals(String.class, modelWithData.getColumnClass(3));
 	}
 	
 	public void testRowCount()
@@ -123,6 +126,10 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		assertEquals("start title", title2, modelWithData.getValueAt(2,1));
 		modelWithData.setValueAt(title2+title2, 2,1);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,1));
+
+		assertEquals("Date Saved", dateSaved1, modelWithData.getValueAt(1,3));
+		modelWithData.setValueAt("today", 1,3);
+		assertEquals("keep title", dateSaved1, modelWithData.getValueAt(1,3));
 	}
 	
 	class MockServer extends MockMartusServer
@@ -139,9 +146,22 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 			Vector list = new Vector();
 			if(hasData)
 			{
-				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=3000");
-				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=3100");
-				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId() + "=3200");
+				list.add(b0.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+						b0.getFieldDataPacket().getLocalId() +
+						MartusConstants.regexEqualsDelimeter +
+						"3000");
+				
+				list.add(b1.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+						b1.getFieldDataPacket().getLocalId() +
+						MartusConstants.regexEqualsDelimeter + 
+						"3100" + 
+						MartusConstants.regexEqualsDelimeter + 
+						"1083873923190");
+				
+				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+						b2.getFieldDataPacket().getLocalId() + 
+						MartusConstants.regexEqualsDelimeter + 
+						"3200");
 			}
 			result.add(list);
 			return result;
@@ -177,9 +197,9 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		public boolean hasData;
 		
 	}
-	
 	final static String title1 = "This is a cool title";
 	final static String title2 = "Even cooler";
+	final static String dateSaved1="05/06/2004 1:05 PM";
 
 	MockUiLocalization localization;
 	MockMartusApp app;

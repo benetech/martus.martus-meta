@@ -33,6 +33,7 @@ import java.util.Vector;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
@@ -143,12 +144,13 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(3));
+		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(4));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(4, modelWithoutData.getColumnCount());
-		assertEquals(4, modelWithData.getColumnCount());
+		assertEquals(5, modelWithoutData.getColumnCount());
+		assertEquals(5, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -163,6 +165,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		assertEquals("title", false, modelWithData.isCellEditable(1,1));
 		assertEquals("author", false, modelWithData.isCellEditable(1,2));
 		assertEquals("size", false, modelWithData.isCellEditable(1,3));
+		assertEquals("date", false, modelWithData.isCellEditable(1,4));
 	}
 	
 	public void testGetColumnClass()
@@ -171,6 +174,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		assertEquals(String.class, modelWithData.getColumnClass(1));
 		assertEquals(String.class, modelWithData.getColumnClass(2));
 		assertEquals(Integer.class, modelWithData.getColumnClass(3));
+		assertEquals(String.class, modelWithData.getColumnClass(4));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -191,6 +195,14 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 
 		assertTrue("B0 Size too small", ((Integer)(modelWithData.getValueAt(0,3))).intValue() > 1);
 		assertTrue("B2 Size too small", ((Integer)(modelWithData.getValueAt(0,3))).intValue() > 1);
+
+		assertEquals("start date1", "", modelWithData.getValueAt(0,4));
+		modelWithData.setValueAt("some date1", 0,4);
+		assertEquals("keep date1", "", modelWithData.getValueAt(0,4));
+
+		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(1,4));
+		modelWithData.setValueAt("some date2", 1,4);
+		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(1,4));
 	}
 	
 	public void testSetAllFlags()
@@ -248,7 +260,13 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 			if(authorAccountId.equals(b0.getAccount()))
 				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
 			if(authorAccountId.equals(b2.getAccount()))
-				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId() + "=" + b2Size);
+				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+					b2.getFieldDataPacket().getLocalId() +
+					MartusConstants.regexEqualsDelimeter + 
+					b2Size + 
+					MartusConstants.regexEqualsDelimeter + 
+					dateSavedInMillis2);
+
 			result.add(list);
 			return result;
 		}
@@ -294,13 +312,19 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		}
 	}
 	
-	String title0 = "cool title";
-	String title1 = "This is a cool title";
-	String title2 = "Even cooler";
+	final static String title0 = "cool title";
+	final static String title1 = "This is a cool title";
+	final static String title2 = "Even cooler";
+	final static String dateSavedInMillis2 = "1083873923190";
+	final static String dateSaved2="05/06/2004 1:05 PM";
 
-	String author0 = "Fred 0";
-	String author1 = "Betty 1";
-	String author2 = "Donna 2";
+	final static String author0 = "Fred 0";
+	final static String author1 = "Betty 1";
+	final static String author2 = "Donna 2";
+
+	static int b0Size;
+	static int b1Size;
+	static int b2Size;
 
 	static MockMartusServer testServer;
 	static NetworkInterface testSSLServerInterface;
@@ -312,9 +336,6 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	static Bulletin b0;
 	static Bulletin b1;
 	static Bulletin b2;
-	static int b0Size;
-	static int b1Size;
-	static int b2Size;
 
 	static RetrieveHQDraftsTableModel modelWithData;
 	static RetrieveHQDraftsTableModel modelWithoutData;
