@@ -75,8 +75,8 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		testServer = new MockServer();
 		testServer.verifyAndLoadConfigurationFiles();
 		
-		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
-		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
+		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer.serverForClients);
+		testSSLServerInterface = new ServerSideNetworkHandler(testServer.serverForClients);
 		app.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithoutData = new RetrieveMyTableModel(app, localization);
 		modelWithoutData.initialize(null);

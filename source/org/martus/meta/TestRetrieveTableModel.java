@@ -29,9 +29,10 @@ package org.martus.meta;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
+
 import org.martus.client.core.BackgroundUploader;
-import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.BulletinSummary;
+import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
@@ -61,6 +62,9 @@ import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.MockServerForClients;
+import org.martus.server.forclients.ServerForClients;
+import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.TestCaseEnhanced;
 
@@ -85,14 +89,15 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			mockSecurityForServer = MockMartusSecurity.createServer();
 
 		mockServer = new MockMartusServer();
-		mockServer.loadBannedClients();
+		mockServer.serverForClients.loadBannedClients();
 		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(mockSecurityForServer);
-		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer);
+		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer.serverForClients);
 
 		appWithoutServer = MockMartusApp.create(mockSecurityForApp);
 		MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
-		appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(mockServerNotAvailable));
+		ServerSideNetworkHandler handler = new ServerSideNetworkHandler(mockServerNotAvailable.serverForClients);
+		appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(handler);
 
 		appWithServer = MockMartusApp.create(mockSecurityForApp);
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
@@ -801,7 +806,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
-		MockServerInterfaceHandler(MockMartusServer serverToUse)
+		MockServerInterfaceHandler(ServerForClientsInterface serverToUse)
 		{
 			super(serverToUse);
 		}
@@ -828,11 +833,23 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			super();
 		}
 
-		public String ping()
+		public ServerForClients createServerForClients()
 		{
-			return null;
+			return new ServerForClientsThatReturnsNullForPing(this);
 		}
 		
+		static class ServerForClientsThatReturnsNullForPing extends MockServerForClients
+		{
+			public ServerForClientsThatReturnsNullForPing(MockMartusServer coreServer)
+			{
+				super(coreServer);
+			}
+			
+			public String ping()
+			{
+				return null;
+			}
+		}
 	}
 
 

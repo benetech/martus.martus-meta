@@ -44,6 +44,7 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.Base64;
 import org.martus.util.TestCaseEnhanced;
@@ -68,7 +69,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		mockServer = new MockMartusServer();
 		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(mockSecurityForServer);
-		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer);
+		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer.serverForClients);
 
 		if(appWithoutServer == null)
 		{
@@ -146,7 +147,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		BulletinFolder outbox = appWithServer.getFolderSealedOutbox();
 		
 		mockServer.allowUploads(appWithServer.getAccountId());
-		mockServer.loadBannedClients();
+		mockServer.serverForClients.loadBannedClients();
 		createSealedBulletin(appWithServer);
 		UploadResult result = uploaderWithServer.backgroundUpload();
 		assertEquals("Should work", NetworkInterfaceConstants.OK, result.result);
@@ -165,7 +166,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
 		
 		mockServer.allowUploads(appWithServer.getAccountId());
-		mockServer.loadBannedClients();
+		mockServer.serverForClients.loadBannedClients();
 		
 		createDraftBulletin(appWithServer);
 		createDraftBulletin(appWithServer);
@@ -215,7 +216,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
-		MockServerInterfaceHandler(MockMartusServer serverToUse)
+		MockServerInterfaceHandler(ServerForClientsInterface serverToUse)
 		{
 			super(serverToUse);
 		}

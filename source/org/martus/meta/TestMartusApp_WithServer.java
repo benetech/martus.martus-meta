@@ -62,6 +62,7 @@ import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.WrongAccountException;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 import org.martus.util.Base64;
@@ -87,11 +88,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			mockSecurityForServer = MockMartusSecurity.createServer();
 
 		mockServer = new MockMartusServer();
-		mockServer.loadBannedClients();
+		mockServer.serverForClients.loadBannedClients();
 		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(mockSecurityForServer);
-		mockNonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(mockServer);
-		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer);
+		mockNonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(mockServer.serverForClients);
+		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer.serverForClients);
 
 		if(appWithoutServer == null)
 		{
@@ -490,8 +491,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		server.setSecurity(mockSecurityForServer);
 		server.serverForClients.clearCanUploadList();
 		server.allowUploads(appWithServer.getAccountId());
-		server.loadBannedClients();
-		appWithServer.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(server));
+		server.serverForClients.loadBannedClients();
+		appWithServer.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(server.serverForClients));
 		appWithServer.serverChunkSize = 100;
 		Bulletin b = appWithServer.createBulletin();
 		b.setSealed();
@@ -1213,7 +1214,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
-		MockServerInterfaceHandler(MockMartusServer serverToUse)
+		MockServerInterfaceHandler(ServerForClientsInterface serverToUse)
 		{
 			super(serverToUse);
 		}

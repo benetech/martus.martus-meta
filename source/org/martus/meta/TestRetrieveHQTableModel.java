@@ -109,7 +109,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	
 		testServer = new MockServer();
 		testServer.verifyAndLoadConfigurationFiles();
-		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
+		testSSLServerInterface = new ServerSideNetworkHandler(testServer.serverForClients);
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQTableModel(hqApp, localization);
 		modelWithData.initialize(null);

@@ -112,7 +112,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b2Size = 2300;
 		testServer = new MockServer();
 		testServer.verifyAndLoadConfigurationFiles();
-		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
+		testSSLServerInterface = new ServerSideNetworkHandler(testServer.serverForClients);
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp,localization);
 		modelWithData.initialize(null);
