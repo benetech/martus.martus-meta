@@ -37,6 +37,7 @@ public class TestMeta extends TestCaseEnhanced
 		suite.addTest(new TestSuite(TestRetrieveMyDraftsTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveMyTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveTableModel.class));
+		suite.addTest(new TestSuite(TestScrubFile.class));
 		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
 		suite.addTest(new TestSuite(TestSSL.class));
 		suite.addTest(new TestSuite(TestThreads.class));
