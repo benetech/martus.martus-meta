@@ -58,10 +58,10 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 
 		modelWithData = new HeadQuartersTableModelEdit(localization);
 		modelWithData.setHQSelectionListener(this);
-		key1 = new HQKey(publicCode1, label1);
-		HQKeys HQKeysAuthorized = new HQKeys(key1); 
-		app.setAndSaveHQKeys(HQKeysAuthorized);
-		app.addHQLabelsWherePossible(HQKeysAuthorized);
+		key1 = new HQKey(publicKey1, label1);
+		HQKeys allHQKeys = new HQKeys(key1);
+		app.setAndSaveHQKeys(allHQKeys, allHQKeys);
+		app.addHQLabelsWherePossible(allHQKeys);
 		
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
@@ -167,9 +167,9 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 	static HeadQuartersTableModelEdit modelWithData;
 	static HeadQuartersTableModelEdit modelWithoutData;
 	
-	static String publicCode1 = "123.436";
+	static String publicKey1 = "123.436";
 	static String label1 = "key1 label";
-	static HQKey key1;
+	static HQKey key1; 
 	static HQKey key2;
 	static int numberOfSelectedHQs;
 }

@@ -148,7 +148,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		HQKeys keys = new HQKeys();
 		HQKey key = new HQKey(hqApp.getAccountId());
 		keys.add(key);
-		appWithServer.setAndSaveHQKeys(keys);
+		appWithServer.setAndSaveHQKeys(keys, keys);
 	
 		String sampleSummary1 = "this is a basic summary";
 		String sampleSummary2 = "another silly summary";

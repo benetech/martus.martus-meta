@@ -63,7 +63,7 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		String label1 = "key1 label";
 		HQKey key1 = new HQKey(publickey, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
-		app.setAndSaveHQKeys(HQKeysAuthorized);
+		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		entry1.setSelected(false);
 		assertEquals(label1, entry1.getLabel());

@@ -351,7 +351,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		hqKeys.add(new HQKey(hqApp.getAccountId()));
 
 		MartusApp fieldOfficeApp = appWithServer;
-		fieldOfficeApp.setAndSaveHQKeys(hqKeys);
+		fieldOfficeApp.setAndSaveHQKeys(hqKeys, hqKeys);
 		
 		Bulletin b1 = createAndUploadPrivateSealed(fieldOfficeApp, sampleSummary1);
 		Bulletin b2 = createAndUploadPublicSealed(fieldOfficeApp, sampleSummary2);
@@ -390,7 +390,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		hqKeys.add(new HQKey(hqApp.getAccountId()));
 
 		MartusApp fieldOfficeApp = appWithServer;
-		fieldOfficeApp.setAndSaveHQKeys(hqKeys);
+		fieldOfficeApp.setAndSaveHQKeys(hqKeys, hqKeys);
 		
 		Bulletin b1 = createAndUploadPrivateSealed(fieldOfficeApp, sampleSummary1);
 		Bulletin b2 = createAndUploadPublicSealed(fieldOfficeApp, sampleSummary2);
@@ -773,7 +773,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		keys.add(key1);
 		HQKey key2 = new HQKey(hq2App.getAccountId());
 		keys.add(key2);
-		appWithServer.setAndSaveHQKeys(keys);
+		appWithServer.setAndSaveHQKeys(keys, keys);
 		
 		Bulletin b1 = createAndUploadPrivateSealed(appWithServer, sampleSummary1);
 		Bulletin b2 = createAndUploadPublicSealed(appWithServer, sampleSummary2);

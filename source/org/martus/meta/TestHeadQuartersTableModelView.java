@@ -57,7 +57,7 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 		modelWithData = new HeadQuartersTableModelView(localization);
 		key1 = new HQKey(publicCode1, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
-		app.setAndSaveHQKeys(HQKeysAuthorized);
+		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
 		app.addHQLabelsWherePossible(HQKeysAuthorized);
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
