@@ -73,20 +73,16 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		assertEquals(key1.getPublicCode(), entry1.getPublicCode());
 		assertEquals(key1, entry1.getKey());
 		assertFalse("Entry is selected?", entry1.isSelected());
-		assertFalse("Entry is default?", entry1.isDefault());
 		
 		HQKey key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		entry2.setSelected(true);
-		entry2.setDefault(true);
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, entry2.getLabel());
 		assertEquals(key2.getPublicCode(), entry2.getPublicCode());
 		assertEquals(key2, entry2.getKey());
 		assertTrue("Entry is not selected?", entry2.isSelected());
-		assertTrue("Entry is not default?", entry2.isDefault());
-		
 		app.deleteAllFiles();
 	}
 

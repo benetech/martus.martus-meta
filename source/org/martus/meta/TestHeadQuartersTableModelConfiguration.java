@@ -127,27 +127,27 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 
 	public void testGetAllSelectedHeadQuarterKeys()
 	{
-		assertEquals(0, modelWithoutData.getAllDefaultHeadQuarterKeys().size());
-		assertEquals(0, modelWithoutData.getAllDefaultHeadQuarterKeys().size());
+		assertEquals(0, modelWithoutData.getAllSelectedHeadQuarterKeys().size());
+		assertEquals(0, modelWithoutData.getAllSelectedHeadQuarterKeys().size());
 		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
-		HQKeys allDefaultHeadQuarterKeys = modelWithData.getAllDefaultHeadQuarterKeys();
+		HQKeys allDefaultHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allDefaultHeadQuarterKeys.size());
 		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		assertEquals(key1, allDefaultHeadQuarterKeys.get(0));
 
 		modelWithData.setValueAt(Boolean.FALSE, 0,0);
 		assertFalse(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
-		assertEquals(0, modelWithData.getAllDefaultHeadQuarterKeys().size());
+		assertEquals(0, modelWithData.getAllSelectedHeadQuarterKeys().size());
 		modelWithData.setValueAt(Boolean.TRUE, 1,0);
 		assertTrue(((Boolean)modelWithData.getValueAt(1,0)).booleanValue());
-		allDefaultHeadQuarterKeys = modelWithData.getAllDefaultHeadQuarterKeys();
+		allDefaultHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allDefaultHeadQuarterKeys.size());
 		assertEquals(key2, allDefaultHeadQuarterKeys.get(0));
 		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
 		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
-		assertEquals(2, modelWithData.getAllDefaultHeadQuarterKeys().size());
+		assertEquals(2, modelWithData.getAllSelectedHeadQuarterKeys().size());
 	}
 	
 	public void testGetSetHQLabels()
