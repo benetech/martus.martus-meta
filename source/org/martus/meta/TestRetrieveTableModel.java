@@ -285,7 +285,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer, localization);
 			model.initialize(null);
-			model.getMySummaries();
+			model.getMySealedSummaries();
 			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("Got valid summaries?");
