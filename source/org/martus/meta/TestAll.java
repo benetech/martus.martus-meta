@@ -25,6 +25,8 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.meta;
 
+import org.martus.amplifier.test.TestAllAmplifier;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -61,6 +63,7 @@ public class TestAll extends java.lang.Object
 		TestSuite suite= new TestSuite("All Martus Tests");
 
 		suite.addTest(TestAllQuick.suite());
+		suite.addTest(TestAllAmplifier.suite());
 		suite.addTestSuite(TestThreads.class);
 		
 	    return suite;
