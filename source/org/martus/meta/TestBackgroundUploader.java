@@ -189,10 +189,10 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
 		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
-		assertEquals("Still in outbox", 1, outbox.getBulletinCount());
-		assertEquals("Not in sent folder", 0, appWithServer.getFolderSaved().getBulletinCount());
+		assertEquals("Not still in outbox?", 1, outbox.getBulletinCount());
+		assertEquals("Not still in saved folder?", 1, appWithServer.getFolderSaved().getBulletinCount());
 		Bulletin stillSealed = outbox.getBulletinSorted(0);
-		assertTrue("Should still be sealed", stillSealed.isSealed());
+		assertTrue("Not still sealed?", stillSealed.isSealed());
 		mockServer.uploadResponse = null;
 		TRACE_END();
 	}
@@ -242,6 +242,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		b.set(Bulletin.TAGTITLE, "test title");
 		app.getStore().saveBulletin(b);
 		app.getFolderSealedOutbox().add(b);
+		app.getFolderSaved().add(b);
 		return b;
 	}
 
@@ -252,6 +253,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		b.set(Bulletin.TAGTITLE, "test title");
 		app.getStore().saveBulletin(b);
 		app.getFolderDraftOutbox().add(b);
+		app.getFolderSaved().add(b);
 		return b;
 	}
 
