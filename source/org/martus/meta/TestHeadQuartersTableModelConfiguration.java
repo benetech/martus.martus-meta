@@ -111,14 +111,18 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 	public void testKeyLabelNames() throws InvalidBase64Exception
 	{
 		assertEquals(label1, modelWithData.getValueAt(0,2));
+		assertEquals(label1, modelWithData.getLabel(0));
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, modelWithData.getValueAt(1,2));
+		assertEquals(label2, modelWithData.getLabel(1));
 	}
 	
 	public void testKeyPublicCodes() throws InvalidBase64Exception
 	{
 		assertEquals(key1.getPublicCode(), modelWithData.getValueAt(0,1));
+		assertEquals(key1.getPublicCode(), modelWithData.getPublicCode(0));
 		assertEquals(key2.getPublicCode(), modelWithData.getValueAt(1,1));
+		assertEquals(key2.getPublicCode(), modelWithData.getPublicCode(1));
 	}
 
 	public void testGetAllSelectedHeadQuarterKeys()
@@ -152,14 +156,14 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		String newLabel2 = "new HQ Label 2";
 			
 		int labelColumn = modelWithData.COLUMN_LABEL;
-		modelWithData.setValueAt(newLabel1, 0,labelColumn);
+		modelWithData.setLabel(0, newLabel1);
 		assertEquals(newLabel1, modelWithData.getValueAt(0, labelColumn));
-		modelWithData.setValueAt(label1, 0,labelColumn);
+		modelWithData.setLabel(0, label1);
 		assertEquals(label1, modelWithData.getValueAt(0, labelColumn));
 		
-		modelWithData.setValueAt(newLabel2, 1,labelColumn);
+		modelWithData.setLabel(1, newLabel2);
 		assertEquals(newLabel2, modelWithData.getValueAt(1, labelColumn));
-		modelWithData.setValueAt("", 1,labelColumn);
+		modelWithData.setLabel(1, "");
 		assertEquals("", modelWithData.getValueAt(1, labelColumn));
 	}
 	
