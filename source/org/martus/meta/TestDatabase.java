@@ -634,6 +634,8 @@ public class TestDatabase extends TestCaseEnhanced
 		
 		File contactFile = db.getContactInfoFile(security.getPublicKeyString());
 		contactFile.deleteOnExit();
+		contactFile.getParentFile().deleteOnExit();
+		contactFile.getParentFile().mkdirs();
 		UnicodeWriter writer2 = new UnicodeWriter(contactFile);
 		writer2.write("fake contact info");
 		writer2.close();
