@@ -55,7 +55,7 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
-import org.martus.common.network.NetworkInterfaceForNonSSL;
+import org.martus.common.network.NonSSLNetworkAPI;
 import org.martus.common.network.NetworkResponse;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
@@ -348,7 +348,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		try
 		{
-			NetworkInterfaceForNonSSL noServer = new NoServerNetworkInterfaceForNonSSLHandler();
+			NonSSLNetworkAPI noServer = new NoServerNetworkInterfaceForNonSSLHandler();
 			appWithoutServer.getServerPublicKey(noServer);
 			fail("Should have thrown");
 		}
@@ -1257,7 +1257,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private MockMartusApp appWithServer;
 
 	private MockMartusServer mockServer;
-	private NetworkInterfaceForNonSSL mockNonSSLServerHandler;
+	private NonSSLNetworkAPI mockNonSSLServerHandler;
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
 	private BackgroundUploader uploaderWithServer;

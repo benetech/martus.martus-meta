@@ -40,7 +40,7 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
-import org.martus.common.network.NetworkInterfaceForNonSSL;
+import org.martus.common.network.NonSSLNetworkAPI;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
@@ -238,7 +238,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	final static int b2Size = 8000;
 
 	MockMartusServer testServer;
-	NetworkInterfaceForNonSSL testServerInterface;
+	NonSSLNetworkAPI testServerInterface;
 	NetworkInterface testSSLServerInterface;
 	UiBasicLocalization localization;
 	MockMartusApp app;
