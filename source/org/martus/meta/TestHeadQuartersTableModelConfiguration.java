@@ -169,13 +169,17 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		String key3Label = "key3";
 		key3.setLabel(key3Label);
 		HeadQuarterEntry newEntry = new HeadQuarterEntry(key3);
+		assertEquals(2, modelWithData.getAllKeys().size());
 		modelWithData.addNewHeadQuarterEntry(newEntry);
 		assertEquals(3, modelWithData.getRowCount());
+		assertEquals(3, modelWithData.getAllKeys().size());
 		assertEquals(key3Label, modelWithData.getValueAt(2, modelWithData.COLUMN_LABEL));
+		assertEquals("", modelWithData.getHQKey(1).getLabel());
 		modelWithData.removeRow(1);
 		assertEquals(2, modelWithData.getRowCount());
 		assertEquals(label1, modelWithData.getValueAt(0, modelWithData.COLUMN_LABEL));
 		assertEquals(key3Label, modelWithData.getValueAt(1, modelWithData.COLUMN_LABEL));
+		assertEquals(key3Label, modelWithData.getHQKey(1).getLabel());
 		
 		
 	}
