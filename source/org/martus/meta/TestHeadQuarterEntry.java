@@ -67,6 +67,9 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		entry1.setSelected(false);
 		assertEquals(label1, entry1.getLabel());
+		String newLabel = "New Label Key1";
+		entry1.setLabel(newLabel);
+		assertEquals(newLabel, entry1.getLabel());
 		assertEquals(key1.getPublicCode(), entry1.getPublicCode());
 		assertEquals(key1, entry1.getKey());
 		assertFalse("Entry is selected?", entry1.isSelected());

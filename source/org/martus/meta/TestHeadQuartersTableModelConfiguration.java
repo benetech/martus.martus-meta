@@ -115,6 +115,12 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		assertEquals(label2, modelWithData.getValueAt(1,2));
 	}
 	
+	public void testKeyPublicCodes() throws InvalidBase64Exception
+	{
+		assertEquals(key1.getPublicCode(), modelWithData.getValueAt(0,1));
+		assertEquals(key2.getPublicCode(), modelWithData.getValueAt(1,1));
+	}
+
 	public void testGetAllSelectedHeadQuarterKeys()
 	{
 		assertEquals(0, modelWithoutData.getAllDefaultHeadQuarterKeys().size());
@@ -123,18 +129,58 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
 		HQKeys allDefaultHeadQuarterKeys = modelWithData.getAllDefaultHeadQuarterKeys();
 		assertEquals(1, allDefaultHeadQuarterKeys.size());
+		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		assertEquals(key1, allDefaultHeadQuarterKeys.get(0));
 
 		modelWithData.setValueAt(Boolean.FALSE, 0,0);
+		assertFalse(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		assertEquals(0, modelWithData.getAllDefaultHeadQuarterKeys().size());
 		modelWithData.setValueAt(Boolean.TRUE, 1,0);
+		assertTrue(((Boolean)modelWithData.getValueAt(1,0)).booleanValue());
 		allDefaultHeadQuarterKeys = modelWithData.getAllDefaultHeadQuarterKeys();
 		assertEquals(1, allDefaultHeadQuarterKeys.size());
 		assertEquals(key2, allDefaultHeadQuarterKeys.get(0));
 		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
+		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		assertEquals(2, modelWithData.getAllDefaultHeadQuarterKeys().size());
 	}
+	
+	public void testGetSetHQLabels()
+	{
+		String newLabel1 = "new HQ Label 1";
+		String newLabel2 = "new HQ Label 2";
+			
+		int labelColumn = modelWithData.COLUMN_LABEL;
+		modelWithData.setValueAt(newLabel1, 0,labelColumn);
+		assertEquals(newLabel1, modelWithData.getValueAt(0, labelColumn));
+		modelWithData.setValueAt(label1, 0,labelColumn);
+		assertEquals(label1, modelWithData.getValueAt(0, labelColumn));
+		
+		modelWithData.setValueAt(newLabel2, 1,labelColumn);
+		assertEquals(newLabel2, modelWithData.getValueAt(1, labelColumn));
+		modelWithData.setValueAt("", 1,labelColumn);
+		assertEquals("", modelWithData.getValueAt(1, labelColumn));
+	}
+	
+	public void testRemoveRow()
+	{
+		HQKey key3 = new HQKey("123.public.key.3");
+		String key3Label = "key3";
+		key3.setLabel(key3Label);
+		HeadQuarterEntry newEntry = new HeadQuarterEntry(key3);
+		modelWithData.addNewHeadQuarterEntry(newEntry);
+		assertEquals(3, modelWithData.getRowCount());
+		assertEquals(key3Label, modelWithData.getValueAt(2, modelWithData.COLUMN_LABEL));
+		modelWithData.removeRow(1);
+		assertEquals(2, modelWithData.getRowCount());
+		assertEquals(label1, modelWithData.getValueAt(0, modelWithData.COLUMN_LABEL));
+		assertEquals(key3Label, modelWithData.getValueAt(1, modelWithData.COLUMN_LABEL));
+		
+		
+	}
+	
+	
 	
 	static MockUiLocalization localization;
 	static MockMartusApp app;

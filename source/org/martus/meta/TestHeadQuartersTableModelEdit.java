@@ -120,6 +120,7 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 	public void testGetAllSelectedHeadQuarterKeys()
 	{
 		assertEquals(0, modelWithData.getAllSelectedHeadQuarterKeys().size());
+		assertFalse(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		assertEquals(0, modelWithoutData.getAllSelectedHeadQuarterKeys().size());
 		assertEquals(0, modelWithData.getNumberOfSelectedHQs());
 		assertEquals(0, modelWithoutData.getNumberOfSelectedHQs());
@@ -127,6 +128,7 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
 		assertEquals(1, numberOfSelectedHQs);
+		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 
 		HQKeys allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allSelectedHeadQuarterKeys.size());
@@ -135,8 +137,10 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 
 		modelWithData.setValueAt(Boolean.FALSE, 0,0);
 		assertEquals(0, numberOfSelectedHQs);
+		assertFalse(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		modelWithData.setValueAt(Boolean.TRUE, 1,0);
 		assertEquals(1, numberOfSelectedHQs);
+		assertTrue(((Boolean)modelWithData.getValueAt(1,0)).booleanValue());
 		
 		allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allSelectedHeadQuarterKeys.size());
