@@ -42,6 +42,7 @@ import junit.framework.TestSuite;
 import org.martus.client.core.ClientFileDatabase;
 import org.martus.common.FieldSpec;
 import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.SessionKey;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.AttachmentPacket;
@@ -305,7 +306,7 @@ public class TestSpeed extends TestCaseEnhanced
 	void timeAttachments(Database db, int fileLength) throws Exception
 	{
 		String accountId = security.getPublicKeyString();
-		byte[] sessionKeyBytes = security.createSessionKey();
+		SessionKey sessionKeyBytes = security.createSessionKey();
 
 		Stopwatch fileCreateTimer = new Stopwatch();
 		File fileToAttach = createRandomFile(fileLength);
