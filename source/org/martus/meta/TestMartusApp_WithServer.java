@@ -586,6 +586,30 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_END();
 	}
 
+	public void testSendAlreadySentBulletin() throws Exception
+	{
+		TRACE_BEGIN("testSendAlreadySentBulletin");
+
+		Bulletin b1 = appWithServer.createBulletin();
+		b1.setSealed();
+		appWithServer.getStore().saveBulletin(b1);
+		mockServer.allowUploads(appWithServer.getAccountId());
+		assertEquals("upload b1", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+
+		Bulletin b2 = appWithServer.createBulletin();
+		b2.setSealed();
+		appWithServer.getStore().saveBulletin(b2);
+		appWithServer.getStore().setIsOnServer(b2);
+		assertEquals("try to upload sealded b2 that is already on server, should be rejected as duplicate.", NetworkInterfaceConstants.DUPLICATE, uploaderWithServer.uploadBulletin(b2));
+		
+		Bulletin b3 = appWithServer.createBulletin();
+		b3.setDraft();
+		appWithServer.getStore().saveBulletin(b3);
+		appWithServer.getStore().setIsOnServer(b3);
+		assertEquals("try to upload draft b3 that is already on server, should be ok.", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b3));
+
+		TRACE_END();
+	}
 		
 	public void testRetrieveBulletins() throws Exception
 	{
