@@ -1039,7 +1039,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	private MockMartusApp appWithServer;
 	private MockMartusApp appWithoutServer;
 
-	private MockMartusServer mockServer;
+	MockMartusServer mockServer;
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
 	BackgroundUploader uploader;
