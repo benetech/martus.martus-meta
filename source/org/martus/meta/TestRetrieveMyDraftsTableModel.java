@@ -44,6 +44,7 @@ import org.martus.common.network.NonSSLNetworkAPI;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 import org.martus.util.TestCaseEnhanced;
@@ -184,22 +185,36 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector listMyDraftBulletinIds(String authorAccountId, Vector retrieveTags) 
+		public ServerForClients createServerForClients()
 		{
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.OK);
-			Vector list = new Vector();
-			list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
-			list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
-					b2.getFieldDataPacket().getLocalId() +
-					MartusConstants.regexEqualsDelimeter + 
-					b2Size + 
-					MartusConstants.regexEqualsDelimeter + 
-					dateSavedInMillis2);
+			return new LocalMockServerForClients(this);
+		}
+		
+		class LocalMockServerForClients extends ServerForClients
+		{
+			LocalMockServerForClients(MockMartusServer coreServer)
+			{
+				super(coreServer);
+			}
 
-			
-			result.add(list);
-			return result;
+			public Vector listMyDraftBulletinIds(String authorAccountId, Vector retrieveTags) 
+			{
+				Vector result = new Vector();
+				result.add(NetworkInterfaceConstants.OK);
+				Vector list = new Vector();
+				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
+				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+						b2.getFieldDataPacket().getLocalId() +
+						MartusConstants.regexEqualsDelimeter + 
+						b2Size + 
+						MartusConstants.regexEqualsDelimeter + 
+						dateSavedInMillis2);
+
+				
+				result.add(list);
+				return result;
+			}
+
 		}
 
 		public Vector getPacket(String hqAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId)

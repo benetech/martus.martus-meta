@@ -41,6 +41,7 @@ import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.TestCaseEnhanced;
 
@@ -155,32 +156,46 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector listMyDraftBulletinIds(String clientId, Vector retrieveTags)
+		public ServerForClients createServerForClients()
 		{
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.OK);
-			Vector list = new Vector();
-			if(hasData)
+			return new LocalMockServerForClients(this);
+		}
+		
+		class LocalMockServerForClients extends ServerForClients
+		{
+			LocalMockServerForClients(MockMartusServer coreServer)
 			{
-				list.add(b0.getLocalId() + MartusConstants.regexEqualsDelimeter + 
-						b0.getFieldDataPacket().getLocalId() +
-						MartusConstants.regexEqualsDelimeter +
-						"3000");
-				
-				list.add(b1.getLocalId() + MartusConstants.regexEqualsDelimeter + 
-						b1.getFieldDataPacket().getLocalId() +
-						MartusConstants.regexEqualsDelimeter + 
-						"3100" + 
-						MartusConstants.regexEqualsDelimeter + 
-						LAST_SAVED_DATE_TIME);
-				
-				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
-						b2.getFieldDataPacket().getLocalId() + 
-						MartusConstants.regexEqualsDelimeter + 
-						"3200");
+				super(coreServer);
 			}
-			result.add(list);
-			return result;
+
+			public Vector listMyDraftBulletinIds(String clientId, Vector retrieveTags)
+			{
+				Vector result = new Vector();
+				result.add(NetworkInterfaceConstants.OK);
+				Vector list = new Vector();
+				if(hasData)
+				{
+					list.add(b0.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+							b0.getFieldDataPacket().getLocalId() +
+							MartusConstants.regexEqualsDelimeter +
+							"3000");
+					
+					list.add(b1.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+							b1.getFieldDataPacket().getLocalId() +
+							MartusConstants.regexEqualsDelimeter + 
+							"3100" + 
+							MartusConstants.regexEqualsDelimeter + 
+							LAST_SAVED_DATE_TIME);
+					
+					list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+							b2.getFieldDataPacket().getLocalId() + 
+							MartusConstants.regexEqualsDelimeter + 
+							"3200");
+				}
+				result.add(list);
+				return result;
+			}
+			
 		}
 		
 		public Vector getPacket(String hqAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId)
