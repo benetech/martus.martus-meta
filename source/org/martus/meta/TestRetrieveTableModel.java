@@ -26,11 +26,13 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Vector;
-
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinSummary;
+import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
@@ -41,12 +43,23 @@ import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
+import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MartusCrypto.CryptoException;
+import org.martus.common.crypto.MartusCrypto.DecryptionException;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
+import org.martus.common.database.Database;
 import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.Packet.InvalidPacketException;
+import org.martus.common.packet.Packet.SignatureVerificationException;
+import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.TestCaseEnhanced;
@@ -85,12 +98,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		
-		appWithAccount = MockMartusApp.create(mockSecurityForApp);
-		appWithAccount.setServerInfo("mock", mockServer.getAccountId(), "");
-		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		
 		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
-		uploader = new BackgroundUploader(appWithAccount, nullProgressMeter);
+		uploader = new BackgroundUploader(appWithServer, nullProgressMeter);
 
 		mockServer.deleteAllData();
 		
@@ -101,48 +110,153 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		appWithoutServer.deleteAllFiles();
 		appWithServer.deleteAllFiles();
-		appWithAccount.deleteAllFiles();
 		mockServer.deleteAllFiles();
 		super.tearDown();
 	}
 	
-	public void testGetMyBulletinSummariesWithServerError() throws Exception
+	public void testRetrieveMyDraftsMarksAllAsOnServer() throws Exception
 	{
-		String sampleSummary1 = "this is a basic summary";
-		String sampleSummary2 = "another silly summary";
-		String sampleSummary3 = "yet another!";
+		MartusApp app = appWithServer;
+		BulletinStore store = app.getStore();
+		
+		Bulletin b1 = createAndUploadPrivateSealed(app, sampleSummary1);
+		Bulletin b2 = createAndUploadPublicSealed(app, sampleSummary2);
+		Bulletin b3 = createAndUploadPrivateDraft(app, sampleSummary3);
+		Bulletin b4 = createAndUploadPublicDraft(app, sampleSummary4);
 
-		Bulletin b1 = appWithAccount.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setSealed();
-		appWithAccount.getStore().saveBulletin(b1);
+		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(app, localization);
+		model.initialize(null);
 
-		Bulletin b2 = appWithAccount.createBulletin();
-		b2.setAllPrivate(false);
-		b2.set(Bulletin.TAGTITLE, sampleSummary2);
-		b2.setSealed();
-		appWithAccount.getStore().saveBulletin(b2);
+		assertFalse("b1 now on?", store.isProbablyOnServer(b1));
+		assertFalse("b2 now on?", store.isProbablyOnServer(b2));
+		assertTrue("b3 not on?", store.isProbablyOnServer(b3));
+		assertTrue("b4 not on?", store.isProbablyOnServer(b4));
+		
+		store.setIsNotOnServer(b3);
+		store.setIsNotOnServer(b4);
+		store.destroyBulletin(b3);
+		store.destroyBulletin(b4);
+		model.initialize(null);
+		assertFalse("b3 on even though it isn't in the store?", store.isProbablyOnServer(b3));
+		assertFalse("b4 on even though it isn't in the store?", store.isProbablyOnServer(b4));
+	}
+	
+	public void testRetrieveMySealedBulletinsMarksAllAsOnServer() throws Exception
+	{
+		MartusApp app = appWithServer;
+		BulletinStore store = app.getStore();
+		
+		Bulletin b1 = createAndUploadPrivateSealed(app, sampleSummary1);
+		Bulletin b2 = createAndUploadPublicSealed(app, sampleSummary2);
+		Bulletin b3 = createAndUploadPrivateDraft(app, sampleSummary3);
+		Bulletin b4 = createAndUploadPublicDraft(app, sampleSummary4);
 
-		Bulletin b3 = appWithAccount.createBulletin();
-		b3.setAllPrivate(true);
-		b3.set(Bulletin.TAGTITLE, sampleSummary3);
-		b3.setSealed();
-		appWithAccount.getStore().saveBulletin(b3);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(app, localization);
+		model.initialize(null);
 
-		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
-
-		BulletinStore store = appWithAccount.getStore();
+		assertTrue("b1 not on?", store.isProbablyOnServer(b1));
+		assertTrue("b2 not on?", store.isProbablyOnServer(b2));
+		assertFalse("b3 now on?", store.isProbablyOnServer(b3));
+		assertFalse("b4 now on?", store.isProbablyOnServer(b4));
+		
+		store.setIsNotOnServer(b1);
+		store.setIsNotOnServer(b2);
 		store.destroyBulletin(b1);
 		store.destroyBulletin(b2);
-		store.destroyBulletin(b3);
+		model.initialize(null);
+		assertFalse("b1 on even though it isn't in the store?", store.isProbablyOnServer(b1));
+		assertFalse("b2 on even though it isn't in the store?", store.isProbablyOnServer(b2));
+	}
+	
+	public void testRetrieveFieldOfficeSealedBulletinsMarksAllAsOnServer() throws Exception
+	{
+		MartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
+		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+		HQKeys hqKeys = new HQKeys();
+		hqKeys.add(new HQKey(hqApp.getAccountId()));
+
+		MartusApp fieldOfficeApp = appWithServer;
+		fieldOfficeApp.setAndSaveHQKeys(hqKeys);
+		
+		Bulletin b1 = createAndUploadPrivateSealed(fieldOfficeApp, sampleSummary1);
+		Bulletin b2 = createAndUploadPublicSealed(fieldOfficeApp, sampleSummary2);
+		Bulletin b3 = createAndUploadPrivateDraft(fieldOfficeApp, sampleSummary3);
+		Bulletin b4 = createAndUploadPublicDraft(fieldOfficeApp, sampleSummary4);
+		
+		Database hqDatabase = hqApp.getStore().getDatabase();
+		MartusCrypto fieldOfficeSecurity = fieldOfficeApp.getSecurity();
+		BulletinSaver.saveToClientDatabase(b1, hqDatabase, false, fieldOfficeSecurity);
+		BulletinSaver.saveToClientDatabase(b2, hqDatabase, false, fieldOfficeSecurity);
+		BulletinSaver.saveToClientDatabase(b3, hqDatabase, false, fieldOfficeSecurity);
+		BulletinSaver.saveToClientDatabase(b4, hqDatabase, false, fieldOfficeSecurity);
+
+		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
+		model.initialize(null);
+
+		BulletinStore hqStore = hqApp.getStore();
+		assertTrue("b1 not on?", hqStore.isProbablyOnServer(b1));
+		assertTrue("b2 not on?", hqStore.isProbablyOnServer(b2));
+		assertFalse("b3 now on?", hqStore.isProbablyOnServer(b3));
+		assertFalse("b4 now on?", hqStore.isProbablyOnServer(b4));
+		
+		hqStore.setIsNotOnServer(b1);
+		hqStore.setIsNotOnServer(b2);
+		hqStore.destroyBulletin(b1);
+		hqStore.destroyBulletin(b2);
+		model.initialize(null);
+		assertFalse("b1 on even though it isn't in the store?", hqStore.isProbablyOnServer(b1));
+		assertFalse("b2 on even though it isn't in the store?", hqStore.isProbablyOnServer(b2));
+	}
+	
+	public void testRetrieveFieldOfficeDraftBulletinsMarksAllAsOnServer() throws Exception
+	{
+		MartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
+		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+		HQKeys hqKeys = new HQKeys();
+		hqKeys.add(new HQKey(hqApp.getAccountId()));
+
+		MartusApp fieldOfficeApp = appWithServer;
+		fieldOfficeApp.setAndSaveHQKeys(hqKeys);
+		
+		Bulletin b1 = createAndUploadPrivateSealed(fieldOfficeApp, sampleSummary1);
+		Bulletin b2 = createAndUploadPublicSealed(fieldOfficeApp, sampleSummary2);
+		Bulletin b3 = createAndUploadPrivateDraft(fieldOfficeApp, sampleSummary3);
+		Bulletin b4 = createAndUploadPublicDraft(fieldOfficeApp, sampleSummary4);
+		
+		Database hqDatabase = hqApp.getStore().getDatabase();
+		MartusCrypto fieldOfficeSecurity = fieldOfficeApp.getSecurity();
+		BulletinSaver.saveToClientDatabase(b1, hqDatabase, false, fieldOfficeSecurity);
+		BulletinSaver.saveToClientDatabase(b2, hqDatabase, false, fieldOfficeSecurity);
+		BulletinSaver.saveToClientDatabase(b3, hqDatabase, false, fieldOfficeSecurity);
+		BulletinSaver.saveToClientDatabase(b4, hqDatabase, false, fieldOfficeSecurity);
+
+		RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(hqApp, localization);
+		model.initialize(null);
+
+		BulletinStore hqStore = hqApp.getStore();
+		assertFalse("b1 now on?", hqStore.isProbablyOnServer(b1));
+		assertFalse("b2 now on?", hqStore.isProbablyOnServer(b2));
+		assertTrue("b3 not on?", hqStore.isProbablyOnServer(b3));
+		assertTrue("b4 not on?", hqStore.isProbablyOnServer(b4));
+		
+		hqStore.setIsNotOnServer(b3);
+		hqStore.setIsNotOnServer(b4);
+		hqStore.destroyBulletin(b3);
+		hqStore.destroyBulletin(b4);
+		model.initialize(null);
+		assertFalse("b3 on even though it isn't in the store?", hqStore.isProbablyOnServer(b3));
+		assertFalse("b4 on even though it isn't in the store?", hqStore.isProbablyOnServer(b4));
+	}
+	
+	public void testGetMyBulletinSummariesWithServerError() throws Exception
+	{
+		createAndUploadAndDeletePrivateSealed(appWithServer, sampleSummary1);
+		createAndUploadAndDeletePublicSealed(appWithServer, sampleSummary2);
+		createAndUploadAndDeletePrivateSealed(appWithServer, sampleSummary3);
 
 		mockServer.countDownToGetPacketFailure = 2;
 
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, localization);
 		try
 		{
 			model.initialize(null);
@@ -213,39 +327,11 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	public void testGetMySummaries() throws Exception
 	{
-		String sampleSummary1 = "this is a basic summary";
-		String sampleSummary2 = "another silly summary";
-		String sampleSummary3 = "yet another!";
+		Bulletin b1 = createAndUploadAndDeletePrivateSealed(appWithServer, sampleSummary1);
+		Bulletin b2 = createAndUploadAndDeletePublicSealed(appWithServer, sampleSummary2);
+		createAndUploadAndDeletePrivateDraft(appWithServer, sampleSummary3);
 		
-		Bulletin b1 = appWithAccount.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setSealed();
-		appWithAccount.getStore().saveBulletin(b1);
-		
-		Bulletin b2 = appWithAccount.createBulletin();
-		b2.setAllPrivate(false);
-		b2.set(Bulletin.TAGTITLE, sampleSummary2);
-		b2.setSealed();
-		appWithAccount.getStore().saveBulletin(b2);
-		
-		Bulletin b3 = appWithAccount.createBulletin();
-		b3.setAllPrivate(true);
-		b3.set(Bulletin.TAGTITLE, sampleSummary3);
-		b3.setDraft();
-		appWithAccount.getStore().saveBulletin(b3);
-		
-		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
-		
-		BulletinStore store = appWithAccount.getStore();
-		store.destroyBulletin(b1);
-		store.destroyBulletin(b2);
-		store.destroyBulletin(b3);
-
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
@@ -275,25 +361,22 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		assertTrue("Missing 1?", found[0]);
 		assertTrue("Missing 2?", found[1]);
 	}
+	
+	public void testOnServerAfterRetrieveSummaries() throws Exception
+	{
+		
+	}
 
 	public void testGetMySummariesDataRetrieved() throws Exception
 	{
-		String sampleSummary1 = "this is a basic summary";
-		
-		Bulletin b1 = appWithAccount.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setSealed();
-		appWithAccount.getStore().saveBulletin(b1);
-		BulletinStore store = appWithAccount.getStore();
-		int b1Size = MartusUtilities.getBulletinSize(store.getDatabase(),b1.getBulletinHeaderPacket());
+		Bulletin b1 = createAndUploadPrivateSealed(appWithServer, sampleSummary1);
 		long b1LastDateSaved = b1.getBulletinHeaderPacket().getLastSavedTime();
-		
-		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+
+		BulletinStore store = appWithServer.getStore();
+		int b1Size = MartusUtilities.getBulletinSize(store.getDatabase(),b1.getBulletinHeaderPacket());
 		store.destroyBulletin(b1);
 
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
@@ -310,39 +393,13 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testGetAllMySummaries() throws Exception
 	{
-		String sampleSummary1 = "1 basic summary";
-		String sampleSummary2 = "2 silly summary";
-		String sampleSummary3 = "3 yet another!";
+		appWithServer.getStore().deleteAllData();
 		
-		appWithAccount.getStore().deleteAllData();
+		Bulletin b1 = createAndUploadAndDeletePrivateSealed(appWithServer, sampleSummary1);
+		Bulletin b2 = createAndUploadAndDeletePublicSealed(appWithServer, sampleSummary2);
+		Bulletin b3 = createAndUploadPrivateSealed(appWithServer, sampleSummary3);
 		
-		Bulletin b1 = appWithAccount.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setSealed();
-		appWithAccount.getStore().saveBulletin(b1);
-		
-		Bulletin b2 = appWithAccount.createBulletin();
-		b2.setAllPrivate(false);
-		b2.set(Bulletin.TAGTITLE, sampleSummary2);
-		b2.setSealed();
-		appWithAccount.getStore().saveBulletin(b2);
-				
-		Bulletin b3 = appWithAccount.createBulletin();
-		b3.setAllPrivate(true);
-		b3.set(Bulletin.TAGTITLE, sampleSummary3);
-		b3.setSealed();
-		appWithAccount.getStore().saveBulletin(b3);
-		
-		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
-
-		appWithAccount.getStore().destroyBulletin(b1);
-		appWithAccount.getStore().destroyBulletin(b2);
-
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector allResult = model.getAllSummaries();
@@ -425,39 +482,11 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	public void testGetMyDraftSummaries() throws Exception
 	{
-		String sampleSummary1 = "this is a basic summary";
-		String sampleSummary2 = "another silly summary";
-		String sampleSummary3 = "yet another!";
+		Bulletin b1 = createAndUploadAndDeletePrivateDraft(appWithServer, sampleSummary1);
+		Bulletin b2 = createAndUploadAndDeletePublicDraft(appWithServer, sampleSummary2);
+		createAndUploadAndDeletePrivateSealed(appWithServer, sampleSummary3);
 		
-		Bulletin b1 = appWithAccount.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setDraft();
-		appWithAccount.getStore().saveBulletin(b1);
-		
-		Bulletin b2 = appWithAccount.createBulletin();
-		b2.setAllPrivate(false);
-		b2.set(Bulletin.TAGTITLE, sampleSummary2);
-		b2.setDraft();
-		appWithAccount.getStore().saveBulletin(b2);
-		
-		Bulletin b3 = appWithAccount.createBulletin();
-		b3.setAllPrivate(true);
-		b3.set(Bulletin.TAGTITLE, sampleSummary3);
-		b3.setSealed();
-		appWithAccount.getStore().saveBulletin(b3);
-		
-		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
-
-		BulletinStore store = appWithAccount.getStore();
-		store.destroyBulletin(b1);
-		store.destroyBulletin(b2);
-		store.destroyBulletin(b3);
-
-		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount, localization);
+		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
@@ -565,43 +594,17 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		assertNotEquals("same public key?", appWithAccount.getAccountId(), hqApp.getAccountId());
+		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
 		HQKeys keys = new HQKeys();
 		HQKey key1 = new HQKey(hqApp.getAccountId());
 		keys.add(key1);
 		HQKey key2 = new HQKey(hq2App.getAccountId());
 		keys.add(key2);
-		appWithAccount.setAndSaveHQKeys(keys);
-
-		String sampleSummary1 = "this is a basic summary";
-		String sampleSummary2 = "another silly summary";
-		String sampleSummary3 = "Draft summary";
+		appWithServer.setAndSaveHQKeys(keys);
 		
-		Bulletin b1 = appWithAccount.createBulletin();
-		b1.setAllPrivate(true);
-		b1.set(Bulletin.TAGTITLE, sampleSummary1);
-		b1.setSealed();
-		appWithAccount.setHQKeysInBulletin(b1);
-		appWithAccount.getStore().saveBulletin(b1);
-		
-		Bulletin b2 = appWithAccount.createBulletin();
-		b2.setAllPrivate(false);
-		b2.set(Bulletin.TAGTITLE, sampleSummary2);
-		b2.setSealed();
-		appWithAccount.setHQKeysInBulletin(b2);
-		appWithAccount.getStore().saveBulletin(b2);
-		
-		Bulletin b3 = appWithAccount.createBulletin();
-		b3.setAllPrivate(false);
-		b3.set(Bulletin.TAGTITLE, sampleSummary3);
-		b3.setDraft();
-		appWithAccount.setHQKeysInBulletin(b3);
-		appWithAccount.getStore().saveBulletin(b3);
-
-		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
+		Bulletin b1 = createAndUploadPrivateSealed(appWithServer, sampleSummary1);
+		Bulletin b2 = createAndUploadPublicSealed(appWithServer, sampleSummary2);
+		Bulletin b3 = createAndUploadPublicDraft(appWithServer, sampleSummary3);
 
 		Vector desiredSealedResult = new Vector();
 		desiredSealedResult.add(NetworkInterfaceConstants.OK);
@@ -686,6 +689,91 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listFieldOfficeSummariesResponse = null;
 		hq2App.deleteAllFiles();
 	}
+	
+	private Bulletin createAndUploadAndDeletePrivateSealed(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadAndDeleteBulletin(app, title, true, true);
+	}
+	
+	private Bulletin createAndUploadAndDeletePrivateDraft(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadAndDeleteBulletin(app, title, true, false);
+	}
+	
+	private Bulletin createAndUploadAndDeletePublicSealed(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadAndDeleteBulletin(app, title, false, true);
+	}
+	
+	private Bulletin createAndUploadAndDeletePublicDraft(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadAndDeleteBulletin(app, title, false, false);
+	}
+	
+	private Bulletin createAndUploadAndDeleteBulletin(MartusApp app, String title, boolean allPrivate, boolean sealed) throws Exception
+	{
+		Bulletin b = createAndUploadBulletin(app, title, allPrivate, sealed);
+		deleteBulletin(app, b);
+		return b;
+	}
+	
+	
+
+	private Bulletin createAndUploadPrivateSealed(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadBulletin(app, title, true, true);
+	}
+	
+	private Bulletin createAndUploadPublicSealed(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadBulletin(app, title, false, true);
+	}
+	
+	private Bulletin createAndUploadPrivateDraft(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadBulletin(app, title, true, false);
+	}
+	
+	private Bulletin createAndUploadPublicDraft(MartusApp app, String title) throws Exception
+	{
+		return createAndUploadBulletin(app, title, false, false);
+	}
+	
+	private Bulletin createAndUploadBulletin(MartusApp app, String title, boolean allPrivate, boolean sealed) throws Exception
+	{
+		Bulletin b = createBulletin(app, title, allPrivate, sealed);
+		uploadBulletin(app, b);
+		BulletinStore store = app.getStore();
+		assertFalse("new bulletin is marked as being on the server?", store.isProbablyOnServer(b));
+		assertFalse("new bulletin is marked as being not on the server?", store.isProbablyNotOnServer(b));
+		return b;
+	}
+	
+	
+
+	private Bulletin createBulletin(MartusApp app, String title, boolean allPrivate, boolean sealed) throws Exception
+	{
+		Bulletin b = app.createBulletin();
+		b.setAllPrivate(allPrivate);
+		b.set(Bulletin.TAGTITLE, title);
+		if(sealed)
+			b.setSealed();
+		app.setHQKeysInBulletin(b);
+		app.getStore().saveBulletin(b);
+		return b;
+	}
+
+	private void uploadBulletin(MartusApp app, Bulletin b) throws InvalidPacketException, WrongPacketTypeException, SignatureVerificationException, DecryptionException, NoKeyPairException, CryptoException, FileNotFoundException, MartusSignatureException, FileTooLargeException, IOException
+	{
+		mockServer.allowUploads(app.getAccountId());
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b));
+	}
+
+	private void deleteBulletin(MartusApp app, Bulletin b) throws IOException
+	{
+		BulletinStore store = app.getStore();
+		store.destroyBulletin(b);
+	}
 
 
 
@@ -752,6 +840,11 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	Bulletin b1;
 	Bulletin b2;
 
+	String sampleSummary1 = "this is a basic summary";
+	String sampleSummary2 = "another silly summary";
+	String sampleSummary3 = "yet another!";
+	String sampleSummary4 = "this is the fourth!";
+
 	String title1 = "This is a cool title";
 	String title2 = "Even cooler";
 
@@ -761,7 +854,6 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	private MockMartusApp appWithServer;
 	private MockMartusApp appWithoutServer;
-	private MockMartusApp appWithAccount;
 
 	private MockMartusServer mockServer;
 	private MockServerInterfaceHandler mockSSLServerHandler;
