@@ -29,6 +29,7 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
+import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.DeleteMyServerDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.MartusConstants;
@@ -127,9 +128,10 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 2,DeleteMyServerDraftsTableModel.COLUMN_TITLE);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,DeleteMyServerDraftsTableModel.COLUMN_TITLE));
 
-		assertEquals("Date Saved", dateSaved1, modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(LAST_SAVED_DATE_TIME));
+		assertEquals("Date Saved", expectedDateSaved, (String)modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("today", 1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED);
-		assertEquals("keep title", dateSaved1, modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals("allowed change?", expectedDateSaved, (String)modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED)); 
 	}
 	
 	public void testSetAllFlags()
@@ -170,7 +172,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 						MartusConstants.regexEqualsDelimeter + 
 						"3100" + 
 						MartusConstants.regexEqualsDelimeter + 
-						"1083873923190");
+						LAST_SAVED_DATE_TIME);
 				
 				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
 						b2.getFieldDataPacket().getLocalId() + 
@@ -213,7 +215,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	}
 	final static String title1 = "This is a cool title";
 	final static String title2 = "Even cooler";
-	final static String dateSaved1="05/06/2004 1:05 PM";
+	private static final String LAST_SAVED_DATE_TIME = "1083873923190";
 
 	MockUiLocalization localization;
 	MockMartusApp app;

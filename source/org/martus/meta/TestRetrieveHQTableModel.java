@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Vector;
 
+import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
@@ -204,9 +205,10 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt("some date1", 0,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED);
 		assertEquals("keep date1", "", modelWithData.getValueAt(0,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED));
 
-		assertEquals("start date2", dateSaved2, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED));
+		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
+		assertEquals("start date2", expectedDateSaved, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("some date2", 2,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED);
-		assertEquals("keep date2", dateSaved2, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals("keep date2", expectedDateSaved, modelWithData.getValueAt(2,RetrieveHQTableModel.COLUMN_LAST_DATE_SAVED));
 	}
 	
 	public void testSetAllFlags()
@@ -323,7 +325,6 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	final static String title1 = "This is a cool title";
 	final static String title2 = "Even cooler";
 	final static String dateSavedInMillis2 = "1083873923190";
-	final static String dateSaved2="05/06/2004 1:05 PM";
 
 	final static String author0 = "Fred 0";
 	final static String author1 = "Betty 1";

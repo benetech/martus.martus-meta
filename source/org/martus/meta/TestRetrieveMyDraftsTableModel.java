@@ -29,6 +29,7 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
+import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.MartusConstants;
@@ -143,9 +144,10 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 
 		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_BULLETIN_SIZE));
 
-		assertEquals("start date", dateSaved2, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
+		assertEquals("start date", expectedDateSaved, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("some date", 1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED);
-		assertEquals("keep date", dateSaved2, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals("keep date", expectedDateSaved, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
 	}
 	
 	public void testSetAllFlags()
@@ -231,7 +233,6 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	final static String title1 = "This is a cool title";
 	final static String title2 = "Even cooler";
 	final static String dateSavedInMillis2 = "1083873923190";
-	final static String dateSaved2="05/06/2004 1:05 PM";
 	final static int b0Size = 3000;
 	final static int b1Size = 5000;
 	final static int b2Size = 8000;
