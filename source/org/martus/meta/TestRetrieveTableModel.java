@@ -37,6 +37,7 @@ import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.common.BulletinSummary;
@@ -70,6 +71,7 @@ import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.SummaryCollector;
 import org.martus.util.TestCaseEnhanced;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class TestRetrieveTableModel extends TestCaseEnhanced
 {
@@ -122,6 +124,101 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		super.tearDown();
 	}
 	
+	class MockModel extends RetrieveTableModel
+	{
+		MockModel(UiBasicLocalization localizationToUse) throws Exception
+		{
+			super(MockMartusApp.create(), localizationToUse);
+			parent = createBulletin(getApp(), sampleSummary1, true, true);
+			son = createClone(getApp(), parent, sampleSummary2);
+			daughter = createClone(getApp(), parent, sampleSummary3);
+			granddaughter = createClone(getApp(), daughter, sampleSummary4);
+
+			allSummaries = new Vector();
+			allSummaries.add(buildSummary(parent));
+			allSummaries.add(buildSummary(son));
+			allSummaries.add(buildSummary(daughter));
+			allSummaries.add(buildSummary(granddaughter));
+		}
+		
+		protected void populateAllSummariesList() throws ServerErrorException
+		{
+		}
+		
+		private BulletinSummary buildSummary(Bulletin b) throws ServerErrorException
+		{
+			BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
+			Database db = getApp().getStore().getDatabase();
+			Vector tags = BulletinSummary.getNormalRetrieveTags();
+			String summaryString = SummaryCollector.extractSummary(bhp, db, tags);
+			try
+			{
+				return BulletinSummary.createFromString(bhp.getAccountId(), summaryString);
+			}
+			catch (WrongValueCount e)
+			{
+				throw new ServerErrorException();
+			}
+		}
+		
+		void deleteAllFromAppExcept(Bulletin keep) throws Exception
+		{
+			
+			ClientBulletinStore store = getApp().getStore();
+			if(!keep.getUniversalId().equals(parent.getUniversalId()))
+				store.deleteBulletinRevision(parent.getUniversalId());
+			if(!keep.getUniversalId().equals(son.getUniversalId()))
+				store.deleteBulletinRevision(son.getUniversalId());
+			if(!keep.getUniversalId().equals(daughter.getUniversalId()))
+				store.deleteBulletinRevision(daughter.getUniversalId());
+			if(!keep.getUniversalId().equals(granddaughter.getUniversalId()))
+				store.deleteBulletinRevision(granddaughter.getUniversalId());
+		}
+		
+		Bulletin parent;
+		Bulletin son;
+		Bulletin daughter;
+		Bulletin granddaughter;
+	}
+	
+	public void testGetUidsThatWouldBeUpgrades() throws Exception
+	{
+		{
+			MockModel model = new MockModel(localization);
+			verifyDaughterWouldUpgrade(model, model.parent);
+		}
+		
+		{
+			MockModel model = new MockModel(localization);
+			verifyDaughterWouldNotUpgrade(model, model.son);
+		}
+		
+		{
+			MockModel model = new MockModel(localization);
+			verifyDaughterWouldNotUpgrade(model, model.granddaughter);
+		}
+		
+	}
+	
+	private void verifyDaughterWouldUpgrade(MockModel model, Bulletin bulletinToRetrieve) throws Exception
+	{
+		model.deleteAllFromAppExcept(bulletinToRetrieve);
+		Vector uidToCheck = new Vector();
+		uidToCheck.add(model.daughter.getUniversalId());
+		Vector result = model.getUidsThatWouldBeUpgrades(uidToCheck);
+		assertEquals(1, result.size());
+		assertEquals(uidToCheck.get(0), result.get(0));
+	}
+
+	private void verifyDaughterWouldNotUpgrade(MockModel model, Bulletin bulletinToRetrieve) throws Exception
+	{
+		model.deleteAllFromAppExcept(bulletinToRetrieve);
+		Vector uidToCheck = new Vector();
+		uidToCheck.add(model.daughter.getUniversalId());
+		Vector result = model.getUidsThatWouldBeUpgrades(uidToCheck);
+		assertEquals(0, result.size());
+	}
+
 	public void testIsDownloadableNormal() throws Exception
 	{
 		MartusApp app = appWithServer;
@@ -145,11 +242,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Database db = store.getDatabase();
 
 		Bulletin original = createBulletin(app, sampleSummary2, true, true);
-		Bulletin clone = app.createBulletin();
-		clone.createDraftCopyOf(original, db);
-		clone.set(Bulletin.TAGTITLE, sampleSummary3);
-		clone.setSealed();
-		store.saveBulletin(clone);
+		Bulletin clone = createClone(app, original, sampleSummary3);
 		
 		RetrieveMyTableModel model = new RetrieveMyTableModel(app, localization);
 		model.initialize(null);
@@ -830,6 +923,17 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		app.setHQKeysInBulletin(b);
 		app.getStore().saveBulletin(b);
 		return b;
+	}
+
+	private Bulletin createClone(MartusApp app, Bulletin original, String summary) throws CryptoException, InvalidPacketException, SignatureVerificationException, WrongPacketTypeException, IOException, InvalidBase64Exception
+	{
+		Bulletin clone = app.createBulletin();
+		ClientBulletinStore store = app.getStore();
+		clone.createDraftCopyOf(original, store.getDatabase());
+		clone.set(Bulletin.TAGTITLE, summary);
+		clone.setSealed();
+		store.saveBulletin(clone);
+		return clone;
 	}
 
 	private void uploadBulletin(MartusApp app, Bulletin b) throws InvalidPacketException, WrongPacketTypeException, SignatureVerificationException, DecryptionException, NoKeyPairException, CryptoException, FileNotFoundException, MartusSignatureException, FileTooLargeException, IOException
