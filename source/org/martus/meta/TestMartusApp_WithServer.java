@@ -51,7 +51,6 @@ import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.network.NetworkInterface;
@@ -831,8 +830,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		MockGateway gateway = new MockGateway();
 
-		MartusSecurity security = new MartusSecurity();
-		security.createKeyPair(512);
+		MartusCrypto security = MockMartusSecurity.createClient();
 		MockMartusApp app= MockMartusApp.create(security);
 		app.currentNetworkInterfaceGateway = gateway;
 		
@@ -883,8 +881,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		MockGateway gateway = new MockGateway();
 
-		MartusSecurity security = new MartusSecurity();
-		security.createKeyPair(512);
+		MartusCrypto security = MockMartusSecurity.createClient();
 		MockMartusApp app= MockMartusApp.create(security);
 		app.currentNetworkInterfaceGateway = gateway;
 		

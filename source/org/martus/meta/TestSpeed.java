@@ -125,7 +125,7 @@ public class TestSpeed extends TestCaseEnhanced
 		String data = createRandomString(dataSize);
 		
 		Stopwatch digestTimer = new Stopwatch();
-		MartusSecurity.createDigestString(data);
+		MartusCrypto.createDigestString(data);
 		print("Digest " + data.length() + " characters of data", digestTimer.stop());
 	}
 	
