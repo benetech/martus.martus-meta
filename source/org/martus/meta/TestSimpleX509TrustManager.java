@@ -35,7 +35,7 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.SimpleX509TrustManager;
-import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.TestCaseEnhanced;
 
 public class TestSimpleX509TrustManager extends TestCaseEnhanced 
 {

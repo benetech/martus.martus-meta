@@ -41,9 +41,9 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.util.InputStreamWithSeek;
 import org.martus.util.StringInputStream;
+import org.martus.util.TestCaseEnhanced;
 
 public class TestThreads extends TestCaseEnhanced
 {

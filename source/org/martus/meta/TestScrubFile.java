@@ -30,8 +30,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.util.ScrubFile;
+import org.martus.util.TestCaseEnhanced;
 
 
 public class TestScrubFile extends TestCaseEnhanced

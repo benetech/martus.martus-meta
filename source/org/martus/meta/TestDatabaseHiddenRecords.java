@@ -37,7 +37,7 @@ import org.martus.common.database.MockServerDatabase;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.packet.UniversalId;
-import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.TestCaseEnhanced;
 
 public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 {

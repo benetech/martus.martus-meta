@@ -28,7 +28,7 @@ package org.martus.meta;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.TestCaseEnhanced;
 
 public class TestMeta extends TestCaseEnhanced
 {

@@ -43,10 +43,10 @@ import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.Base64;
+import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeReader;
 
 public class TestBackgroundUploader extends TestCaseEnhanced

@@ -45,8 +45,8 @@ import org.martus.common.database.MockServerDatabase;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.packet.UniversalId;
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.common.utilities.MartusServerUtilities;
+import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeWriter;
 
 

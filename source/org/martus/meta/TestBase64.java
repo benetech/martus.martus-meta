@@ -25,8 +25,8 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.meta;
 
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.util.Base64;
+import org.martus.util.TestCaseEnhanced;
 
 
 public class TestBase64 extends TestCaseEnhanced

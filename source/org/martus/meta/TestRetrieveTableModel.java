@@ -45,9 +45,9 @@ import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterfaceConstants;
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
+import org.martus.util.TestCaseEnhanced;
 
 public class TestRetrieveTableModel extends TestCaseEnhanced
 {
