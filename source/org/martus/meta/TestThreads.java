@@ -295,7 +295,7 @@ public class TestThreads extends TestCaseEnhanced
 
 					store.saveBulletin(b);
 					assertTrue("not found after save?", store.doesBulletinRevisionExist(uid));
-					store.removeBulletinFromStore(uid);
+					store.destroyBulletin(b);
 					assertFalse("found after remove?", store.doesBulletinRevisionExist(uid));
 				}
 			}

@@ -546,9 +546,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("upload b3", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b3));
 
 		ClientBulletinStore store = appWithServer.getStore();
-		store.removeBulletinFromStore(b1.getUniversalId());
-		store.removeBulletinFromStore(b2.getUniversalId());
-		store.removeBulletinFromStore(b3.getUniversalId());
+		store.destroyBulletin(b1);
+		store.destroyBulletin(b2);
+		store.destroyBulletin(b3);
 		
 		Vector withBadId = new Vector();
 		withBadId.add(b1.getUniversalId());
@@ -628,8 +628,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("upload b1", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
 		assertEquals("upload b2", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
 		assertEquals("upload b3", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b3));
-		store.removeBulletinFromStore(b1.getUniversalId());
-		store.removeBulletinFromStore(b3.getUniversalId());
+		store.destroyBulletin(b1);
+		store.destroyBulletin(b3);
 		assertEquals("not just one left?", 1, store.getBulletinCount());
 		
 		Vector allThree = new Vector();
