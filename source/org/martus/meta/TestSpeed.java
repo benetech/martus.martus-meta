@@ -51,13 +51,14 @@ import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.Base64;
-import org.martus.util.ByteArrayInputStreamWithSeek;
-import org.martus.util.InputStreamWithSeek;
 import org.martus.util.Stopwatch;
-import org.martus.util.StringInputStream;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeWriter;
+import org.martus.util.inputstreamwithseek.ByteArrayInputStreamWithSeek;
+import org.martus.util.inputstreamwithseek.InputStreamWithSeek;
+import org.martus.util.inputstreamwithseek.StringInputStreamWithSeek;
+
 
 public class TestSpeed extends TestCaseEnhanced 
 {
@@ -165,7 +166,7 @@ public class TestSpeed extends TestCaseEnhanced
 	{
 		String longData = createRandomString(longDataSize);
 		
-		InputStream plainIn = new StringInputStream(longData);
+		InputStream plainIn = new StringInputStreamWithSeek(longData);
 		ByteArrayOutputStream cipherOut = new ByteArrayOutputStream();
 		
 		Stopwatch t = new Stopwatch();
@@ -254,12 +255,12 @@ public class TestSpeed extends TestCaseEnhanced
 		fdp.writeXmlPlainText(writerPlain, security);
 		print("Write    plaintext fdp", writePlainTimer.stop());
 
-		InputStreamWithSeek in1 = new StringInputStream(writerPlain.toString());
+		InputStreamWithSeek in1 = new StringInputStreamWithSeek(writerPlain.toString());
 		Stopwatch validatePlainTimer = new Stopwatch();
 		FieldDataPacket.validateXml(in1, uid.getAccountId(), uid.getLocalId(), null, security);
 		print("Validate plaintext fdp", validatePlainTimer.stop());
 
-		InputStreamWithSeek in2 = new StringInputStream(writerPlain.toString());
+		InputStreamWithSeek in2 = new StringInputStreamWithSeek(writerPlain.toString());
 		Stopwatch loadPlainTimer = new Stopwatch();
 		fdp.loadFromXml(in2, security);
 		print("Load     plaintext fdp", loadPlainTimer.stop());
@@ -276,12 +277,12 @@ public class TestSpeed extends TestCaseEnhanced
 		fdp.writeXmlEncrypted(writerEncrypted, security);
 		print("Write    encrypted fdp", writeTimer.stop());
 		
-		InputStreamWithSeek in1 = new StringInputStream(writerEncrypted.toString());
+		InputStreamWithSeek in1 = new StringInputStreamWithSeek(writerEncrypted.toString());
 		Stopwatch validateTimer = new Stopwatch();
 		FieldDataPacket.validateXml(in1, uid.getAccountId(), uid.getLocalId(), null, security);
 		print("Validate encrypted fdp", validateTimer.stop());
 
-		InputStreamWithSeek in2 = new StringInputStream(writerEncrypted.toString());
+		InputStreamWithSeek in2 = new StringInputStreamWithSeek(writerEncrypted.toString());
 		Stopwatch loadTimer = new Stopwatch();
 		fdp.loadFromXml(in2, security);
 		print("Load     encrypted fdp", loadTimer.stop());

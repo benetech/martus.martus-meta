@@ -40,9 +40,10 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
-import org.martus.util.InputStreamWithSeek;
-import org.martus.util.StringInputStream;
 import org.martus.util.TestCaseEnhanced;
+import org.martus.util.inputstreamwithseek.InputStreamWithSeek;
+import org.martus.util.inputstreamwithseek.StringInputStreamWithSeek;
+
 
 public class TestThreads extends TestCaseEnhanced
 {
@@ -411,7 +412,7 @@ System.out.flush();
 				{
 					Writer writer = new StringWriter();
 					bulletin.getBulletinHeaderPacket().writeXml(writer, security);
-					InputStreamWithSeek in = new StringInputStream(writer.toString());
+					InputStreamWithSeek in = new StringInputStreamWithSeek(writer.toString());
 					Packet.validateXml(in, bulletin.getAccount(), bulletin.getLocalId(), null, security);
 				}
 			} 
