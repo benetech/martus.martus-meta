@@ -54,10 +54,10 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 			martusServerSecurity = MockMartusSecurity.createServer();
 			MartusSecureWebServer.security = MockMartusSecurity.createOtherServer();
 			
-			RSAPublicKey sslPublicKey = (RSAPublicKey)securityForSSL.getPublicKey();
-			RSAPrivateCrtKey sslPrivateKey = (RSAPrivateCrtKey)securityForSSL.getPrivateKey();
-			RSAPublicKey serverPublicKey = (RSAPublicKey)martusServerSecurity.getPublicKey();
-			RSAPrivateCrtKey serverPrivateKey = (RSAPrivateCrtKey)martusServerSecurity.getPrivateKey();
+			RSAPublicKey sslPublicKey = (RSAPublicKey)securityForSSL.getKeyPair().getPublicKey();
+			RSAPrivateCrtKey sslPrivateKey = (RSAPrivateCrtKey)securityForSSL.getKeyPair().getPrivateKey();
+			RSAPublicKey serverPublicKey = (RSAPublicKey)martusServerSecurity.getKeyPair().getPublicKey();
+			RSAPrivateCrtKey serverPrivateKey = (RSAPrivateCrtKey)martusServerSecurity.getKeyPair().getPrivateKey();
 			assertNotEquals("reused same key?", sslPrivateKey, serverPrivateKey);
 			
 			cert0 = securityForSSL.createCertificate(sslPublicKey, sslPrivateKey);
