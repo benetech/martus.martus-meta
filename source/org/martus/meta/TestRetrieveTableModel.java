@@ -913,7 +913,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	
 
-	private Bulletin createBulletin(MartusApp app, String title, boolean allPrivate, boolean sealed) throws Exception
+	Bulletin createBulletin(MartusApp app, String title, boolean allPrivate, boolean sealed) throws Exception
 	{
 		Bulletin b = app.createBulletin();
 		b.setAllPrivate(allPrivate);
@@ -925,7 +925,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		return b;
 	}
 
-	private Bulletin createClone(MartusApp app, Bulletin original, String summary) throws CryptoException, InvalidPacketException, SignatureVerificationException, WrongPacketTypeException, IOException, InvalidBase64Exception
+	Bulletin createClone(MartusApp app, Bulletin original, String summary) throws CryptoException, InvalidPacketException, SignatureVerificationException, WrongPacketTypeException, IOException, InvalidBase64Exception
 	{
 		Bulletin clone = app.createBulletin();
 		ClientBulletinStore store = app.getStore();
