@@ -38,6 +38,7 @@ import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.ReadableDatabase;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.InputStreamWithSeek;
@@ -202,7 +203,7 @@ public class TestThreads extends TestCaseEnhanced
 			store.deleteAllData();
 		}
 
-		ClientBulletinStore store;		
+		MockBulletinStore store;		
 	}
 	
 	class PacketWriteThreadFactory extends ThreadFactory
@@ -341,25 +342,25 @@ System.out.flush();
 		Bulletin bulletin;
 		File file;
 		int copies;
-		Database db;
+		ReadableDatabase db;
 		MartusCrypto security;
 		DatabaseKey headerKey;
 	}
 
 	class Importer extends TestingThread
 	{
-		Importer(ClientBulletinStore storeToUse, int copiesToDo) throws Exception
+		Importer(MockBulletinStore storeToUse, int copiesToDo) throws Exception
 		{
 			copies = copiesToDo;
 			store = storeToUse;
 
 			file = createTempFile();
-			db = store.getDatabase();
+			db = store.getWriteableDatabase();
 			security = store.getSignatureVerifier();
 
 			Bulletin b = store.createEmptyBulletin();
 			store.saveBulletin(b);
-			Database db = store.getDatabase();
+			Database db = store.getWriteableDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 			BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 			store.destroyBulletin(b);
@@ -386,7 +387,7 @@ System.out.flush();
 			}
 		}
 		
-		ClientBulletinStore store;
+		MockBulletinStore store;
 		File file;
 		int copies;
 		Database db;
@@ -424,7 +425,7 @@ System.out.flush();
 		}
 		
 		Bulletin bulletin;
-		Database db;
+		ReadableDatabase db;
 		MartusCrypto security;
 		int copies;
 	}

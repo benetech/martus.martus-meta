@@ -59,6 +59,7 @@ import org.martus.common.crypto.MartusCrypto.DecryptionException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.database.Database;
+import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet.InvalidPacketException;
@@ -124,15 +125,20 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		super.tearDown();
 	}
 	
+	MockModel createMockModel(UiBasicLocalization localizationToUse) throws Exception
+	{
+		return new MockModel(MockMartusApp.create(), localizationToUse);
+	}
+	
 	class MockModel extends RetrieveTableModel
 	{
-		MockModel(UiBasicLocalization localizationToUse) throws Exception
+		MockModel(MockMartusApp appToUse, UiBasicLocalization localizationToUse) throws Exception
 		{
-			super(MockMartusApp.create(), localizationToUse);
+			super(appToUse, localizationToUse);
 			parent = createBulletin(getApp(), sampleSummary1, true, true);
-			son = createClone(getApp(), parent, sampleSummary2);
-			daughter = createClone(getApp(), parent, sampleSummary3);
-			granddaughter = createClone(getApp(), daughter, sampleSummary4);
+			son = createClone(appToUse, parent, sampleSummary2);
+			daughter = createClone(appToUse, parent, sampleSummary3);
+			granddaughter = createClone(appToUse, daughter, sampleSummary4);
 
 			allSummaries = new Vector();
 			allSummaries.add(buildSummary(parent));
@@ -148,7 +154,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		private BulletinSummary buildSummary(Bulletin b) throws ServerErrorException
 		{
 			BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
-			Database db = getApp().getStore().getDatabase();
+			ReadableDatabase db = getApp().getStore().getDatabase();
 			Vector tags = BulletinSummary.getNormalRetrieveTags();
 			String summaryString = SummaryCollector.extractSummary(bhp, db, tags);
 			try
@@ -184,17 +190,17 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	public void testGetUidsThatWouldBeUpgrades() throws Exception
 	{
 		{
-			MockModel model = new MockModel(localization);
+			MockModel model = createMockModel(localization);
 			verifyDaughterWouldUpgrade(model, model.parent);
 		}
 		
 		{
-			MockModel model = new MockModel(localization);
+			MockModel model = createMockModel(localization);
 			verifyDaughterWouldNotUpgrade(model, model.son);
 		}
 		
 		{
-			MockModel model = new MockModel(localization);
+			MockModel model = createMockModel(localization);
 			verifyDaughterWouldNotUpgrade(model, model.granddaughter);
 		}
 		
@@ -223,7 +229,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		MartusApp app = appWithServer;
 		ClientBulletinStore store = app.getStore();
-		Database db = store.getDatabase();
+		ReadableDatabase db = store.getDatabase();
 
 		Bulletin b1 = createBulletin(app, sampleSummary1, true, true);
 
@@ -237,9 +243,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testIsDownloadable() throws Exception
 	{
-		MartusApp app = appWithServer;
+		MockMartusApp app = appWithServer;
 		ClientBulletinStore store = app.getStore();
-		Database db = store.getDatabase();
+		ReadableDatabase db = store.getDatabase();
 
 		Bulletin original = createBulletin(app, sampleSummary2, true, true);
 		Bulletin clone = createClone(app, original, sampleSummary3);
@@ -267,7 +273,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	}
 	
-	private BulletinSummary createSummary(Bulletin b, Database db) throws WrongValueCount
+	private BulletinSummary createSummary(Bulletin b, ReadableDatabase db) throws WrongValueCount
 	{
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		Vector tags = BulletinSummary.getNormalRetrieveTags();
@@ -332,7 +338,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testRetrieveFieldOfficeSealedBulletinsMarksAllAsOnServer() throws Exception
 	{
-		MartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
+		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		HQKeys hqKeys = new HQKeys();
 		hqKeys.add(new HQKey(hqApp.getAccountId()));
@@ -345,7 +351,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b3 = createAndUploadPrivateDraft(fieldOfficeApp, sampleSummary3);
 		Bulletin b4 = createAndUploadPublicDraft(fieldOfficeApp, sampleSummary4);
 		
-		Database hqDatabase = hqApp.getStore().getDatabase();
+		Database hqDatabase = hqApp.getWriteableDatabase();
 		MartusCrypto fieldOfficeSecurity = fieldOfficeApp.getSecurity();
 		BulletinSaver.saveToClientDatabase(b1, hqDatabase, false, fieldOfficeSecurity);
 		BulletinSaver.saveToClientDatabase(b2, hqDatabase, false, fieldOfficeSecurity);
@@ -372,7 +378,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testRetrieveFieldOfficeDraftBulletinsMarksAllAsOnServer() throws Exception
 	{
-		MartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
+		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		HQKeys hqKeys = new HQKeys();
 		hqKeys.add(new HQKey(hqApp.getAccountId()));
@@ -385,7 +391,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b3 = createAndUploadPrivateDraft(fieldOfficeApp, sampleSummary3);
 		Bulletin b4 = createAndUploadPublicDraft(fieldOfficeApp, sampleSummary4);
 		
-		Database hqDatabase = hqApp.getStore().getDatabase();
+		Database hqDatabase = hqApp.getWriteableDatabase();
 		MartusCrypto fieldOfficeSecurity = fieldOfficeApp.getSecurity();
 		BulletinSaver.saveToClientDatabase(b1, hqDatabase, false, fieldOfficeSecurity);
 		BulletinSaver.saveToClientDatabase(b2, hqDatabase, false, fieldOfficeSecurity);
@@ -925,13 +931,13 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		return b;
 	}
 
-	Bulletin createClone(MartusApp app, Bulletin original, String summary) throws CryptoException, InvalidPacketException, SignatureVerificationException, WrongPacketTypeException, IOException, InvalidBase64Exception
+	Bulletin createClone(MockMartusApp app, Bulletin original, String summary) throws CryptoException, InvalidPacketException, SignatureVerificationException, WrongPacketTypeException, IOException, InvalidBase64Exception
 	{
 		Bulletin clone = app.createBulletin();
-		ClientBulletinStore store = app.getStore();
-		clone.createDraftCopyOf(original, store.getDatabase());
+		clone.createDraftCopyOf(original, app.getWriteableDatabase());
 		clone.set(Bulletin.TAGTITLE, summary);
 		clone.setSealed();
+		ClientBulletinStore store = app.getStore();
 		store.saveBulletin(clone);
 		return clone;
 	}

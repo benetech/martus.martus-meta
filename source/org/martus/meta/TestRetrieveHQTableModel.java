@@ -43,8 +43,8 @@ import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.FieldDataPacket;
@@ -72,11 +72,11 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
 		fieldApp1 = MockMartusApp.create(fieldSecurity1);
-		Database db1 = fieldApp1.getStore().getDatabase();
+		ReadableDatabase db1 = fieldApp1.getStore().getDatabase();
 
 		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2);
-		Database db2 = fieldApp2.getStore().getDatabase();
+		ReadableDatabase db2 = fieldApp2.getStore().getDatabase();
 
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());
 
@@ -123,7 +123,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals(0, modelWithoutData.getRowCount());
 	}
 
-	void importBulletinFromFieldOfficeToHq(Database db, Bulletin b, MartusCrypto sigVerifier) throws Exception
+	void importBulletinFromFieldOfficeToHq(ReadableDatabase db, Bulletin b, MartusCrypto sigVerifier) throws Exception
 	{
 		File tempFile = createTempFile();
 		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
