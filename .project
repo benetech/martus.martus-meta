@@ -3,8 +3,9 @@
 	<name>martus-meta</name>
 	<comment></comment>
 	<projects>
-		<project>martus</project>
 		<project>martus-client</project>
+		<project>martus-common</project>
+		<project>martus-server</project>
 		<project>martus-utils</project>
 	</projects>
 	<buildSpec>

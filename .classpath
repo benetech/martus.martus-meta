@@ -2,8 +2,9 @@
 <classpath>
     <classpathentry kind="src" path="source"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="src" path="/martus"/>
     <classpathentry kind="src" path="/martus-utils"/>
     <classpathentry kind="src" path="/martus-client"/>
+    <classpathentry kind="src" path="/martus-common"/>
+    <classpathentry kind="src" path="/martus-server"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>
