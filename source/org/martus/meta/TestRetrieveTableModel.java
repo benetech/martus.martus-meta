@@ -44,6 +44,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			mockSecurityForServer = MockMartusSecurity.createServer();
 
 		mockServer = new MockMartusServer();
+		mockServer.loadBannedClients();
 		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(mockSecurityForServer);
 		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer);

@@ -147,7 +147,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		BulletinFolder outbox = appWithServer.getFolderOutbox();
 		
 		mockServer.allowUploads(appWithServer.getAccountId());
-
+		mockServer.loadBannedClients();
 		createSealedBulletin(appWithServer);
 		UploadResult result = uploaderWithServer.backgroundUpload();
 		assertEquals("Should work", NetworkInterfaceConstants.OK, result.result);
@@ -167,7 +167,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
 		
 		mockServer.allowUploads(appWithServer.getAccountId());
-
+		mockServer.loadBannedClients();
+		
 		createDraftBulletin(appWithServer);
 		createDraftBulletin(appWithServer);
 		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
