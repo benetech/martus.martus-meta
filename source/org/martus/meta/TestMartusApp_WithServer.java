@@ -80,8 +80,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		File keyPairFile = appWithServer.getCurrentKeyPairFile();
 		keyPairFile.delete();
 		appWithServer.getUploadInfoFile().delete();
-		appWithServer.getConfigInfoFile().delete();
-		appWithServer.getConfigInfoSignatureFile().delete();
+		appWithServer.getContactInfoFile().delete();
+		appWithServer.getContactInfoSignatureFile().delete();
 
 		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
@@ -219,9 +219,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		MockMartusApp app = MockMartusApp.create();
 		app.setSecurity(mockSecurityForApp);
 		app.setServerInfo(server1, key1, serverCompliance1);
-		assertEquals("Didn't set Configinfo name", server1, app.getConfigInfo().getServerName());
-		assertEquals("Didn't set Configinfo key", key1, app.getConfigInfo().getServerPublicKey());
-		assertEquals("Didn't set Configinfo compliance", serverCompliance1, app.getConfigInfo().getServerCompliance());
+		assertEquals("Didn't set Contactinfo name", server1, app.getContactInfo().getServerName());
+		assertEquals("Didn't set Contactinfo key", key1, app.getContactInfo().getServerPublicKey());
+		assertEquals("Didn't set Contactinfo compliance", serverCompliance1, app.getContactInfo().getServerCompliance());
 		assertNull("Should have cleared handler", app.currentNetworkInterfaceHandler);
 		assertNull("Should have cleared gateway", app.currentNetworkInterfaceGateway);
 
@@ -230,16 +230,16 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertNotNull("Should have created gateway", app.currentNetworkInterfaceGateway);
 
 		app.setServerInfo(server2, key2, serverCompliance2);
-		assertEquals("Didn't update Configinfo name?", server2, app.getConfigInfo().getServerName());
-		assertEquals("Didn't update Configinfo key?", key2, app.getConfigInfo().getServerPublicKey());
-		assertEquals("Didn't update Configinfo compliance", serverCompliance2, app.getConfigInfo().getServerCompliance());
+		assertEquals("Didn't update Contactinfo name?", server2, app.getContactInfo().getServerName());
+		assertEquals("Didn't update Contactinfo key?", key2, app.getContactInfo().getServerPublicKey());
+		assertEquals("Didn't update Contactinfo compliance", serverCompliance2, app.getContactInfo().getServerCompliance());
 		assertNull("Should have re-cleared handler", app.currentNetworkInterfaceHandler);
 		assertNull("Should have re-cleared gateway", app.currentNetworkInterfaceGateway);
 		
-		app.loadConfigInfo();
-		assertEquals("Didn't save Configinfo name?", server2, app.getConfigInfo().getServerName());
-		assertEquals("Didn't save Configinfo key?", key2, app.getConfigInfo().getServerPublicKey());
-		assertEquals("Didn't save Configinfo compliance?", serverCompliance2, app.getConfigInfo().getServerCompliance());
+		app.loadContactInfo();
+		assertEquals("Didn't save Contactinfo name?", server2, app.getContactInfo().getServerName());
+		assertEquals("Didn't save Contactinfo key?", key2, app.getContactInfo().getServerPublicKey());
+		assertEquals("Didn't save Contactinfo compliance?", serverCompliance2, app.getContactInfo().getServerCompliance());
 		
 		app.deleteAllFiles();
 
