@@ -297,7 +297,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Vector response = new Vector();
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(mockSecurityForApp.getPublicKeyString());
-		response.add(Base64.encode(new String("whatever").getBytes()));
+		response.add(Base64.encode("whatever"));
 		mockServer.infoResponse = response;
 		try
 		{
