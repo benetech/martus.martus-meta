@@ -190,7 +190,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		mockServer.uploadResponse = FAILRESULT;
 		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
 		assertEquals("Still in outbox", 1, outbox.getBulletinCount());
-		assertEquals("Not in sent folder", 0, appWithServer.getFolderSent().getBulletinCount());
+		assertEquals("Not in sent folder", 0, appWithServer.getFolderSaved().getBulletinCount());
 		Bulletin stillSealed = outbox.getBulletinSorted(0);
 		assertTrue("Should still be sealed", stillSealed.isSealed());
 		mockServer.uploadResponse = null;
