@@ -158,14 +158,14 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
-		appWithServer.setHQKeysInBulletin(b1);
+		appWithServer.setDefaultHQKeysInBulletin(b1);
 		appWithServer.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
-		appWithServer.setHQKeysInBulletin(b2);
+		appWithServer.setDefaultHQKeysInBulletin(b2);
 		appWithServer.getStore().saveBulletin(b2);
 		
 		Bulletin b3 = appWithServer.createBulletin();

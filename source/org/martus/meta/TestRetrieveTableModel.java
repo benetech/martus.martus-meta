@@ -92,26 +92,34 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		if(mockSecurityForServer == null)
 			mockSecurityForServer = MockMartusSecurity.createServer();
 
-		mockServer = new MockMartusServer();
-		mockServer.serverForClients.loadBannedClients();
-		mockServer.verifyAndLoadConfigurationFiles();
-		mockServer.setSecurity(mockSecurityForServer);
-		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer.serverForClients);
+		if(mockServer == null)
+		{
+			mockServer = new MockMartusServer();
+			mockServer.serverForClients.loadBannedClients();
+			mockServer.verifyAndLoadConfigurationFiles();
+			mockServer.setSecurity(mockSecurityForServer);
+			mockSSLServerHandler = new MockServerInterfaceHandler(mockServer.serverForClients);
+		}
+		
+		if(appWithoutServer == null)
+		{
+			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
+			MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
+			ServerSideNetworkHandler handler = new ServerSideNetworkHandler(mockServerNotAvailable.serverForClients);
+			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(handler);
+		}
 
-		appWithoutServer = MockMartusApp.create(mockSecurityForApp);
-		MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
-		ServerSideNetworkHandler handler = new ServerSideNetworkHandler(mockServerNotAvailable.serverForClients);
-		appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(handler);
-
-		appWithServer = MockMartusApp.create(mockSecurityForApp);
-		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
-		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+		if(appWithServer == null)
+		{
+			appWithServer = MockMartusApp.create(mockSecurityForApp);
+			appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
+			appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+		}
 		
 		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploader = new BackgroundUploader(appWithServer, nullProgressMeter);
 
 		mockServer.deleteAllFiles();
-		mockServerNotAvailable.deleteAllFiles();
 	}
 
 	public void tearDown() throws Exception
@@ -932,7 +940,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b.set(Bulletin.TAGTITLE, title);
 		if(sealed)
 			b.setSealed();
-		app.setHQKeysInBulletin(b);
+		app.setDefaultHQKeysInBulletin(b);
 		app.getStore().saveBulletin(b);
 		return b;
 	}
