@@ -36,7 +36,6 @@ import org.martus.client.test.MockBulletinStore;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.packet.Packet;
@@ -355,12 +354,11 @@ System.out.flush();
 			store = storeToUse;
 
 			file = createTempFile();
-			db = store.getWriteableDatabase();
+			ReadableDatabase db = store.getDatabase();
 			security = store.getSignatureVerifier();
 
 			Bulletin b = store.createEmptyBulletin();
 			store.saveBulletin(b);
-			Database db = store.getWriteableDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 			BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 			store.destroyBulletin(b);
@@ -373,7 +371,7 @@ System.out.flush();
 				for(int i=0; i < copies; ++i)
 				{
 					ZipFile zip = new ZipFile(file);
-					BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase(db, null, zip, security);
+					store.importBulletinZipFile(zip);
 					zip.close();
 
 					Bulletin b = store.getBulletinRevision(headerKey.getUniversalId());
@@ -390,7 +388,6 @@ System.out.flush();
 		MockBulletinStore store;
 		File file;
 		int copies;
-		Database db;
 		MartusCrypto security;
 		DatabaseKey headerKey;
 	}
