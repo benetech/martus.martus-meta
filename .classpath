@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="/martus-common"/>
 	<classpathentry kind="src" path="/martus-server"/>
 	<classpathentry kind="src" path="/martus-amplifier"/>
+	<classpathentry kind="lib" path="/martus-thirdparty/libext/JUnit/bin/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
