@@ -393,5 +393,5 @@ public class TestSpeed extends TestCaseEnhanced
 		"v9WPkKQixP7NxafdxT0=";
 	
 	static MartusSecurity security;
-	static final String password = "password";
+	static final char[] password = "password".toCharArray();
 }
