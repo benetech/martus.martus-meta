@@ -134,7 +134,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 		assertEquals("Empty outbox", 0, outbox.getBulletinCount());
 		UploadResult result = uploaderWithServer.backgroundUpload();
-		assertEquals("Empty outbox", NetworkInterfaceConstants.OK, result.result);
+		assertEquals("Empty outbox", NetworkInterfaceConstants.UNKNOWN, result.result);
 		TRACE_END();
 	}
 
