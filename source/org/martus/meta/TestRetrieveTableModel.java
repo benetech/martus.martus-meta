@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.client.core.BackgroundUploader;
-import org.martus.client.core.BulletinSummary;
 import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
@@ -40,6 +39,7 @@ import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
+import org.martus.common.BulletinSummary;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;

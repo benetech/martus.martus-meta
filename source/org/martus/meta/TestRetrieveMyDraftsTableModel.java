@@ -29,10 +29,9 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
-import org.martus.common.MartusConstants;
+import org.martus.common.BulletinSummary;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.clientside.UiBasicLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
@@ -203,11 +202,11 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 				result.add(NetworkInterfaceConstants.OK);
 				Vector list = new Vector();
 				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
-				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+				list.add(b2.getLocalId() + BulletinSummary.fieldDelimeter + 
 						b2.getFieldDataPacket().getLocalId() +
-						MartusConstants.regexEqualsDelimeter + 
+						BulletinSummary.fieldDelimeter + 
 						b2Size + 
-						MartusConstants.regexEqualsDelimeter + 
+						BulletinSummary.fieldDelimeter + 
 						dateSavedInMillis2);
 
 				

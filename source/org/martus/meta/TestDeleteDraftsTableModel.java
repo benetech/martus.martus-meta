@@ -29,10 +29,9 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.DeleteMyServerDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
-import org.martus.common.MartusConstants;
+import org.martus.common.BulletinSummary;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
@@ -175,21 +174,21 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 				Vector list = new Vector();
 				if(hasData)
 				{
-					list.add(b0.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+					list.add(b0.getLocalId() + BulletinSummary.fieldDelimeter + 
 							b0.getFieldDataPacket().getLocalId() +
-							MartusConstants.regexEqualsDelimeter +
+							BulletinSummary.fieldDelimeter +
 							"3000");
 					
-					list.add(b1.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+					list.add(b1.getLocalId() + BulletinSummary.fieldDelimeter + 
 							b1.getFieldDataPacket().getLocalId() +
-							MartusConstants.regexEqualsDelimeter + 
+							BulletinSummary.fieldDelimeter + 
 							"3100" + 
-							MartusConstants.regexEqualsDelimeter + 
+							BulletinSummary.fieldDelimeter + 
 							LAST_SAVED_DATE_TIME);
 					
-					list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+					list.add(b2.getLocalId() + BulletinSummary.fieldDelimeter + 
 							b2.getFieldDataPacket().getLocalId() + 
-							MartusConstants.regexEqualsDelimeter + 
+							BulletinSummary.fieldDelimeter + 
 							"3200");
 				}
 				result.add(list);

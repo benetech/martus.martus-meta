@@ -31,12 +31,11 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.core.ClientBulletinStore;
-import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.BulletinSummary;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
-import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
@@ -278,11 +277,11 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 				if(authorAccountId.equals(b0.getAccount()))
 					list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
 				if(authorAccountId.equals(b2.getAccount()))
-					list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+					list.add(b2.getLocalId() + BulletinSummary.fieldDelimeter + 
 						b2.getFieldDataPacket().getLocalId() +
-						MartusConstants.regexEqualsDelimeter + 
+						BulletinSummary.fieldDelimeter + 
 						b2Size + 
-						MartusConstants.regexEqualsDelimeter + 
+						BulletinSummary.fieldDelimeter + 
 						dateSavedInMillis2);
 
 				result.add(list);
