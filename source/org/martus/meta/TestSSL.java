@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
 import org.martus.common.test.TestCaseEnhanced;
@@ -30,7 +31,8 @@ public class TestSSL extends TestCaseEnhanced
 			mockServer = new MockMartusServer();
 			mockServer.verifyAndLoadConfigurationFiles();
 			mockServer.setSecurity(mockSecurityForServer);
-
+			MartusSecureWebServer.security = mockSecurityForServer;
+			
 			serverForClients = new ServerForClients(mockServer);
 			serverForClients.handleNonSSL(nonSslPorts);
 			serverForClients.handleSSL(sslPorts);
