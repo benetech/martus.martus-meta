@@ -699,15 +699,15 @@ public class TestDatabase extends TestCaseEnhanced
 		db.writeRecord(largeKey, largeString);
 
 		counter.clear();
-		db.visitAllNonHiddenRecordsForAccount(counter, "none found");
+		db.visitAllRecordsForAccount(counter, "none found");
 		assertEquals(db.toString()+" found for account with none?", 0, counter.count);
 
 		counter.clear();
-		db.visitAllNonHiddenRecordsForAccount(counter, smallKey.getAccountId());
+		db.visitAllRecordsForAccount(counter, smallKey.getAccountId());
 		assertEquals(db.toString()+" wrong for first account?", 2, counter.count);
 
 		counter.clear();
-		db.visitAllNonHiddenRecordsForAccount(counter, largeKey.getAccountId());
+		db.visitAllRecordsForAccount(counter, largeKey.getAccountId());
 		assertEquals(db.toString()+" wrong for second account?", 1, counter.count);
 	}
 
@@ -767,7 +767,7 @@ public class TestDatabase extends TestCaseEnhanced
 		db.writeRecord(smallKey, smallString);
 		
 		PacketNullThrower ac = new PacketNullThrower();
-		db.visitAllNonHiddenRecordsForAccount(ac, smallKey.getAccountId());
+		db.visitAllRecordsForAccount(ac, smallKey.getAccountId());
 		assertEquals("count?", 0, ac.list.size());
 	}
 	
