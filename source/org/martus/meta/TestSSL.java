@@ -93,6 +93,7 @@ public class TestSSL extends TestCaseEnhanced
 
 		proxy1.getSimpleX509TrustManager().setExpectedPublicCode("Not a valid code");
 		trustManager.clearCalledCheckServerTrusted();
+		System.out.println("Ignore the following SSLHandshakeException (from " + getClass().toString() + "):");
 		assertNull("accepted bad cert?", proxy1.getServerInfo(new Vector()));
 		assertTrue("Never checked ssl cert!", trustManager.wasCheckServerTrustedCalled());
 	}
