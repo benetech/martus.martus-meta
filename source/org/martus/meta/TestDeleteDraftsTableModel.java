@@ -99,7 +99,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	{
 		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	

@@ -95,7 +95,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	{
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_RETRIEVE_FLAG));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_LAST_DATE_SAVED));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(RetrieveMyTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	

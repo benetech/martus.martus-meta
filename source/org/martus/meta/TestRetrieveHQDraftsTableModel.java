@@ -146,7 +146,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(RetrieveHQDraftsTableModel.COLUMN_RETRIEVE_FLAG));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(RetrieveHQDraftsTableModel.COLUMN_TITLE));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(RetrieveHQDraftsTableModel.COLUMN_AUTHOR));
-		assertEquals(localization.getFieldLabel("BulletinDateSaved"), modelWithData.getColumnName(RetrieveHQDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(RetrieveHQDraftsTableModel.COLUMN_LAST_DATE_SAVED));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(RetrieveHQDraftsTableModel.COLUMN_BULLETIN_SIZE));
 	}
 	
