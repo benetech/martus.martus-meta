@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.meta;
 
 import org.martus.client.swingui.bulletincomponent.HeadQuarterEntry;
+import org.martus.client.swingui.bulletincomponent.HeadQuartersSelectionListener;
 import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelEdit;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.HQKey;
@@ -37,7 +38,7 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.Base64.InvalidBase64Exception;
 
-public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced 
+public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced implements HeadQuartersSelectionListener
 {
 
 	public TestHeadQuarterTableModelEdit(String name) 
@@ -48,6 +49,7 @@ public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		numberOfSelectedHQs = 0;
 		if(localization!=null)
 			return;
 		localization = new MockUiLocalization();
@@ -55,6 +57,7 @@ public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced
 		app = MockMartusApp.create(appSecurityAndHQ);
 
 		modelWithData = new HeadQuartersTableModelEdit(localization);
+		modelWithData.setHQSelectionListener(this);
 		key1 = new HQKey(publicCode1, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized);
@@ -115,25 +118,42 @@ public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced
 	{
 		assertEquals(0, modelWithData.getAllSelectedHeadQuarterKeys().size());
 		assertEquals(0, modelWithoutData.getAllSelectedHeadQuarterKeys().size());
+		assertEquals(0, modelWithData.getNumberOfSelectedHQs());
+		assertEquals(0, modelWithoutData.getNumberOfSelectedHQs());
+		assertEquals(0, numberOfSelectedHQs);
+		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
+		assertEquals(1, numberOfSelectedHQs);
 
 		HQKeys allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allSelectedHeadQuarterKeys.size());
+		assertEquals(1, modelWithData.getNumberOfSelectedHQs());
 		assertEquals(key1, allSelectedHeadQuarterKeys.get(0));
 
 		modelWithData.setValueAt(Boolean.FALSE, 0,0);
+		assertEquals(0, numberOfSelectedHQs);
 		modelWithData.setValueAt(Boolean.TRUE, 1,0);
+		assertEquals(1, numberOfSelectedHQs);
+		
 		allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allSelectedHeadQuarterKeys.size());
+		assertEquals(1, modelWithData.getNumberOfSelectedHQs());
 		assertEquals(key2, allSelectedHeadQuarterKeys.get(0));
 		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
+		assertEquals(2, numberOfSelectedHQs);
 		allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(2, allSelectedHeadQuarterKeys.size());
-		
+		assertEquals(2, modelWithData.getNumberOfSelectedHQs());
 		
 	}
 
+	public void selectedHQsChanged(int newNumberOfSelectedHQs) 
+	{
+		numberOfSelectedHQs = newNumberOfSelectedHQs;
+		
+	}
+	
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
@@ -144,4 +164,5 @@ public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced
 	static String label1 = "key1 label";
 	static HQKey key1;
 	static HQKey key2;
+	static int numberOfSelectedHQs;
 }
