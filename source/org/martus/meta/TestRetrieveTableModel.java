@@ -558,7 +558,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector desiredResult = new Vector();
 
 		desiredResult.add(NetworkInterfaceConstants.REJECTED);
-		mockServer.listFieldOfficeSummariesResponse = desiredResult;
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredResult;
 		try
 		{
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer, localization);
@@ -585,7 +585,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 		}
 
-		mockServer.listFieldOfficeSummariesResponse = null;
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
 	}
 
 	public void testGetFieldOfficeSummaries() throws Exception
@@ -617,7 +617,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId()+"=2000");
 		list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId()+"=2000");
 		desiredSealedResult.add(list);
-		mockServer.listFieldOfficeSummariesResponse = desiredSealedResult;	
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredSealedResult;	
 
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
 		model.initialize(null);
@@ -642,7 +642,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector list2 = new Vector();
 		list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
 		desiredDraftResult.add(list2);
-		mockServer.listFieldOfficeSummariesResponse = desiredDraftResult;	
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredDraftResult;	
 
 		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, localization);
 		model2.initialize(null);
@@ -653,7 +653,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		boolean found3 = false;
 		found3 = s3.getLocalId().equals(b3.getLocalId());
 		assertTrue("not found S3?", found3);
-		mockServer.listFieldOfficeSummariesResponse = null;
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
 		hqApp.deleteAllFiles();
 
 	
@@ -680,7 +680,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector listOfData = new Vector();
 		listOfData.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
 		desired2DraftResult.add(listOfData);
-		mockServer.listFieldOfficeSummariesResponse = desired2DraftResult;	
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desired2DraftResult;	
 
 		RetrieveHQDraftsTableModel draftHQ2Model = new RetrieveHQDraftsTableModel(hqApp, localization);
 		draftHQ2Model.initialize(null);
@@ -691,7 +691,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		boolean foundItems2 = false;
 		foundItems2 = bsDraft3.getLocalId().equals(b3.getLocalId());
 		assertTrue("not found S3 for HQ2?", foundItems2);
-		mockServer.listFieldOfficeSummariesResponse = null;
+		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
 		hq2App.deleteAllFiles();
 	}
 	

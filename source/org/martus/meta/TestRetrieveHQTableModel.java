@@ -51,6 +51,7 @@ import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.TestCaseEnhanced;
 
@@ -259,26 +260,40 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 			setSecurity(MockMartusSecurity.createServer());
 		}
 		
-		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
+		public ServerForClients createServerForClients()
 		{
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.OK);
-			Vector list = new Vector();
-			if(authorAccountId.equals(b0.getAccount()))
-				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
-			if(authorAccountId.equals(b1.getAccount()))
-				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
-			if(authorAccountId.equals(b2.getAccount()))
-				list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
-						b2.getFieldDataPacket().getLocalId() +
-						MartusConstants.regexEqualsDelimeter + 
-						b2Size + 
-						MartusConstants.regexEqualsDelimeter + 
-						dateSavedInMillis2);
-			result.add(list);
-			return result;
+			return new LocalMockServerForClients(this);
 		}
 		
+		class LocalMockServerForClients extends ServerForClients
+		{
+			LocalMockServerForClients(MockMartusServer coreServer)
+			{
+				super(coreServer);
+			}
+
+			public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
+			{
+				Vector result = new Vector();
+				result.add(NetworkInterfaceConstants.OK);
+				Vector list = new Vector();
+				if(authorAccountId.equals(b0.getAccount()))
+					list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
+				if(authorAccountId.equals(b1.getAccount()))
+					list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
+				if(authorAccountId.equals(b2.getAccount()))
+					list.add(b2.getLocalId() + MartusConstants.regexEqualsDelimeter + 
+							b2.getFieldDataPacket().getLocalId() +
+							MartusConstants.regexEqualsDelimeter + 
+							b2Size + 
+							MartusConstants.regexEqualsDelimeter + 
+							dateSavedInMillis2);
+				result.add(list);
+				return result;
+			}
+			
+		}
+
 		public Vector listFieldOfficeAccounts(String hqAccountId) 
 		{
 			Vector v = new Vector();
