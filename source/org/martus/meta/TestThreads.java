@@ -32,13 +32,12 @@ import java.util.zip.ZipFile;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
+import org.martus.client.test.MockBulletinStore;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
-import org.martus.common.database.MockClientDatabase;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.InputStreamWithSeek;
@@ -134,12 +133,9 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		BulletinThreadFactory() throws Exception
 		{
-			store = new BulletinStore(new MockClientDatabase());
+			store = new MockBulletinStore();
 			//store.maxCachedBulletinCount = 10;
 			
-			MockMartusSecurity security = MockMartusSecurity.createClient();
-			store.setSignatureGenerator(security);
-
 			for (int i = 0; i < 10; i++)
 			{
 				Bulletin b = store.createEmptyBulletin();
@@ -159,10 +155,8 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		ExportThreadFactory() throws Exception
 		{
-			store = new BulletinStore(new MockClientDatabase());
-			MockMartusSecurity security = MockMartusSecurity.createClient();
+			store = new MockBulletinStore();
 			
-			store.setSignatureGenerator(security);
 			b = store.createEmptyBulletin();
 			store.saveBulletin(b);
 		}
@@ -180,9 +174,7 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		ImportThreadFactory() throws Exception
 		{
-			store = new BulletinStore(new MockClientDatabase());
-			MockMartusSecurity security = MockMartusSecurity.createClient();
-			store.setSignatureGenerator(security);
+			store = new MockBulletinStore();
 		}
 		
 		TestingThread createThread(int copies) throws Exception
@@ -197,11 +189,7 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		PacketWriteThreadFactory() throws Exception
 		{
-			store = new BulletinStore(new MockClientDatabase());
-
-			MockMartusSecurity security = MockMartusSecurity.createClient();
-			store.setSignatureGenerator(security);
-
+			store = new MockBulletinStore();
 		}
 		
 		TestingThread createThread(int copies) throws Exception
@@ -216,11 +204,7 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		FolderListThreadFactory() throws Exception
 		{
-			store = new BulletinStore(new MockClientDatabase());
-
-			MockMartusSecurity security = MockMartusSecurity.createClient();
-			store.setSignatureGenerator(security);
-
+			store = new MockBulletinStore();
 		}
 		
 		TestingThread createThread(int copies) throws Exception
@@ -241,11 +225,7 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		FolderContentsThreadFactory() throws Exception
 		{
-			store = new BulletinStore(new MockClientDatabase());
-
-			MockMartusSecurity security = MockMartusSecurity.createClient();
-			store.setSignatureGenerator(security);
-
+			store = new MockBulletinStore();
 		}
 		
 		TestingThread createThread(int copies) throws Exception
