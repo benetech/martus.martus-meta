@@ -112,8 +112,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploader = new BackgroundUploader(appWithServer, nullProgressMeter);
 
-		mockServer.deleteAllData();
-		
+		mockServer.deleteAllFiles();
 		mockServerNotAvailable.deleteAllFiles();
 	}
 
@@ -135,6 +134,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		MockModel(MockMartusApp appToUse, UiBasicLocalization localizationToUse) throws Exception
 		{
 			super(appToUse, localizationToUse);
+			app = appToUse;
 			parent = createBulletin(getApp(), sampleSummary1, true, true);
 			son = createClone(appToUse, parent, sampleSummary2);
 			daughter = createClone(appToUse, parent, sampleSummary3);
@@ -145,6 +145,11 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			allSummaries.add(buildSummary(son));
 			allSummaries.add(buildSummary(daughter));
 			allSummaries.add(buildSummary(granddaughter));
+		}
+		
+		public void deleteAllFiles() throws Exception
+		{
+			app.deleteAllFiles();
 		}
 		
 		protected void populateAllSummariesList() throws ServerErrorException
@@ -181,6 +186,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				store.deleteBulletinRevision(granddaughter.getUniversalId());
 		}
 		
+		MockMartusApp app;
 		Bulletin parent;
 		Bulletin son;
 		Bulletin daughter;
@@ -192,16 +198,19 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			MockModel model = createMockModel(localization);
 			verifyDaughterWouldUpgrade(model, model.parent);
+			model.deleteAllFiles();
 		}
 		
 		{
 			MockModel model = createMockModel(localization);
 			verifyDaughterWouldNotUpgrade(model, model.son);
+			model.deleteAllFiles();
 		}
 		
 		{
 			MockModel model = createMockModel(localization);
 			verifyDaughterWouldNotUpgrade(model, model.granddaughter);
+			model.deleteAllFiles();
 		}
 		
 	}
@@ -374,6 +383,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		model.initialize(null);
 		assertFalse("b1 on even though it isn't in the store?", hqStore.isProbablyOnServer(b1));
 		assertFalse("b2 on even though it isn't in the store?", hqStore.isProbablyOnServer(b2));
+		hqApp.deleteAllFiles();
 	}
 	
 	public void testRetrieveFieldOfficeDraftBulletinsMarksAllAsOnServer() throws Exception
@@ -414,6 +424,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		model.initialize(null);
 		assertFalse("b3 on even though it isn't in the store?", hqStore.isProbablyOnServer(b3));
 		assertFalse("b4 on even though it isn't in the store?", hqStore.isProbablyOnServer(b4));
+		hqApp.deleteAllFiles();
 	}
 	
 	public void testGetMyBulletinSummariesWithServerError() throws Exception
@@ -855,6 +866,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		foundItems2 = bsDraft3.getLocalId().equals(b3.getLocalId());
 		assertTrue("not found S3 for HQ2?", foundItems2);
 		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
+		hqApp.deleteAllFiles();
 		hq2App.deleteAllFiles();
 	}
 	
