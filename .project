@@ -3,6 +3,7 @@
 	<name>martus-meta</name>
 	<comment></comment>
 	<projects>
+		<project>martus-amplifier</project>
 		<project>martus-client</project>
 		<project>martus-common</project>
 		<project>martus-server</project>
