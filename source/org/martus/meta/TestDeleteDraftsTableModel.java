@@ -98,18 +98,18 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	
 	public void testGetColumnName()
 	{
-		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(DeleteMyServerDraftsTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(modelWithData.COLUMN_DELETE_FLAG));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(modelWithData.COLUMN_TITLE));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(modelWithData.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(modelWithData.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetColumnClass()
 	{
-		assertEquals(Boolean.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
-		assertEquals(String.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_TITLE));
-		assertEquals(String.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		assertEquals(Integer.class, modelWithData.getColumnClass(DeleteMyServerDraftsTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals(Boolean.class, modelWithData.getColumnClass(modelWithData.COLUMN_DELETE_FLAG));
+		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_TITLE));
+		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_LAST_DATE_SAVED));
+		assertEquals(Integer.class, modelWithData.getColumnClass(modelWithData.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testRowCount()
@@ -120,18 +120,18 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	
 	public void testGetAndSetValueAt()
 	{
-		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG)).booleanValue());
-		modelWithData.setValueAt(new Boolean(true), 0,DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG);
-		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG)).booleanValue());
+		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_DELETE_FLAG)).booleanValue());
+		modelWithData.setValueAt(new Boolean(true), 0,modelWithData.COLUMN_DELETE_FLAG);
+		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_DELETE_FLAG)).booleanValue());
 
-		assertEquals("start title", title2, modelWithData.getValueAt(2,DeleteMyServerDraftsTableModel.COLUMN_TITLE));
-		modelWithData.setValueAt(title2+title2, 2,DeleteMyServerDraftsTableModel.COLUMN_TITLE);
-		assertEquals("keep title", title2, modelWithData.getValueAt(2,DeleteMyServerDraftsTableModel.COLUMN_TITLE));
+		assertEquals("start title", title2, modelWithData.getValueAt(2,modelWithData.COLUMN_TITLE));
+		modelWithData.setValueAt(title2+title2, 2,modelWithData.COLUMN_TITLE);
+		assertEquals("keep title", title2, modelWithData.getValueAt(2,modelWithData.COLUMN_TITLE));
 
 		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(LAST_SAVED_DATE_TIME));
-		assertEquals("Date Saved", expectedDateSaved, (String)modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		modelWithData.setValueAt("today", 1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED);
-		assertEquals("allowed change?", expectedDateSaved, (String)modelWithData.getValueAt(1,DeleteMyServerDraftsTableModel.COLUMN_LAST_DATE_SAVED)); 
+		assertEquals("Date Saved", expectedDateSaved, (String)modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
+		modelWithData.setValueAt("today", 1,modelWithData.COLUMN_LAST_DATE_SAVED);
+		assertEquals("allowed change?", expectedDateSaved, (String)modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED)); 
 	}
 	
 	public void testSetAllFlags()
@@ -141,11 +141,11 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		
 		modelWithData.setAllFlags(true);
 		for(int allTrueCounter = 0; allTrueCounter < modelWithData.getRowCount(); ++allTrueCounter)
-			assertEquals("all true" + allTrueCounter, t, modelWithData.getValueAt(0,DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
+			assertEquals("all true" + allTrueCounter, t, modelWithData.getValueAt(0,modelWithData.COLUMN_DELETE_FLAG));
 
 		modelWithData.setAllFlags(false);
 		for(int allFalseCounter = 0; allFalseCounter < modelWithData.getRowCount(); ++allFalseCounter)
-			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,DeleteMyServerDraftsTableModel.COLUMN_DELETE_FLAG));
+			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,modelWithData.COLUMN_DELETE_FLAG));
 	}
 
 	class MockServer extends MockMartusServer

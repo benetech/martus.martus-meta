@@ -98,10 +98,10 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName() throws Exception
 	{
-		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(RetrieveMyDraftsTableModel.COLUMN_TITLE));
-		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(RetrieveMyDraftsTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(modelWithData.COLUMN_RETRIEVE_FLAG));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(modelWithData.COLUMN_TITLE));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGLASTSAVED), modelWithData.getColumnName(modelWithData.COLUMN_LAST_DATE_SAVED));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(modelWithData.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetColumnCount()
@@ -118,36 +118,36 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	
 	public void testIsCellEditable()
 	{
-		assertEquals("flag", true, modelWithData.isCellEditable(1,RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG));
-		assertEquals("title", false, modelWithData.isCellEditable(1,RetrieveMyDraftsTableModel.COLUMN_TITLE));
-		assertEquals("size", false, modelWithData.isCellEditable(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		assertEquals("date", false, modelWithData.isCellEditable(1,RetrieveMyDraftsTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals("flag", true, modelWithData.isCellEditable(1,modelWithData.COLUMN_RETRIEVE_FLAG));
+		assertEquals("title", false, modelWithData.isCellEditable(1,modelWithData.COLUMN_TITLE));
+		assertEquals("size", false, modelWithData.isCellEditable(1,modelWithData.COLUMN_LAST_DATE_SAVED));
+		assertEquals("date", false, modelWithData.isCellEditable(1,modelWithData.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetColumnClass()
 	{
-		assertEquals(Boolean.class, modelWithData.getColumnClass(RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG));
-		assertEquals(String.class, modelWithData.getColumnClass(RetrieveMyDraftsTableModel.COLUMN_TITLE));
-		assertEquals(String.class, modelWithData.getColumnClass(RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		assertEquals(Integer.class, modelWithData.getColumnClass(RetrieveMyDraftsTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals(Boolean.class, modelWithData.getColumnClass(modelWithData.COLUMN_RETRIEVE_FLAG));
+		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_TITLE));
+		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_LAST_DATE_SAVED));
+		assertEquals(Integer.class, modelWithData.getColumnClass(modelWithData.COLUMN_BULLETIN_SIZE));
 	}
 	
 	public void testGetAndSetValueAt()
 	{
-		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG)).booleanValue());
-		modelWithData.setValueAt(new Boolean(true), 0,RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG);
-		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG)).booleanValue());
+		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
+		modelWithData.setValueAt(new Boolean(true), 0,modelWithData.COLUMN_RETRIEVE_FLAG);
+		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 
-		assertEquals("start title", title2, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_TITLE));
-		modelWithData.setValueAt(title2+title2, 1,RetrieveMyDraftsTableModel.COLUMN_TITLE);
-		assertEquals("keep title", title2, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_TITLE));
+		assertEquals("start title", title2, modelWithData.getValueAt(1,modelWithData.COLUMN_TITLE));
+		modelWithData.setValueAt(title2+title2, 1,modelWithData.COLUMN_TITLE);
+		assertEquals("keep title", title2, modelWithData.getValueAt(1,modelWithData.COLUMN_TITLE));
 
-		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_BULLETIN_SIZE));
+		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(1,modelWithData.COLUMN_BULLETIN_SIZE));
 
 		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
-		assertEquals("start date", expectedDateSaved, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
-		modelWithData.setValueAt("some date", 1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED);
-		assertEquals("keep date", expectedDateSaved, modelWithData.getValueAt(1,RetrieveMyDraftsTableModel.COLUMN_LAST_DATE_SAVED));
+		assertEquals("start date", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
+		modelWithData.setValueAt("some date", 1,modelWithData.COLUMN_LAST_DATE_SAVED);
+		assertEquals("keep date", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
 	}
 	
 	public void testSetAllFlags()
@@ -157,11 +157,11 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		
 		modelWithData.setAllFlags(true);
 		for(int allTrueCounter = 0; allTrueCounter < modelWithData.getRowCount(); ++allTrueCounter)
-			assertEquals("all true" + allTrueCounter, t, modelWithData.getValueAt(0,RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG));
+			assertEquals("all true" + allTrueCounter, t, modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG));
 
 		modelWithData.setAllFlags(false);
 		for(int allFalseCounter = 0; allFalseCounter < modelWithData.getRowCount(); ++allFalseCounter)
-			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG));
+			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG));
 	}
 	
 	public void testGetIdList()
@@ -171,7 +171,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		assertEquals(0, emptyList.size());
 		
 		modelWithData.setAllFlags(true);
-		modelWithData.setValueAt(new Boolean(false), 1, RetrieveMyDraftsTableModel.COLUMN_RETRIEVE_FLAG);
+		modelWithData.setValueAt(new Boolean(false), 1, modelWithData.COLUMN_RETRIEVE_FLAG);
 		Vector twoList = modelWithData.getUniversalIdList();
 		assertEquals(1, twoList.size());
 		assertEquals("b0 id", b0.getUniversalId(), twoList.get(0));
