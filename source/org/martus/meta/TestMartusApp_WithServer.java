@@ -835,17 +835,16 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		security.createKeyPair(512);
 		MockMartusApp app= MockMartusApp.create(security);
 		app.currentNetworkInterfaceGateway = gateway;
-		String accountId = app.getAccountId();
 		
 		Vector uids = new Vector();
-		uids.add(BulletinHeaderPacket.createUniversalId(accountId));
+		uids.add(BulletinHeaderPacket.createUniversalId(security));
 
 		Vector mockResponse = new Vector();
 		mockResponse.clear();
 		mockResponse.add(NetworkInterfaceConstants.OK);
 		gateway.response = mockResponse;
-		uids.add(BulletinHeaderPacket.createUniversalId(accountId));
-		uids.add(BulletinHeaderPacket.createUniversalId(accountId));
+		uids.add(BulletinHeaderPacket.createUniversalId(security));
+		uids.add(BulletinHeaderPacket.createUniversalId(security));
 		String result = app.deleteServerDraftBulletins(uids);
 		assertEquals("wrong result?", mockResponse.get(0), result);
 		assertEquals("wrong crypto?", app.getSecurity(), gateway.gotSigner);
@@ -867,7 +866,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		}
 		gateway.throwSigError = false;
 
-		uids.add(BulletinHeaderPacket.createUniversalId(mockServer.getAccountId()));
+		uids.add(BulletinHeaderPacket.createUniversalId(mockServer.getSecurity()));
 		try
 		{
 			app.deleteServerDraftBulletins(uids);

@@ -45,6 +45,7 @@ import org.martus.common.database.MockServerDatabase;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.packet.UniversalId;
+import org.martus.common.test.UniversalIdForTesting;
 import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeWriter;
@@ -524,8 +525,8 @@ public class TestDatabase extends TestCaseEnhanced
 
 	private void internalTestGetRecordSize(Database db) throws Exception
 	{
-		DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount" , "x"));
-		DatabaseKey shortKey2 = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount2" , "cvx"));
+		DatabaseKey shortKey = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
+		DatabaseKey shortKey2 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";			
 		db.writeRecord(shortKey, testString);
 		
@@ -663,9 +664,9 @@ public class TestDatabase extends TestCaseEnhanced
 
 		String account1 = "account1";
 		String account2 = "account2";
-		DatabaseKey key1 = new DatabaseKey(UniversalId.createFromAccountAndPrefix(account1, "x"));
-		DatabaseKey key2 = new DatabaseKey(UniversalId.createFromAccountAndPrefix(account2, "x"));
-		DatabaseKey key3 = new DatabaseKey(UniversalId.createFromAccountAndPrefix(account1, "x"));
+		DatabaseKey key1 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix(account1, "x"));
+		DatabaseKey key2 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix(account2, "x"));
+		DatabaseKey key3 = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix(account1, "x"));
 
 		counter.clear();
 		db.visitAllAccounts(counter);
@@ -691,7 +692,7 @@ public class TestDatabase extends TestCaseEnhanced
 	{
 		PacketCounter counter = new PacketCounter(db);
 
-		UniversalId smallUid2 = UniversalId.createFromAccountAndPrefix(smallKey.getAccountId(), "x");
+		UniversalId smallUid2 = UniversalIdForTesting.createFromAccountAndPrefix(smallKey.getAccountId(), "x");
 		DatabaseKey smallKey2 = DatabaseKey.createSealedKey(smallUid2);
 		db.writeRecord(smallKey, smallString);
 		db.writeRecord(smallKey2, smallString);
@@ -1041,8 +1042,8 @@ public class TestDatabase extends TestCaseEnhanced
 	}
 
 	MockMartusSecurity security;
-	DatabaseKey smallKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("small account", "x"));
-	DatabaseKey largeKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("large account", "x"));
+	DatabaseKey smallKey = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("small account", "x"));
+	DatabaseKey largeKey = new DatabaseKey(UniversalIdForTesting.createFromAccountAndPrefix("large account", "x"));
 	String smallString = "How are you doing?";
 	String smallString2 = "Just another string 123";
 	String largeString = buildLargeString();

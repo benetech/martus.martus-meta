@@ -37,6 +37,7 @@ import org.martus.common.database.MockServerDatabase;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.packet.UniversalId;
+import org.martus.common.test.UniversalIdForTesting;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestDatabaseHiddenRecords extends TestCaseEnhanced
@@ -57,10 +58,10 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		fileDatabase.initialize();
 		mockDatabase = new MockServerDatabase();
 
-		draftUid = UniversalId.createFromAccountAndPrefix("bogus account", "G");
+		draftUid = UniversalIdForTesting.createFromAccountAndPrefix("bogus account", "G");
 		draftKey = DatabaseKey.createDraftKey(draftUid);
 
-		sealedUid = UniversalId.createFromAccountAndPrefix("bogus account", "G");
+		sealedUid = UniversalIdForTesting.createFromAccountAndPrefix("bogus account", "G");
 		sealedKey = DatabaseKey.createSealedKey(sealedUid);
 		
 		assertNotEquals("duplicate uids?", draftUid, sealedUid);
