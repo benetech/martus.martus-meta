@@ -3,9 +3,13 @@ package org.martus.meta;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TestAll extends java.lang.Object 
+import org.martus.client.test.TestClient;
+import org.martus.common.test.TestCommon;
+import org.martus.server.main.TestServer;
+
+public class TestAllQuick extends java.lang.Object 
 {
-    public TestAll() 
+    public TestAllQuick() 
     {
     }
 
@@ -35,9 +39,12 @@ public class TestAll extends java.lang.Object
 	{
 		TestSuite suite= new TestSuite("All Martus Tests");
 
-		suite.addTest(TestAllQuick.suite());
-		suite.addTestSuite(TestThreads.class);
+		suite.addTest(TestMetaQuick.suite());
 		
+		// shared stuff
+		suite.addTest(TestCommon.suite());
+		suite.addTest(TestServer.suite());
+		suite.addTest(TestClient.suite());
 	    return suite;
 	}
 }

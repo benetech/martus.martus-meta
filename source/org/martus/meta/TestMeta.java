@@ -27,20 +27,8 @@ public class TestMeta extends TestCaseEnhanced
 	{
 		TestSuite suite= new TestSuite("Meta Tests");
 
-		suite.addTest(new TestSuite(TestBackgroundUploader.class));
-		suite.addTest(new TestSuite(TestDatabase.class));
-		suite.addTest(new TestSuite(TestDatabaseHiddenRecords.class));
-		suite.addTest(new TestSuite(TestDeleteDraftsTableModel.class));
-		suite.addTest(new TestSuite(TestMartusApp_WithServer.class));
-		suite.addTest(new TestSuite(TestRetrieveHQDraftsTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveHQTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveMyDraftsTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveMyTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveTableModel.class));
-		suite.addTest(new TestSuite(TestScrubFile.class));
-		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
-		suite.addTest(new TestSuite(TestSSL.class));
-		suite.addTest(new TestSuite(TestThreads.class));
+		suite.addTest(TestMetaQuick.suite());
+		suite.addTestSuite(TestThreads.class);
 		
 		return suite;
 	}	
