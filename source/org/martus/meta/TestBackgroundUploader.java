@@ -85,8 +85,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		File keyPairFile = appWithServer.getCurrentKeyPairFile();
 		keyPairFile.delete();
 		appWithServer.getUploadInfoFile().delete();
-		new File(appWithServer.getConfigInfoFilename()).delete();
-		new File(appWithServer.getConfigInfoSignatureFilename()).delete();
+		appWithServer.getConfigInfoFile().delete();
+		appWithServer.getConfigInfoSignatureFile().delete();
 
 		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
