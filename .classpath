@@ -6,5 +6,7 @@
     <classpathentry kind="src" path="/martus-client"/>
     <classpathentry kind="src" path="/martus-common"/>
     <classpathentry kind="src" path="/martus-server"/>
+    <classpathentry kind="var" path="junit"/>
+    <classpathentry kind="var" path="jsse"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>
