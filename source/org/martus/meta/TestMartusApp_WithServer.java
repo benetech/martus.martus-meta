@@ -42,6 +42,7 @@ import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
 import org.martus.client.test.NullProgressMeter;
+import org.martus.common.HQKey;
 import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.VersionBuildDate;
@@ -1066,7 +1067,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
 		Vector keys = new Vector();
-		keys.add(hqApp.getAccountId());
+		HQKey key = new HQKey(hqApp.getAccountId(), "");
+		keys.add(key);
 		appWithServer.setAndSaveHQKeys(keys);
 
 		String sampleSummary1 = "this is a basic summary";

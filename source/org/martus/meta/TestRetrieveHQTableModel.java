@@ -33,6 +33,7 @@ import java.util.Vector;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.HQKey;
 import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
@@ -82,7 +83,8 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b0.set(Bulletin.TAGAUTHOR, author0);
 		b0.setAllPrivate(true);
 		Vector hqKey = new Vector();
-		hqKey.add(hqApp.getAccountId());
+		HQKey key = new HQKey(hqApp.getAccountId(), "");
+		hqKey.add(key);
 		b0.setAuthorizedToReadKeys(hqKey);
 		fieldApp1.getStore().saveBulletin(b0);
 		b0Size = 20;

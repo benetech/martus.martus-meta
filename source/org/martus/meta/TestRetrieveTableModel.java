@@ -37,6 +37,7 @@ import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
+import org.martus.common.HQKey;
 import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.MartusUtilities.ServerErrorException;
@@ -565,8 +566,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithAccount.getAccountId(), hqApp.getAccountId());
 		Vector keys = new Vector();
-		keys.add(hqApp.getAccountId());
-		keys.add(hq2App.getAccountId());
+		HQKey key1 = new HQKey(hqApp.getAccountId(), "");
+		keys.add(key1);
+		HQKey key2 = new HQKey(hq2App.getAccountId(), "");
+		keys.add(key2);
 		appWithAccount.setAndSaveHQKeys(keys);
 
 		String sampleSummary1 = "this is a basic summary";
