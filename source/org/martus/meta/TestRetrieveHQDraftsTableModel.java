@@ -34,6 +34,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.HQKey;
+import org.martus.common.HQKeys;
 import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
@@ -83,8 +84,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b0.set(Bulletin.TAGTITLE, title0);
 		b0.set(Bulletin.TAGAUTHOR, author0);
 		b0.setAllPrivate(true);
-		Vector hqKey = new Vector();
-		HQKey key = new HQKey(hqApp.getAccountId(), "");
+		HQKeys hqKey = new HQKeys();
+		HQKey key = new HQKey(hqApp.getAccountId());
 		hqKey.add(key);
 		b0.setAuthorizedToReadKeys(hqKey);
 		b0.setDraft();

@@ -34,6 +34,7 @@ import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.HQKey;
+import org.martus.common.HQKeys;
 import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
@@ -82,10 +83,10 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b0.set(Bulletin.TAGTITLE, title0);
 		b0.set(Bulletin.TAGAUTHOR, author0);
 		b0.setAllPrivate(true);
-		Vector hqKey = new Vector();
-		HQKey key = new HQKey(hqApp.getAccountId(), "");
-		hqKey.add(key);
-		b0.setAuthorizedToReadKeys(hqKey);
+		HQKeys hqKeys = new HQKeys();
+		HQKey key = new HQKey(hqApp.getAccountId());
+		hqKeys.add(key);
+		b0.setAuthorizedToReadKeys(hqKeys);
 		fieldApp1.getStore().saveBulletin(b0);
 		b0Size = 20;
 
@@ -93,7 +94,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b1.set(Bulletin.TAGTITLE, title1);
 		b1.set(Bulletin.TAGAUTHOR, author1);
 		b1.setAllPrivate(false);
-		b1.setAuthorizedToReadKeys(hqKey);
+		b1.setAuthorizedToReadKeys(hqKeys);
 		fieldApp1.getStore().saveBulletin(b1);
 		b1Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b1.getBulletinHeaderPacket());
 
@@ -101,7 +102,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b2.set(Bulletin.TAGTITLE, title2);
 		b2.set(Bulletin.TAGAUTHOR, author2);
 		b2.setAllPrivate(true);
-		b2.setAuthorizedToReadKeys(hqKey);
+		b2.setAuthorizedToReadKeys(hqKeys);
 		fieldApp2.getStore().saveBulletin(b2);
 		b2Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b2.getBulletinHeaderPacket());
 	
