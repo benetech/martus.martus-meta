@@ -26,8 +26,8 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.bulletincomponent.HeadQuarterEntry;
-import org.martus.client.swingui.bulletincomponent.HeadQuartersSelectionListener;
+import org.martus.client.swingui.HeadQuarterEntry;
+import org.martus.client.swingui.HeadQuartersSelectionListener;
 import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelEdit;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.HQKey;
@@ -38,10 +38,10 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.Base64.InvalidBase64Exception;
 
-public class TestHeadQuarterTableModelEdit extends TestCaseEnhanced implements HeadQuartersSelectionListener
+public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements HeadQuartersSelectionListener
 {
 
-	public TestHeadQuarterTableModelEdit(String name) 
+	public TestHeadQuartersTableModelEdit(String name) 
 	{
 		super(name);
 	}

@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.bulletincomponent.HeadQuarterEntry;
+import org.martus.client.swingui.HeadQuarterEntry;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;

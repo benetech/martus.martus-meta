@@ -59,8 +59,9 @@ public class TestMetaQuick extends TestCaseEnhanced
 		suite.addTestSuite(TestDatabaseHiddenRecords.class);
 		suite.addTestSuite(TestDeleteDraftsTableModel.class);
 		suite.addTestSuite(TestHeadQuarterEntry.class);
-		suite.addTestSuite(TestHeadQuarterTableModelEdit.class);
-		suite.addTestSuite(TestHeadQuarterTableModelView.class);
+		suite.addTestSuite(TestHeadQuartersTableModelConfiguration.class);
+		suite.addTestSuite(TestHeadQuartersTableModelEdit.class);
+		suite.addTestSuite(TestHeadQuartersTableModelView.class);
 		suite.addTestSuite(TestMartusApp_WithServer.class);
 		suite.addTestSuite(TestRetrieveHQDraftsTableModel.class);
 		suite.addTestSuite(TestRetrieveHQTableModel.class);

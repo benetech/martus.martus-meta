@@ -1,6 +1,4 @@
-/*
-
-The Martus(tm) free, social justice documentation and
+/*The Martus(tm) free, social justice documentation and
 monitoring software. Copyright (C) 2005, Beneficent
 Technology, Inc. (Benetech).
 
@@ -26,8 +24,8 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.bulletincomponent.HeadQuarterEntry;
-import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelView;
+import org.martus.client.swingui.HeadQuarterEntry;
+import org.martus.client.swingui.HeadQuartersTableModelConfiguration;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
@@ -37,10 +35,10 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.Base64.InvalidBase64Exception;
 
-public class TestHeadQuarterTableModelView extends TestCaseEnhanced 
+public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 {
 
-	public TestHeadQuarterTableModelView(String name) 
+	public TestHeadQuartersTableModelConfiguration(String name) 
 	{
 		super(name);
 	}
@@ -54,21 +52,21 @@ public class TestHeadQuarterTableModelView extends TestCaseEnhanced
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadQuartersTableModelView(localization);
+		modelWithData = new HeadQuartersTableModelConfiguration(localization);
 		key1 = new HQKey(publicCode1, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized);
 		app.addHQLabelsWherePossible(HQKeysAuthorized);
+		
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
-		
 		key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		key2.setLabel(app.getHQLabelIfPresent(key2));
+		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadQuartersTableModelView(localization);
+		modelWithoutData = new HeadQuartersTableModelConfiguration(localization);
 	}
 
 	public void tearDown() throws Exception
@@ -79,13 +77,15 @@ public class TestHeadQuarterTableModelView extends TestCaseEnhanced
 	
 	public void testGetColumnName()
 	{
-		assertEquals(localization.getFieldLabel("BulletinHeadQuartersHQLabel"), modelWithData.getColumnName(0));
+		assertEquals(localization.getFieldLabel("ConfigureHeadQuartersDefault"), modelWithData.getColumnName(0));
+		assertEquals(localization.getFieldLabel("ConfigureHQColumnHeaderPublicCode"), modelWithData.getColumnName(1));
+		assertEquals(localization.getFieldLabel("BulletinHeadQuartersHQLabel"), modelWithData.getColumnName(2));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(1, modelWithoutData.getColumnCount());
-		assertEquals(1, modelWithData.getColumnCount());
+		assertEquals(3, modelWithoutData.getColumnCount());
+		assertEquals(3, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -96,35 +96,57 @@ public class TestHeadQuarterTableModelView extends TestCaseEnhanced
 	
 	public void testIsCellEditable()
 	{
+		assertEquals("select hq not editable?", true, modelWithData.isCellEditable(1,modelWithData.COLUMN_DEFAULT));
+		assertEquals("Public code is editable?", false, modelWithData.isCellEditable(1,modelWithData.COLUMN_PUBLIC_CODE));
 		assertEquals("label is editable?", false, modelWithData.isCellEditable(1,modelWithData.COLUMN_LABEL));
 	}
 	
 	public void testGetColumnClass()
 	{
+		assertEquals(Boolean.class, modelWithData.getColumnClass(modelWithData.COLUMN_DEFAULT));
+		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_PUBLIC_CODE));
 		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_LABEL));
 	}
 	
 	public void testKeyLabelNames() throws InvalidBase64Exception
 	{
-		assertEquals(label1, modelWithData.getValueAt(0,0));
+		assertEquals(label1, modelWithData.getValueAt(0,2));
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
-		assertEquals(label2, modelWithData.getValueAt(1,0));
+		assertEquals(label2, modelWithData.getValueAt(1,2));
 	}
 	
 	public void testGetAllSelectedHeadQuarterKeys()
 	{
-		assertEquals(0, modelWithData.getAllSelectedHeadQuarterKeys().size());
-		assertEquals(0, modelWithoutData.getAllSelectedHeadQuarterKeys().size());
-	}
+		assertEquals(0, modelWithoutData.getAllDefaultHeadQuarterKeys().size());
+		assertEquals(0, modelWithoutData.getAllDefaultHeadQuarterKeys().size());
+		
+		modelWithData.setValueAt(Boolean.TRUE, 0,0);
+		HQKeys allDefaultHeadQuarterKeys = modelWithData.getAllDefaultHeadQuarterKeys();
+		assertEquals(1, allDefaultHeadQuarterKeys.size());
+		assertEquals(key1, allDefaultHeadQuarterKeys.get(0));
 
+		modelWithData.setValueAt(Boolean.FALSE, 0,0);
+		assertEquals(0, modelWithData.getAllDefaultHeadQuarterKeys().size());
+		modelWithData.setValueAt(Boolean.TRUE, 1,0);
+		allDefaultHeadQuarterKeys = modelWithData.getAllDefaultHeadQuarterKeys();
+		assertEquals(1, allDefaultHeadQuarterKeys.size());
+		assertEquals(key2, allDefaultHeadQuarterKeys.get(0));
+		
+		modelWithData.setValueAt(Boolean.TRUE, 0,0);
+		assertEquals(2, modelWithData.getAllDefaultHeadQuarterKeys().size());
+	}
+	
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
-	static HeadQuartersTableModelView modelWithData;
-	static HeadQuartersTableModelView modelWithoutData;
+	static HeadQuartersTableModelConfiguration modelWithData;
+	static HeadQuartersTableModelConfiguration modelWithoutData;
 	
 	static String publicCode1 = "123.436";
 	static String label1 = "key1 label";
 	static HQKey key1;
 	static HQKey key2;
 }
+
+
+
