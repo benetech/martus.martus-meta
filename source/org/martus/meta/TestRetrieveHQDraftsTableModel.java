@@ -81,7 +81,9 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b0.set(Bulletin.TAGTITLE, title0);
 		b0.set(Bulletin.TAGAUTHOR, author0);
 		b0.setAllPrivate(true);
-		b0.setHQPublicKey(hqApp.getAccountId());
+		Vector hqKey = new Vector();
+		hqKey.add(hqApp.getAccountId());
+		b0.setHQPublicKeys(hqKey);
 		b0.setDraft();
 		store1.saveBulletin(b0);
 		b0Size = MartusUtilities.getBulletinSize(store1.getDatabase(), b0.getBulletinHeaderPacket());
@@ -90,7 +92,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b1.set(Bulletin.TAGTITLE, title1);
 		b1.set(Bulletin.TAGAUTHOR, author1);
 		b1.setAllPrivate(false);
-		b1.setHQPublicKey(hqApp.getAccountId());
+		b1.setHQPublicKeys(hqKey);
 		b1.setSealed();
 		store1.saveBulletin(b1);
 		b1Size = MartusUtilities.getBulletinSize(store1.getDatabase(), b1.getBulletinHeaderPacket());
@@ -99,7 +101,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b2.set(Bulletin.TAGTITLE, title2);
 		b2.set(Bulletin.TAGAUTHOR, author2);
 		b2.setAllPrivate(true);
-		b2.setHQPublicKey(hqApp.getAccountId());
+		b2.setHQPublicKeys(hqKey);
 		b2.setDraft();
 		store2.saveBulletin(b2);
 		b2Size = 2300;

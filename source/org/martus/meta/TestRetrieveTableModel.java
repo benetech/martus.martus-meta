@@ -539,21 +539,21 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
-		appWithAccount.setHQKeyInBulletin(b1);
+		appWithAccount.setHQKeysInBulletin(b1);
 		appWithAccount.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
-		appWithAccount.setHQKeyInBulletin(b2);
+		appWithAccount.setHQKeysInBulletin(b2);
 		appWithAccount.getStore().saveBulletin(b2);
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(false);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setDraft();
-		appWithAccount.setHQKeyInBulletin(b3);
+		appWithAccount.setHQKeysInBulletin(b3);
 		appWithAccount.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
