@@ -1113,9 +1113,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	}
 
 
-	public void testShouldShowDraftUploadReminder() throws Exception
+	public void testIsDraftOutboxEmpty() throws Exception
 	{
-		TRACE_BEGIN("testShouldShowDraftUploadReminder");
+		TRACE_BEGIN("testIsDraftOutboxEmpty");
 		File file = appWithServer.getUploadInfoFile();
 		file.delete();
 		BulletinStore store = appWithServer.getStore();
@@ -1123,14 +1123,36 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		store.deleteAllData();
 		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
 		assertEquals("Draft outbox not empty", 0, draftOutbox.getBulletinCount());
-		assertEquals("No file and draft outbox empty", false, appWithServer.shouldShowDraftUploadReminder());
+		assertEquals("No file and draft outbox empty", true, appWithServer.isDraftOutboxEmpty());
 
 		Bulletin b = appWithServer.createBulletin();
 		appWithServer.getStore().saveBulletin(b);
 		store.addBulletinToFolder(b.getUniversalId(), draftOutbox);
 		assertEquals("Draft file got created somehow?", false, file.exists());
 		assertEquals("Draft outbox empty", 1, draftOutbox.getBulletinCount());
-		assertEquals("No file and draft outbox contains data", true, appWithServer.shouldShowDraftUploadReminder());
+		assertEquals("No file and draft outbox contains data", false, appWithServer.isDraftOutboxEmpty());
+		TRACE_END();
+	}
+
+	public void testIsSealedOutboxEmpty() throws Exception
+	{
+		TRACE_BEGIN("testIsSealedOutboxEmpty");
+		File file = appWithServer.getUploadInfoFile();
+		file.delete();
+		BulletinStore store = appWithServer.getStore();
+
+		store.deleteAllData();
+		BulletinFolder sealedOutbox = appWithServer.getFolderSealedOutbox();
+		assertEquals("Draft outbox not empty", 0, sealedOutbox.getBulletinCount());
+		assertEquals("No file and draft outbox empty", true, appWithServer.isSealedOutboxEmpty());
+
+		Bulletin b = appWithServer.createBulletin();
+		b.setSealed();
+		appWithServer.getStore().saveBulletin(b);
+		store.addBulletinToFolder(b.getUniversalId(), sealedOutbox);
+		assertEquals("Sealed file got created somehow?", false, file.exists());
+		assertEquals("Sealed outbox empty", 1, sealedOutbox.getBulletinCount());
+		assertEquals("No file and sealed outbox contains data", false, appWithServer.isSealedOutboxEmpty());
 		TRACE_END();
 	}
 
