@@ -59,25 +59,30 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		MockUiLocalization localization = new MockUiLocalization();
 		MockMartusApp app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		String publicCode1 = "123.436";
+		String publickey = "1234.4363.1233.3432.8823";
 		String label1 = "key1 label";
-		HQKey key1 = new HQKey(publicCode1, label1);
+		HQKey key1 = new HQKey(publickey, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized);
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		entry1.setSelected(false);
 		assertEquals(label1, entry1.getLabel());
+		assertEquals(key1.getPublicCode(), entry1.getPublicCode());
 		assertEquals(key1, entry1.getKey());
 		assertFalse("Entry is selected?", entry1.isSelected());
+		assertFalse("Entry is default?", entry1.isDefault());
 		
 		HQKey key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		entry2.setSelected(true);
+		entry2.setDefault(true);
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, entry2.getLabel());
+		assertEquals(key2.getPublicCode(), entry2.getPublicCode());
 		assertEquals(key2, entry2.getKey());
 		assertTrue("Entry is not selected?", entry2.isSelected());
+		assertTrue("Entry is not default?", entry2.isDefault());
 		
 		app.deleteAllFiles();
 	}
