@@ -152,7 +152,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 
 		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(1,modelWithData.COLUMN_BULLETIN_SIZE));
 
-		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
+		String expectedDateSaved = localization.formatDateTime(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
 		assertEquals("start date", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("some date", 1,modelWithData.COLUMN_LAST_DATE_SAVED);
 		assertEquals("keep date", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));

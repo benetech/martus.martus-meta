@@ -153,7 +153,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt("some date1", 0,modelWithData.COLUMN_LAST_DATE_SAVED);
 		assertEquals("keep date1", "", modelWithData.getValueAt(0,modelWithData.COLUMN_LAST_DATE_SAVED));
 
-		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
+		String expectedDateSaved = localization.formatDateTime(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
 		assertEquals("start date2", expectedDateSaved, modelWithData.getValueAt(2,modelWithData.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("some date2", 2,modelWithData.COLUMN_LAST_DATE_SAVED);
 		assertEquals("keep date2", expectedDateSaved, modelWithData.getValueAt(2,modelWithData.COLUMN_LAST_DATE_SAVED));

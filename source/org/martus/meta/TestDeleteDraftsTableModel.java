@@ -130,7 +130,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 2,modelWithData.COLUMN_TITLE);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,modelWithData.COLUMN_TITLE));
 
-		String expectedDateSaved = localization.convertStoredDateTimeToDisplay(BulletinSummary.getLastDateTimeSaved(LAST_SAVED_DATE_TIME));
+		String expectedDateSaved = localization.formatDateTime(BulletinSummary.getLastDateTimeSaved(LAST_SAVED_DATE_TIME));
 		assertEquals("Date Saved", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("today", 1,modelWithData.COLUMN_LAST_DATE_SAVED);
 		assertEquals("allowed change?", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED)); 
