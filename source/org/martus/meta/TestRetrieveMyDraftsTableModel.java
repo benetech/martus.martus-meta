@@ -84,7 +84,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		modelWithoutData = new RetrieveMyDraftsTableModel(app, localization);
 		modelWithoutData.initialize(null);
 		app.getStore().deleteAllData();
-		assertFalse("deleteAllData didn't?", app.getStore().doesBulletinExist(b0.getUniversalId()));
+		assertFalse("deleteAllData didn't?", app.getStore().doesBulletinRevisionExist(b0.getUniversalId()));
 		modelWithData = new RetrieveMyDraftsTableModel(app, localization);
 		modelWithData.initialize(null);
 	}

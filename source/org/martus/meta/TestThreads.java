@@ -294,9 +294,9 @@ public class TestThreads extends TestCaseEnhanced
 					UniversalId uid = b.getUniversalId();
 
 					store.saveBulletin(b);
-					assertTrue("not found after save?", store.doesBulletinExist(uid));
+					assertTrue("not found after save?", store.doesBulletinRevisionExist(uid));
 					store.removeBulletinFromStore(uid);
-					assertFalse("found after remove?", store.doesBulletinExist(uid));
+					assertFalse("found after remove?", store.doesBulletinRevisionExist(uid));
 				}
 			}
 			catch (Throwable e)
@@ -376,7 +376,7 @@ System.out.flush();
 					zip.close();
 
 					Bulletin b = store.findBulletinByUniversalId(headerKey.getUniversalId());
-					assertTrue("import didn't work?", store.doesBulletinExist(headerKey.getUniversalId()));
+					assertTrue("import didn't work?", store.doesBulletinRevisionExist(headerKey.getUniversalId()));
 					store.destroyBulletin(b);
 				}
 			} 
