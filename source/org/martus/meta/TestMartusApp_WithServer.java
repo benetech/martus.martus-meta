@@ -338,6 +338,33 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("empty word failed after right word passed?", true, appWithServer.requestServerUploadRights(""));
 		mockServer.serverForClients.addMagicWordForTesting(null, null);
 	}
+
+	public void testGetGroupNameForMagicWord() throws Exception
+	{
+		String magicWord = "Magic Word";
+		String groupName = "My Test Group";
+		mockServer.serverForClients.addMagicWordForTesting(magicWord, groupName);
+		assertEquals("Group names should match for valid magic word", groupName,mockServer.serverForClients.getGroupNameForMagicWord(magicWord));
+		assertEquals("Group names should match for valid magic word", groupName,mockServer.serverForClients.getGroupNameForMagicWord(magicWord.toLowerCase()));
+	}
+		
+	public void testGetHumanReadableMagicWord() throws Exception
+	{
+		String magicWord = "Magic Word";
+		String groupName = "My Test Group";
+		mockServer.serverForClients.addMagicWordForTesting(magicWord, groupName);
+		assertEquals("Human Readable should match for valid magic word", magicWord,mockServer.serverForClients.getHumanReadableMagicWord(magicWord));
+		assertEquals("Group names should match for valid magic word", magicWord,mockServer.serverForClients.getHumanReadableMagicWord(magicWord.toLowerCase()));
+	}
+
+	public void testIsValidMagicWord() throws Exception
+	{
+		String magicWord = "Magic Word";
+		String groupName = "My Test Group";
+		mockServer.serverForClients.addMagicWordForTesting(magicWord, groupName);
+		assertTrue("exact magic word should match", mockServer.serverForClients.isValidMagicWord(magicWord));
+		assertTrue("lowercase magic word should match", mockServer.serverForClients.isValidMagicWord(magicWord.toLowerCase()));
+	}
 	
 	class MockMartusServerChunks extends MockMartusServer 
 	{
