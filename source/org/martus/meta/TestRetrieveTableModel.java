@@ -104,7 +104,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		if(appWithoutServer == null)
 		{
 			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
-			MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
+			mockServerNotAvailable = new MockServerNotAvailable();
 			ServerSideNetworkHandler handler = new ServerSideNetworkHandler(mockServerNotAvailable.serverForClients);
 			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(handler);
 		}
@@ -127,6 +127,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithoutServer.deleteAllFiles();
 		appWithServer.deleteAllFiles();
 		mockServer.deleteAllFiles();
+		mockServerNotAvailable.deleteAllFiles();
 		super.tearDown();
 	}
 	
@@ -1038,6 +1039,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	private MockMartusApp appWithServer;
 	private MockMartusApp appWithoutServer;
+	private MockServerNotAvailable mockServerNotAvailable;
 
 	MockMartusServer mockServer;
 	private MockServerInterfaceHandler mockSSLServerHandler;
