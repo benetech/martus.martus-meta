@@ -62,6 +62,7 @@ import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.WrongAccountException;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.MockServerForClients;
 import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
@@ -202,8 +203,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Vector noNews = new Vector();
 		noNews.add(NetworkInterfaceConstants.OK);
 		noNews.add(new Vector());
-		mockServer.newsResponse = noNews;
-		mockServer.newsVersionLabelToCheck = UiConstants.versionLabel;
+		MockServerForClients mockServerForClients = (MockServerForClients) mockServer.serverForClients;
+		mockServerForClients.newsResponse = noNews;
+		mockServerForClients.newsVersionLabelToCheck = UiConstants.versionLabel;
 		Vector noNewsResponse = appWithServer.getNewsFromServer();
 		assertEquals(0, noNewsResponse.size());
 			
@@ -212,7 +214,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Vector badNewsItems = new Vector();
 		badNewsItems.add("news for you NOT");
 		badNews.add(badNewsItems);
-		mockServer.newsResponse = badNews;
+		mockServerForClients.newsResponse = badNews;
+		
+		
 		Vector badNewsResponse = appWithServer.getNewsFromServer();
 		assertEquals(0, badNewsResponse.size());
 
@@ -224,22 +228,22 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		twoNewsItems.add(firstNewsItem);
 		twoNewsItems.add(secondNewsItem);
 		twoNews.add(twoNewsItems);
-		mockServer.newsResponse = twoNews;
+		mockServerForClients.newsResponse = twoNews;
 		
 		Vector twoNewsResponseWithVersionLabelValid = appWithServer.getNewsFromServer();
 		assertEquals(2, twoNewsResponseWithVersionLabelValid.size());
 		assertEquals(firstNewsItem, twoNewsResponseWithVersionLabelValid.get(0));
 		assertEquals(secondNewsItem, twoNewsResponseWithVersionLabelValid.get(1));
 
-		mockServer.newsVersionLabelToCheck = "";
-		mockServer.newsVersionBuildDateToCheck = VersionBuildDate.getVersionBuildDate();
+		mockServerForClients.newsVersionLabelToCheck = "";
+		mockServerForClients.newsVersionBuildDateToCheck = VersionBuildDate.getVersionBuildDate();
 		Vector twoNewsResponseWithBuildDateValid = appWithServer.getNewsFromServer();
 		assertEquals(2, twoNewsResponseWithBuildDateValid.size());
 		assertEquals(firstNewsItem, twoNewsResponseWithBuildDateValid.get(0));
 		assertEquals(secondNewsItem, twoNewsResponseWithBuildDateValid.get(1));
 
-		mockServer.newsVersionLabelToCheck = "0.0.0";
-		mockServer.newsVersionBuildDateToCheck = "00/00/00";
+		mockServerForClients.newsVersionLabelToCheck = "0.0.0";
+		mockServerForClients.newsVersionBuildDateToCheck = "00/00/00";
 		Vector twoNewsResponseWithInvalidVersionInfo = appWithServer.getNewsFromServer();
 		assertEquals(0, twoNewsResponseWithInvalidVersionInfo.size());
 	}
