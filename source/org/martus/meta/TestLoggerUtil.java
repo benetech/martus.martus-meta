@@ -56,7 +56,7 @@ public class TestLoggerUtil extends TestCaseEnhanced
 		{
 			String result = LoggerUtil.getStackTrace(e);
 			assertContains("java.lang.ArithmeticException: / by zero", result);
-			assertContains("at org.martus.meta.TestLoggerUtil.testBasics(TestLoggerUtil.java:52)", result);
+			assertContains("at org.martus.meta.TestLoggerUtil.testBasics(", result);
 		}
 	}
 	
