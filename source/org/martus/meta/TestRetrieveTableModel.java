@@ -199,8 +199,6 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin daughter;
 		Bulletin granddaughter;
 
-		// This class is NOT intended to be serialized!!!
-		static final long serialVersionUID = 1;
 	}
 	
 	public void testGetUidsThatWouldBeUpgrades() throws Exception
