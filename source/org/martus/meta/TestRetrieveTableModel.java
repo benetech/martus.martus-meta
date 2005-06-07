@@ -28,6 +28,7 @@ package org.martus.meta;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.NotSerializableException;
 import java.util.Vector;
 
 import org.martus.client.core.BackgroundUploader;
@@ -193,6 +194,12 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				store.deleteBulletinRevision(DatabaseKey.createLegacyKey(granddaughter.getUniversalId()));
 		}
 		
+		private static final long serialVersionUID = 1;
+		private void writeObject(java.io.ObjectOutputStream stream) throws IOException
+		{
+			throw new NotSerializableException();
+		}
+
 		MockMartusApp app;
 		Bulletin parent;
 		Bulletin son;
