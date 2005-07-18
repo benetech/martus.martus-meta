@@ -49,7 +49,7 @@ import org.martus.common.BulletinSummary.WrongValueCount;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.clientside.UiBasicLocalization;
+import org.martus.common.clientside.UiLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
@@ -131,14 +131,14 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		super.tearDown();
 	}
 	
-	MockModel createMockModel(UiBasicLocalization localizationToUse) throws Exception
+	MockModel createMockModel(UiLocalization localizationToUse) throws Exception
 	{
 		return new MockModel(MockMartusApp.create(), localizationToUse);
 	}
 	
 	class MockModel extends RetrieveTableModel
 	{
-		MockModel(MockMartusApp appToUse, UiBasicLocalization localizationToUse) throws Exception
+		MockModel(MockMartusApp appToUse, UiLocalization localizationToUse) throws Exception
 		{
 			super(appToUse, localizationToUse);
 			app = appToUse;
@@ -1035,7 +1035,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	String title1 = "This is a cool title";
 	String title2 = "Even cooler";
 
-	static UiBasicLocalization localization;
+	static UiLocalization localization;
 	private static MockMartusSecurity mockSecurityForApp;
 	private static MockMartusSecurity mockSecurityForServer;
 

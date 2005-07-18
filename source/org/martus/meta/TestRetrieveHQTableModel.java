@@ -39,7 +39,7 @@ import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
-import org.martus.common.clientside.UiBasicLocalization;
+import org.martus.common.clientside.UiLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -386,7 +386,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	static MockMartusApp fieldApp1;
 	static MockMartusApp fieldApp2;
 	static MockMartusApp hqApp;
-	static UiBasicLocalization localization;
+	static UiLocalization localization;
 	
 	static Bulletin b0;
 	static Bulletin b1;

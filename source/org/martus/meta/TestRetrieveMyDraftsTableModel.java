@@ -33,7 +33,7 @@ import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.BulletinSummary;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.clientside.UiBasicLocalization;
+import org.martus.common.clientside.UiLocalization;
 import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -272,7 +272,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	MockMartusServer testServer;
 	NonSSLNetworkAPI testServerInterface;
 	NetworkInterface testSSLServerInterface;
-	UiBasicLocalization localization;
+	UiLocalization localization;
 	MockMartusApp app;
 	Bulletin b0;
 	Bulletin b1;
