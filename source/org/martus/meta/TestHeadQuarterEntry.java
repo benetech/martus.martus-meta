@@ -28,9 +28,9 @@ package org.martus.meta;
 
 import org.martus.client.swingui.HeadQuarterEntry;
 import org.martus.client.test.MockMartusApp;
+import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
-import org.martus.common.clientside.test.MockUiLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;

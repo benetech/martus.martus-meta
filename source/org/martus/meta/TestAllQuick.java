@@ -29,6 +29,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.martus.client.test.TestClient;
+import org.martus.clientside.test.TestClientside;
 import org.martus.common.test.TestCommon;
 import org.martus.server.main.TestServer;
 
@@ -70,6 +71,7 @@ public class TestAllQuick extends java.lang.Object
 		suite.addTest(TestCommon.suite());
 		suite.addTest(TestServer.suite());
 		suite.addTest(TestClient.suite());
+		suite.addTest(TestClientside.suite());
 	    return suite;
 	}
 }
