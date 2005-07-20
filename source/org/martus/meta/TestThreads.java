@@ -30,8 +30,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
 
-import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.ClientBulletinStore;
+import org.martus.client.bulletinstore.BulletinFolder;
+import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.test.MockBulletinStore;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;

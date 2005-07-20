@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.ClientBulletinStore;
+import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;

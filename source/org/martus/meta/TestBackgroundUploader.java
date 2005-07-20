@@ -29,9 +29,9 @@ package org.martus.meta;
 import java.io.File;
 import java.util.Vector;
 
+import org.martus.client.bulletinstore.BulletinFolder;
+import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.BackgroundUploader;
-import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.ClientBulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.BackgroundUploader.UploadResult;
 import org.martus.client.test.MockMartusApp;
