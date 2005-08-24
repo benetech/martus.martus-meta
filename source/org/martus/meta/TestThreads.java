@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
-
+import junit.framework.TestSuite;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.test.MockBulletinStore;
@@ -47,6 +47,12 @@ import org.martus.util.inputstreamwithseek.StringInputStreamWithSeek;
 
 public class TestThreads extends TestCaseEnhanced
 {
+	public static void main(String[] args)
+	{
+		if(args.length ==1)
+			scaleFactor = Integer.parseInt(args[0]);
+		junit.textui.TestRunner.run (new TestSuite(TestThreads.class));
+	}		
 
 	public TestThreads(String name)
 	{
@@ -55,8 +61,8 @@ public class TestThreads extends TestCaseEnhanced
 
 	public void testThreadedBulletinActivity() throws Throwable
 	{
-		final int threadCount = 5;
-		final int iterations = 5;
+		final int threadCount = 5 * scaleFactor;
+		final int iterations = 5 * scaleFactor;
 		ThreadFactory factory = new BulletinThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -65,8 +71,8 @@ public class TestThreads extends TestCaseEnhanced
 	
 	public void testThreadedPacketWriting() throws Throwable
 	{
-		final int threadCount = 10;
-		final int iterations = 10;
+		final int threadCount = 10 * scaleFactor;
+		final int iterations = 10 * scaleFactor;
 		ThreadFactory factory = new PacketWriteThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -74,8 +80,8 @@ public class TestThreads extends TestCaseEnhanced
 	
 	public void testThreadedExporting() throws Throwable
 	{
-		final int threadCount = 10;
-		final int iterations = 10;
+		final int threadCount = 10 * scaleFactor;
+		final int iterations = 10 * scaleFactor;
 		ThreadFactory factory = new ExportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -83,8 +89,8 @@ public class TestThreads extends TestCaseEnhanced
 
 	public void testThreadedImporting() throws Throwable
 	{
-		final int threadCount = 10;
-		final int iterations = 10;
+		final int threadCount = 10 * scaleFactor;
+		final int iterations = 10 * scaleFactor;
 		ThreadFactory factory = new ImportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -92,8 +98,8 @@ public class TestThreads extends TestCaseEnhanced
 	
 	public void testThreadedFolderListActivity() throws Throwable
 	{
-		final int threadCount = 10;
-		final int iterations = 10;
+		final int threadCount = 10 * scaleFactor;
+		final int iterations = 10 * scaleFactor;
 		FolderListThreadFactory factory = new FolderListThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -101,8 +107,8 @@ public class TestThreads extends TestCaseEnhanced
 
 	public void testThreadedFolderContentsActivity() throws Throwable
 	{
-		final int threadCount = 5;
-		final int iterations = 5;
+		final int threadCount = 5 * scaleFactor;
+		final int iterations = 5 * scaleFactor;
 		FolderContentsThreadFactory factory = new FolderContentsThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -519,11 +525,11 @@ System.out.flush();
 				result = e;
 			}
 		}
-		
 		ClientBulletinStore store;
 		int copies;
 		String folderName;
 		Bulletin[] bulletins;
 	}
 
+	public static int scaleFactor = 1;
 }
