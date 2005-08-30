@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
+import javax.swing.UIManager;
 import junit.framework.TestSuite;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
@@ -47,6 +48,9 @@ import org.martus.util.inputstreamwithseek.StringInputStreamWithSeek;
 
 public class TestThreads extends TestCaseEnhanced
 {
+	private static int ITERATIONS = 10;
+	private static int THREAD_COUNT = 10;
+
 	public static void main(String[] args)
 	{
 		if(args.length ==1)
@@ -57,12 +61,40 @@ public class TestThreads extends TestCaseEnhanced
 	public TestThreads(String name)
 	{
 		super(name);
+		//Java HACK under MSWindows and maybe Mac (Testing?)
+		//Under Java 1.4.2_03 Iterations of 20 with a threadCount of 20 causes a hotspot error
+		//Under Java 1.5 with Iterations of 9 with a threadCount of 9 causes the hotspot error
+		//Under Java 1.6 with Iterations of 4 with a threadCount of 4 causes the hotspot error
+		//Under Linux no hotspot errors occure at any Iteration # of threadCount #, but since threads are more important for a server
+		//Than a client we are making this change so that the tests will pass on the Win2K build machine
+		//And for us developers with win2K machines.
+		
+		
+		if(isMSWindowsOrMac())
+		{
+			ITERATIONS = 3;
+			THREAD_COUNT = 3;
+		}
+		else
+		{
+			ITERATIONS = 5;
+			THREAD_COUNT = 50;
+		}
+	}
+
+	boolean isMSWindowsOrMac()
+	{
+		if(UIManager.getSystemLookAndFeelClassName().indexOf("MacLookAndFeel") >= 0)
+			return true;
+		if(UIManager.getSystemLookAndFeelClassName().indexOf("WindowsLookAndFeel") >= 0)
+			return true;
+		return false;
 	}
 
 	public void testThreadedBulletinActivity() throws Throwable
 	{
-		final int threadCount = 5 * scaleFactor;
-		final int iterations = 5 * scaleFactor;
+		final int threadCount = THREAD_COUNT * scaleFactor;
+		final int iterations = ITERATIONS * scaleFactor;
 		ThreadFactory factory = new BulletinThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -71,8 +103,8 @@ public class TestThreads extends TestCaseEnhanced
 	
 	public void testThreadedPacketWriting() throws Throwable
 	{
-		final int threadCount = 10 * scaleFactor;
-		final int iterations = 10 * scaleFactor;
+		final int threadCount = THREAD_COUNT * scaleFactor;
+		final int iterations = ITERATIONS * scaleFactor;
 		ThreadFactory factory = new PacketWriteThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -80,8 +112,8 @@ public class TestThreads extends TestCaseEnhanced
 	
 	public void testThreadedExporting() throws Throwable
 	{
-		final int threadCount = 10 * scaleFactor;
-		final int iterations = 10 * scaleFactor;
+		final int threadCount = THREAD_COUNT * scaleFactor;
+		final int iterations = ITERATIONS * scaleFactor;
 		ThreadFactory factory = new ExportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -89,8 +121,8 @@ public class TestThreads extends TestCaseEnhanced
 
 	public void testThreadedImporting() throws Throwable
 	{
-		final int threadCount = 10 * scaleFactor;
-		final int iterations = 10 * scaleFactor;
+		final int threadCount = THREAD_COUNT * scaleFactor;
+		final int iterations = ITERATIONS * scaleFactor;
 		ThreadFactory factory = new ImportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -98,8 +130,8 @@ public class TestThreads extends TestCaseEnhanced
 	
 	public void testThreadedFolderListActivity() throws Throwable
 	{
-		final int threadCount = 10 * scaleFactor;
-		final int iterations = 10 * scaleFactor;
+		final int threadCount = THREAD_COUNT * scaleFactor;
+		final int iterations = ITERATIONS * scaleFactor;
 		FolderListThreadFactory factory = new FolderListThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
@@ -107,8 +139,8 @@ public class TestThreads extends TestCaseEnhanced
 
 	public void testThreadedFolderContentsActivity() throws Throwable
 	{
-		final int threadCount = 5 * scaleFactor;
-		final int iterations = 5 * scaleFactor;
+		final int threadCount = THREAD_COUNT * scaleFactor;
+		final int iterations = ITERATIONS * scaleFactor;
 		FolderContentsThreadFactory factory = new FolderContentsThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 		factory.tearDown();
