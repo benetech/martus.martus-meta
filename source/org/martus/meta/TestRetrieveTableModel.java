@@ -1023,9 +1023,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	}
 
 
-	Bulletin b0;
-	Bulletin b1;
-	Bulletin b2;
+	Bulletin testB0;
+	Bulletin testB1;
+	Bulletin testB2;
 
 	String sampleSummary1 = "this is a basic summary";
 	String sampleSummary2 = "another silly summary";
