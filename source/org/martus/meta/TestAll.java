@@ -64,7 +64,7 @@ public class TestAll extends java.lang.Object
 
 		suite.addTest(TestAllQuick.suite());
 		suite.addTest(TestAllAmplifier.suite());
-		suite.addTestSuite(TestThreads.class);
+		suite.addTestSuite(TestThreadsClient.class);
 		
 	    return suite;
 	}

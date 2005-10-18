@@ -29,8 +29,9 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
-import javax.swing.UIManager;
+
 import junit.framework.TestSuite;
+
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.test.MockBulletinStore;
@@ -41,12 +42,13 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
+import org.martus.swing.Utilities;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.inputstreamwithseek.InputStreamWithSeek;
 import org.martus.util.inputstreamwithseek.StringInputStreamWithSeek;
 
 
-public class TestThreads extends TestCaseEnhanced
+public class TestThreadsClient extends TestCaseEnhanced
 {
 	private static int ITERATIONS = 10;
 	private static int THREAD_COUNT = 10;
@@ -55,10 +57,10 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		if(args.length ==1)
 			scaleFactor = Integer.parseInt(args[0]);
-		junit.textui.TestRunner.run (new TestSuite(TestThreads.class));
+		junit.textui.TestRunner.run (new TestSuite(TestThreadsClient.class));
 	}		
 
-	public TestThreads(String name)
+	public TestThreadsClient(String name)
 	{
 		super(name);
 		//Java HACK under MSWindows and maybe Mac (Testing?)
@@ -70,7 +72,7 @@ public class TestThreads extends TestCaseEnhanced
 		//And for us developers with win2K machines.
 		
 		
-		if(isMSWindowsOrMac())
+		if(Utilities.isMSWindows())
 		{
 			ITERATIONS = 3;
 			THREAD_COUNT = 3;
@@ -80,15 +82,6 @@ public class TestThreads extends TestCaseEnhanced
 			ITERATIONS = 5;
 			THREAD_COUNT = 50;
 		}
-	}
-
-	boolean isMSWindowsOrMac()
-	{
-		if(UIManager.getSystemLookAndFeelClassName().indexOf("MacLookAndFeel") >= 0)
-			return true;
-		if(UIManager.getSystemLookAndFeelClassName().indexOf("WindowsLookAndFeel") >= 0)
-			return true;
-		return false;
 	}
 
 	public void testThreadedBulletinActivity() throws Throwable

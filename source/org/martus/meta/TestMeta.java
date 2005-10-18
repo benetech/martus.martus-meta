@@ -52,7 +52,7 @@ public class TestMeta extends TestCaseEnhanced
 	{
 		TestSuite suite= new TestSuite("Meta Tests");
 		suite.addTest(TestMetaQuick.suite());
-		suite.addTestSuite(TestThreads.class);
+		suite.addTestSuite(TestThreadsClient.class);
 		return suite;
 	}	
 }
