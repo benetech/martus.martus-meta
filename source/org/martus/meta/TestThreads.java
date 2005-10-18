@@ -146,33 +146,6 @@ public class TestThreads extends TestCaseEnhanced
 		factory.tearDown();
 	}
 
-	private void launchTestThreads(ThreadFactory factory, int threadCount, int iterations) throws Throwable
-	{
-		TestingThread[] threads = new TestingThread[threadCount];
-		for (int i = 0; i < threads.length; i++) 
-		{
-			threads[i] = factory.createThread(iterations);
-		}
-		
-		for (int i = 0; i < threads.length; i++) 
-		{
-			threads[i].start();
-		}
-		
-		for (int i = 0; i < threads.length; i++) 
-		{
-			threads[i].join();
-			if(threads[i].getResult() != null)
-				throw threads[i].getResult();
-		}
-	}
-	
-	abstract class ThreadFactory
-	{
-		abstract TestingThread createThread(int copies) throws Exception;
-		abstract void tearDown() throws Exception;
-	}
-	
 	class BulletinThreadFactory extends ThreadFactory
 	{
 		BulletinThreadFactory() throws Exception
@@ -187,12 +160,12 @@ public class TestThreads extends TestCaseEnhanced
 			}
 		}
 		
-		TestingThread createThread(int copies) throws Exception
+		public TestingThread createThread(int copies) throws Exception
 		{
 			return new BulletinTester(store, copies);
 		}
 
-		void tearDown() throws Exception
+		public void tearDown() throws Exception
 		{
 			store.deleteAllData();
 		}
@@ -210,12 +183,12 @@ public class TestThreads extends TestCaseEnhanced
 			store.saveBulletin(b);
 		}
 		
-		TestingThread createThread(int copies) throws Exception
+		public TestingThread createThread(int copies) throws Exception
 		{
 			return new Exporter(store, b, copies);
 		}
 		
-		void tearDown() throws Exception
+		public void tearDown() throws Exception
 		{
 			store.deleteAllData();
 		}
@@ -231,12 +204,12 @@ public class TestThreads extends TestCaseEnhanced
 			store = new MockBulletinStore();
 		}
 		
-		TestingThread createThread(int copies) throws Exception
+		public TestingThread createThread(int copies) throws Exception
 		{
 			return new Importer(store, copies);
 		}
 
-		void tearDown() throws Exception
+		public void tearDown() throws Exception
 		{
 			store.deleteAllData();
 		}
@@ -251,12 +224,12 @@ public class TestThreads extends TestCaseEnhanced
 			store = new MockBulletinStore();
 		}
 		
-		TestingThread createThread(int copies) throws Exception
+		public TestingThread createThread(int copies) throws Exception
 		{
 			return new PacketWriter(store, copies);
 		}
 
-		void tearDown() throws Exception
+		public void tearDown() throws Exception
 		{
 			store.deleteAllData();
 		}
@@ -271,12 +244,12 @@ public class TestThreads extends TestCaseEnhanced
 			store = new MockBulletinStore();
 		}
 		
-		TestingThread createThread(int copies) throws Exception
+		public TestingThread createThread(int copies) throws Exception
 		{
 			return new FolderListTester(store, copies, nextId++);
 		}
 		
-		void tearDown() throws Exception
+		public void tearDown() throws Exception
 		{
 			store.deleteAllData();
 		}
@@ -292,12 +265,12 @@ public class TestThreads extends TestCaseEnhanced
 			store = new MockBulletinStore();
 		}
 		
-		TestingThread createThread(int copies) throws Exception
+		public TestingThread createThread(int copies) throws Exception
 		{
 			return new FolderContentsTester(store, copies);
 		}
 		
-		void tearDown() throws Exception 
+		public void tearDown() throws Exception 
 		{
 			store.deleteAllData();
 		}
@@ -305,16 +278,6 @@ public class TestThreads extends TestCaseEnhanced
 		ClientBulletinStore store;
 	}
 	
-	abstract class TestingThread extends Thread
-	{
-		Throwable getResult()
-		{
-			return result;
-		}
-
-		Throwable result;
-	}
-
 	class BulletinTester extends TestingThread
 	{
 		BulletinTester(ClientBulletinStore storeToUse, int copiesToDo) throws Exception
