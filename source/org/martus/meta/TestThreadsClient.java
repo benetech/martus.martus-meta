@@ -109,7 +109,6 @@ public class TestThreadsClient extends TestCaseEnhanced
 			ClientBulletinStore store;
 			int copies;
 			String folderName;
-			Bulletin[] bulletins;
 		}
 
 		class BulletinThreadFactory extends ClientThreadFactory implements ThreadFactory
@@ -142,7 +141,6 @@ public class TestThreadsClient extends TestCaseEnhanced
 			{
 				
 				copies = copiesToDo;
-				db = storeToUse.getDatabase();
 				bulletin = storeToUse.createEmptyBulletin();
 				security = storeToUse.getSignatureGenerator();
 			}
@@ -166,7 +164,6 @@ public class TestThreadsClient extends TestCaseEnhanced
 			}
 			
 			Bulletin bulletin;
-			ReadableDatabase db;
 			MartusCrypto security;
 			int copies;
 		}
