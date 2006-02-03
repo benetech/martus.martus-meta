@@ -32,6 +32,7 @@ import org.martus.client.test.TestClient;
 import org.martus.clientside.test.TestClientside;
 import org.martus.common.test.TestCommon;
 import org.martus.server.main.TestServer;
+import org.martus.util.TestUtil;
 
 public class TestAllQuick extends java.lang.Object 
 {
@@ -68,6 +69,7 @@ public class TestAllQuick extends java.lang.Object
 		suite.addTest(TestMetaQuick.suite());
 		
 		// shared stuff
+		suite.addTest(TestUtil.suite());
 		suite.addTest(TestCommon.suite());
 		suite.addTest(TestServer.suite());
 		suite.addTest(TestClient.suite());
