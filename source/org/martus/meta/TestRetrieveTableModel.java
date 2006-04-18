@@ -28,6 +28,7 @@ package org.martus.meta;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Set;
 import java.util.Vector;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.BackgroundUploader;
@@ -228,9 +229,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		model.deleteAllFromAppExcept(bulletinToRetrieve);
 		Vector uidToCheck = new Vector();
 		uidToCheck.add(model.daughter.getUniversalId());
-		Vector result = model.getUidsThatWouldBeUpgrades(uidToCheck);
+		Set result = model.getUidsThatWouldBeUpgrades(uidToCheck);
 		assertEquals(1, result.size());
-		assertEquals(uidToCheck.get(0), result.get(0));
+		assertTrue(result.contains(uidToCheck.get(0)));
 	}
 
 	private void verifyDaughterWouldNotUpgrade(MockModel model, Bulletin bulletinToRetrieve) throws Exception
@@ -238,7 +239,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		model.deleteAllFromAppExcept(bulletinToRetrieve);
 		Vector uidToCheck = new Vector();
 		uidToCheck.add(model.daughter.getUniversalId());
-		Vector result = model.getUidsThatWouldBeUpgrades(uidToCheck);
+		Set result = model.getUidsThatWouldBeUpgrades(uidToCheck);
 		assertEquals(0, result.size());
 	}
 
