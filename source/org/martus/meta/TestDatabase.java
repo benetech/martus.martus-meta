@@ -43,6 +43,7 @@ import org.martus.common.database.FileDatabase;
 import org.martus.common.database.MockDatabase;
 import org.martus.common.database.MockServerDatabase;
 import org.martus.common.database.ServerFileDatabase;
+import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.UniversalIdForTesting;
@@ -306,6 +307,14 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestGetRecordSize(serverFileDb);
 	}
 
+	public void testGetmTime() throws Exception
+	{
+		TRACE("testGetmTime");
+		internalTestGetmTime(mockDb);
+		internalTestGetmTime(clientFileDb);
+		internalTestGetmTime(serverFileDb);
+	}
+
 	public void testLargeWriteRecord() throws Exception
 	{
 		TRACE("testLargeWriteRecord");
@@ -527,13 +536,47 @@ public class TestDatabase extends TestCaseEnhanced
 	{
 		DatabaseKey shortKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
 		DatabaseKey shortKey2 = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
+		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";			
 		db.writeRecord(shortKey, testString);
+		db.writeRecord(hiddenKey, testString);
+		db.hide(hiddenKey.getUniversalId());
 		
 		assertEquals(db.toString()+" Mock Record size not correct?", testString.length(), db.getRecordSize(shortKey));
 		assertEquals(db.toString()+" Size not zero?", 0, db.getRecordSize(shortKey2));
+		try
+		{
+			db.getRecordSize(hiddenKey);
+			fail("Should have thrown if hidden");
+		}
+		catch(RecordHiddenException expected)
+		{
+		}
 	}
 	
+	private void internalTestGetmTime(Database db) throws Exception
+	{
+		DatabaseKey shortKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
+		DatabaseKey unsavedKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
+		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
+		String testString = "This is a test";	
+		long startTime = System.currentTimeMillis();
+		db.writeRecord(shortKey, testString);
+		db.writeRecord(hiddenKey, testString);
+		db.hide(hiddenKey.getUniversalId());
+		long endTime = System.currentTimeMillis();
+		long mTimeOfFile = db.getmTime(shortKey);
+		assertTrue(db.toString()+" mTime not correct?", startTime <= mTimeOfFile && mTimeOfFile <= endTime);
+		assertEquals(db.toString()+" mTime not -1 for key not found?", -1, db.getmTime(unsavedKey));
+		try
+		{
+			db.getmTime(hiddenKey);
+			fail("Should have thrown if hidden");
+		}
+		catch(RecordHiddenException expected)
+		{
+		}
+	}
 
 	private void internalTestLargeWriteRecord(Database db) throws Exception
 	{
