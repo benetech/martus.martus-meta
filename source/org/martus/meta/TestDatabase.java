@@ -561,11 +561,14 @@ public class TestDatabase extends TestCaseEnhanced
 		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";	
 		long startTime = System.currentTimeMillis();
+		System.out.println("S"+startTime);
 		db.writeRecord(shortKey, testString);
 		db.writeRecord(hiddenKey, testString);
 		db.hide(hiddenKey.getUniversalId());
 		long endTime = System.currentTimeMillis();
 		long mTimeOfFile = db.getmTime(shortKey);
+		System.out.println("M"+mTimeOfFile);
+		System.out.println("E"+endTime);
 		assertTrue(db.toString()+" mTime not correct?", startTime <= mTimeOfFile && mTimeOfFile <= endTime);
 		assertEquals(db.toString()+" mTime not -1 for key not found?", -1, db.getmTime(unsavedKey));
 		try
