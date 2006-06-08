@@ -36,6 +36,7 @@ import java.util.Vector;
 
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.ClientFileDatabase;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -556,19 +557,30 @@ public class TestDatabase extends TestCaseEnhanced
 	
 	private void internalTestGetmTime(Database db) throws Exception
 	{
-		DatabaseKey shortKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
+		DatabaseKey sealedKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount" , "x"));
+		DatabaseKey burSealedKey = BulletinUploadRecord.getBurKey(sealedKey);
 		DatabaseKey unsavedKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";	
 		long startTime = System.currentTimeMillis();
-		db.writeRecord(shortKey, testString);
+		db.writeRecord(sealedKey, testString);
+		String bur = BulletinUploadRecord.createBulletinUploadRecord(sealedKey.getLocalId(), security);
+		db.writeRecord(burSealedKey, bur);
 		db.writeRecord(hiddenKey, testString);
 		db.hide(hiddenKey.getUniversalId());
 		long endTime = System.currentTimeMillis();
-		long mTimeOfFile = db.getmTime(shortKey);
+		long mTimeOfFile = db.getmTime(sealedKey);
 		
 		assertTrue(db.toString()+" mTime not within start - end? S="+startTime+": A="+mTimeOfFile+ ": E="+endTime, startTime <= mTimeOfFile && mTimeOfFile <= endTime);
-		assertEquals(db.toString()+" mTime not -1 for key not found?", -1, db.getmTime(unsavedKey));
+		try
+		{
+			db.getmTime(unsavedKey);
+			fail("should have thrown an error for an mTime not found");
+		}
+		catch(IOException expected)
+		{
+		}
+
 		try
 		{
 			db.getmTime(hiddenKey);
