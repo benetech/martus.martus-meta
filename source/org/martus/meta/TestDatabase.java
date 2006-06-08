@@ -560,15 +560,14 @@ public class TestDatabase extends TestCaseEnhanced
 		DatabaseKey unsavedKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";	
-		long paddingForJavaFastTime = 3000; //3 seconds padding for java fast time and ms vs second resolution.
-		long startTime = System.currentTimeMillis() - paddingForJavaFastTime;
+		long startTime = System.currentTimeMillis();
 		db.writeRecord(shortKey, testString);
 		db.writeRecord(hiddenKey, testString);
 		db.hide(hiddenKey.getUniversalId());
-		long endTime = System.currentTimeMillis() + paddingForJavaFastTime;
+		long endTime = System.currentTimeMillis();
 		long mTimeOfFile = db.getmTime(shortKey);
 		
-		assertTrue(db.toString()+" mTime not within +/- 3 seconds?", startTime <= mTimeOfFile && mTimeOfFile <= endTime);
+		assertTrue(db.toString()+" mTime not within start - end? S="+startTime+": A="+mTimeOfFile+ ": E="+endTime, startTime <= mTimeOfFile && mTimeOfFile <= endTime);
 		assertEquals(db.toString()+" mTime not -1 for key not found?", -1, db.getmTime(unsavedKey));
 		try
 		{
