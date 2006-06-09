@@ -562,16 +562,17 @@ public class TestDatabase extends TestCaseEnhanced
 		DatabaseKey unsavedKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(UniversalIdForTesting.createFromAccountAndPrefix("myAccount2" , "cvx"));
 		String testString = "This is a test";	
-		long startTime = System.currentTimeMillis();
 		db.writeRecord(sealedKey, testString);
 		String bur = BulletinUploadRecord.createBulletinUploadRecord(sealedKey.getLocalId(), security);
 		db.writeRecord(burSealedKey, bur);
 		db.writeRecord(hiddenKey, testString);
 		db.hide(hiddenKey.getUniversalId());
-		long endTime = System.currentTimeMillis();
 		long mTimeOfFile = db.getmTime(sealedKey);
+		long mTimeOfBurPacket = BulletinUploadRecord.getTimeStamp(bur);
+		if (db instanceof MockDatabase)
+			mTimeOfBurPacket = db.getmTime(burSealedKey);
 		
-		assertTrue(db.toString()+" mTime not within start - end? S="+startTime+": A="+mTimeOfFile+ ": E="+endTime, startTime <= mTimeOfFile && mTimeOfFile <= endTime);
+		assertEquals("mTimes not identical to bur time?", mTimeOfBurPacket, mTimeOfFile);
 		try
 		{
 			db.getmTime(unsavedKey);
