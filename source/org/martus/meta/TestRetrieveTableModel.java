@@ -314,18 +314,18 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(app, localization);
 		model.initialize(null);
 
-		assertFalse("b1 now on?", store.isProbablyOnServer(b1));
-		assertFalse("b2 now on?", store.isProbablyOnServer(b2));
-		assertTrue("b3 not on?", store.isProbablyOnServer(b3));
-		assertTrue("b4 not on?", store.isProbablyOnServer(b4));
+		assertFalse("b1 now on?", store.isProbablyOnServer(b1.getUniversalId()));
+		assertFalse("b2 now on?", store.isProbablyOnServer(b2.getUniversalId()));
+		assertTrue("b3 not on?", store.isProbablyOnServer(b3.getUniversalId()));
+		assertTrue("b4 not on?", store.isProbablyOnServer(b4.getUniversalId()));
 		
 		store.setIsNotOnServer(b3);
 		store.setIsNotOnServer(b4);
 		store.destroyBulletin(b3);
 		store.destroyBulletin(b4);
 		model.initialize(null);
-		assertFalse("b3 on even though it isn't in the store?", store.isProbablyOnServer(b3));
-		assertFalse("b4 on even though it isn't in the store?", store.isProbablyOnServer(b4));
+		assertFalse("b3 on even though it isn't in the store?", store.isProbablyOnServer(b3.getUniversalId()));
+		assertFalse("b4 on even though it isn't in the store?", store.isProbablyOnServer(b4.getUniversalId()));
 	}
 	
 	public void testRetrieveMySealedBulletinsMarksAllAsOnServer() throws Exception
@@ -341,18 +341,18 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveMyTableModel model = new RetrieveMyTableModel(app, localization);
 		model.initialize(null);
 
-		assertTrue("b1 not on?", store.isProbablyOnServer(b1));
-		assertTrue("b2 not on?", store.isProbablyOnServer(b2));
-		assertFalse("b3 now on?", store.isProbablyOnServer(b3));
-		assertFalse("b4 now on?", store.isProbablyOnServer(b4));
+		assertTrue("b1 not on?", store.isProbablyOnServer(b1.getUniversalId()));
+		assertTrue("b2 not on?", store.isProbablyOnServer(b2.getUniversalId()));
+		assertFalse("b3 now on?", store.isProbablyOnServer(b3.getUniversalId()));
+		assertFalse("b4 now on?", store.isProbablyOnServer(b4.getUniversalId()));
 		
 		store.setIsNotOnServer(b1);
 		store.setIsNotOnServer(b2);
 		store.destroyBulletin(b1);
 		store.destroyBulletin(b2);
 		model.initialize(null);
-		assertFalse("b1 on even though it isn't in the store?", store.isProbablyOnServer(b1));
-		assertFalse("b2 on even though it isn't in the store?", store.isProbablyOnServer(b2));
+		assertFalse("b1 on even though it isn't in the store?", store.isProbablyOnServer(b1.getUniversalId()));
+		assertFalse("b2 on even though it isn't in the store?", store.isProbablyOnServer(b2.getUniversalId()));
 	}
 	
 	public void testRetrieveFieldOfficeSealedBulletinsMarksAllAsOnServer() throws Exception
@@ -379,18 +379,18 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
 		model.initialize(null);
 
-		assertTrue("b1 not on?", hqStore.isProbablyOnServer(b1));
-		assertTrue("b2 not on?", hqStore.isProbablyOnServer(b2));
-		assertFalse("b3 now on?", hqStore.isProbablyOnServer(b3));
-		assertFalse("b4 now on?", hqStore.isProbablyOnServer(b4));
+		assertTrue("b1 not on?", hqStore.isProbablyOnServer(b1.getUniversalId()));
+		assertTrue("b2 not on?", hqStore.isProbablyOnServer(b2.getUniversalId()));
+		assertFalse("b3 now on?", hqStore.isProbablyOnServer(b3.getUniversalId()));
+		assertFalse("b4 now on?", hqStore.isProbablyOnServer(b4.getUniversalId()));
 		
 		hqStore.setIsNotOnServer(b1);
 		hqStore.setIsNotOnServer(b2);
 		hqStore.destroyBulletin(b1);
 		hqStore.destroyBulletin(b2);
 		model.initialize(null);
-		assertFalse("b1 on even though it isn't in the store?", hqStore.isProbablyOnServer(b1));
-		assertFalse("b2 on even though it isn't in the store?", hqStore.isProbablyOnServer(b2));
+		assertFalse("b1 on even though it isn't in the store?", hqStore.isProbablyOnServer(b1.getUniversalId()));
+		assertFalse("b2 on even though it isn't in the store?", hqStore.isProbablyOnServer(b2.getUniversalId()));
 		hqApp.deleteAllFiles();
 	}
 	
@@ -418,18 +418,18 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(hqApp, localization);
 		model.initialize(null);
 
-		assertFalse("b1 now on?", hqStore.isProbablyOnServer(b1));
-		assertFalse("b2 now on?", hqStore.isProbablyOnServer(b2));
-		assertTrue("b3 not on?", hqStore.isProbablyOnServer(b3));
-		assertTrue("b4 not on?", hqStore.isProbablyOnServer(b4));
+		assertFalse("b1 now on?", hqStore.isProbablyOnServer(b1.getUniversalId()));
+		assertFalse("b2 now on?", hqStore.isProbablyOnServer(b2.getUniversalId()));
+		assertTrue("b3 not on?", hqStore.isProbablyOnServer(b3.getUniversalId()));
+		assertTrue("b4 not on?", hqStore.isProbablyOnServer(b4.getUniversalId()));
 		
 		hqStore.setIsNotOnServer(b3);
 		hqStore.setIsNotOnServer(b4);
 		hqStore.destroyBulletin(b3);
 		hqStore.destroyBulletin(b4);
 		model.initialize(null);
-		assertFalse("b3 on even though it isn't in the store?", hqStore.isProbablyOnServer(b3));
-		assertFalse("b4 on even though it isn't in the store?", hqStore.isProbablyOnServer(b4));
+		assertFalse("b3 on even though it isn't in the store?", hqStore.isProbablyOnServer(b3.getUniversalId()));
+		assertFalse("b4 on even though it isn't in the store?", hqStore.isProbablyOnServer(b4.getUniversalId()));
 		hqApp.deleteAllFiles();
 	}
 	
@@ -930,8 +930,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b = createBulletin(app, title, allPrivate, sealed);
 		uploadBulletin(app, b);
 		ClientBulletinStore store = app.getStore();
-		assertFalse("new bulletin is marked as being on the server?", store.isProbablyOnServer(b));
-		assertFalse("new bulletin is marked as being not on the server?", store.isProbablyNotOnServer(b));
+		assertFalse("new bulletin is marked as being on the server?", store.isProbablyOnServer(b.getUniversalId()));
+		assertFalse("new bulletin is marked as being not on the server?", store.isProbablyNotOnServer(b.getUniversalId()));
 		return b;
 	}
 	
