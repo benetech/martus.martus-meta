@@ -190,9 +190,10 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
 		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
-		assertEquals("Not still in outbox?", 1, outbox.getBulletinCount());
-		assertEquals("Not still in saved folder?", 1, appWithServer.getFolderSaved().getBulletinCount());
-		Bulletin stillSealed = outbox.getBulletinSorted(0);
+		assertEquals("New behavior, failed bulletins are removed from outbox?", 0, outbox.getBulletinCount());
+		BulletinFolder folderSaved = appWithServer.getFolderSaved();
+		assertEquals("Not still in saved folder?", 1, folderSaved.getBulletinCount());
+		Bulletin stillSealed = folderSaved.getBulletinSorted(0);
 		assertTrue("Not still sealed?", stillSealed.isSealed());
 		mockServer.uploadResponse = null;
 		TRACE_END();
@@ -209,7 +210,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
 		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
-		assertEquals("Still in draft outbox", 1, draftOutbox.getBulletinCount());
+		assertEquals("New behavior if upload fails we remove it from the outbox", 0, draftOutbox.getBulletinCount());
 		mockServer.uploadResponse = null;
 		TRACE_END();
 	}
