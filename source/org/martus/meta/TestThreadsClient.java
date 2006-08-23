@@ -395,13 +395,13 @@ public class TestThreadsClient extends TestCaseEnhanced
 						assertEquals("Already in?", false, f.contains(b));
 						store.addBulletinToFolder(f, uid);
 						assertEquals("Not added?", true, f.contains(b));
-						store.discardBulletin(f, b);
+						store.discardBulletin(f, b.getUniversalId());
 						assertEquals("Not discarded?", false, f.contains(b));
 						store.moveBulletin(b, store.getFolderDiscarded(), f);
 						assertEquals("Not moved back?", true, f.contains(b));
 						store.removeBulletinFromFolder(f, b);
 						assertEquals("Not removed?", false, f.contains(b));
-						assertEquals("Not orphan?", true, store.isOrphan(b));
+						assertEquals("Not orphan?", true, store.isOrphan(b.getUniversalId()));
 						store.addBulletinToFolder(f, uid);
 					}
 				}
