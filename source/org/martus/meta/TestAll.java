@@ -25,6 +25,9 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.meta;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.martus.amplifier.test.TestAllAmplifier;
 import org.martus.common.TestFieldCollectionMemoryUsage;
 
@@ -61,6 +64,11 @@ public class TestAll extends java.lang.Object
 
 	public static Test suite ( ) 
 	{
+		// Turn down logging verbosity...
+		// should be in main() or runTests(), but neither of those get 
+		// hit if you run the tests from inside eclipse
+		Logger.global.setLevel(Level.WARNING);
+		
 		TestSuite suite= new TestSuite("All Martus Tests");
 
 		suite.addTest(TestAllQuick.suite());
