@@ -258,7 +258,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		
 		Visitor visitor = new Visitor(key);
 		db.visitAllRecords(visitor);
-		assertEquals(visibleKey, visitor.visitedKey);
+		assertEquals(visibleKey.toString(), visitor.visitedKey.toString());
 		visitor.visitedKey = null;
 		db.visitAllRecordsForAccount(visitor, accountId);
 		assertEquals(visibleKey, visitor.visitedKey);
