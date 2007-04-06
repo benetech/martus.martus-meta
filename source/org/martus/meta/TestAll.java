@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.martus.amplifier.test.TestAllAmplifier;
+import org.martus.client.core.MartusLogger;
 import org.martus.common.TestFieldCollectionMemoryUsage;
 
 import junit.framework.Test;
@@ -68,6 +69,7 @@ public class TestAll extends java.lang.Object
 		// should be in main() or runTests(), but neither of those get 
 		// hit if you run the tests from inside eclipse
 		Logger.global.setLevel(Level.WARNING);
+		MartusLogger.disableLogging();
 		
 		TestSuite suite= new TestSuite("All Martus Tests");
 
