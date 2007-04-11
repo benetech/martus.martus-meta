@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.martus.client.core.MartusLogger;
 import org.martus.client.test.TestClient;
 import org.martus.clientside.test.TestClientside;
 import org.martus.common.test.TestCommon;
@@ -71,6 +72,7 @@ public class TestAllQuick extends java.lang.Object
 		// should be in main() or runTests(), but neither of those get 
 		// hit if you run the tests from inside eclipse
 		Logger.global.setLevel(Level.WARNING);
+		MartusLogger.disableLogging();
 		
 		TestSuite suite= new TestSuite("All Martus Tests");
 
