@@ -71,7 +71,7 @@ import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.SummaryCollector;
 import org.martus.util.TestCaseEnhanced;
-import org.martus.util.Base64.InvalidBase64Exception;
+import org.martus.util.StreamableBase64.InvalidBase64Exception;
 
 public class TestRetrieveTableModel extends TestCaseEnhanced
 {

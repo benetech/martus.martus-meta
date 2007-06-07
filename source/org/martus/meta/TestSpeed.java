@@ -50,7 +50,7 @@ import org.martus.common.packet.AttachmentPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
-import org.martus.util.Base64;
+import org.martus.util.StreamableBase64;
 import org.martus.util.Stopwatch;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeReader;
@@ -101,11 +101,11 @@ public class TestSpeed extends TestCaseEnhanced
 				
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				security.writeKeyPair(out, password);
-				System.out.println(Base64.encode(out.toByteArray()));
+				System.out.println(StreamableBase64.encode(out.toByteArray()));
 			}
 			else
 			{
-				InputStream in = new ByteArrayInputStream(Base64.decode(keyPair));
+				InputStream in = new ByteArrayInputStream(StreamableBase64.decode(keyPair));
 				security.readKeyPair(in, password);
 			}
 		}
@@ -194,11 +194,11 @@ public class TestSpeed extends TestCaseEnhanced
 		byte[] data = createRandomBytes(100 * 1024);
 
 		Stopwatch encoder = new Stopwatch();
-		String encoded = Base64.encode(data);
+		String encoded = StreamableBase64.encode(data);
 		print("Base64 encode " + data.length + " bytes of data", encoder.stop());
 		
 		Stopwatch decoder = new Stopwatch();
-		Base64.decode(encoded);
+		StreamableBase64.decode(encoded);
 		print("Base64 decode " + data.length + " bytes of data", decoder.stop());
 	}
 
@@ -213,7 +213,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testGetBytes() throws Exception
 	{
 		byte[] data = createRandomBytes(100);
-		String base64 = Base64.encode(data);
+		String base64 = StreamableBase64.encode(data);
 		
 		final int count = 100000;
 		Stopwatch getBytesTimer = new Stopwatch();
@@ -357,7 +357,7 @@ public class TestSpeed extends TestCaseEnhanced
 		for(int line = 0; line < lineCount; ++line)
 		{
 			byte[] bytes = createRandomBytes(lineLength);
-			String base64 = Base64.encode(bytes);
+			String base64 = StreamableBase64.encode(bytes);
 			writer.writeln(base64); 
 		}
 		writer.close();

@@ -46,7 +46,7 @@ import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
-import org.martus.util.Base64;
+import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestBackgroundUploader extends TestCaseEnhanced
@@ -274,7 +274,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 	byte[] getBulletinZipBytes(Bulletin b) throws Exception
 	{
-		return Base64.decode(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForApp));
+		return StreamableBase64.decode(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForApp));
 	}
 		
 	private static MockMartusSecurity mockSecurityForApp;

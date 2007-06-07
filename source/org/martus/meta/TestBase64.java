@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.meta;
 
-import org.martus.util.Base64;
+import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
 
 
@@ -39,21 +39,21 @@ public class TestBase64 extends TestCaseEnhanced
 	public void testEncryptDecrypt() throws Exception
 	{
 		String data = "hello";
-		String encrypted = Base64.encode(data);
-		String encrypted2 = Base64.encode(data.getBytes("UTF-8"));
+		String encrypted = StreamableBase64.encode(data);
+		String encrypted2 = StreamableBase64.encode(data.getBytes("UTF-8"));
 		assertEquals("Not the same?", encrypted, encrypted2);
 		
-		byte[] decrypted = Base64.decode(encrypted);
+		byte[] decrypted = StreamableBase64.decode(encrypted);
 		assertEquals("decoded data not equal?", data, new String(decrypted));
 	}
 
 	public void testEncryptDecryptEmptyString() throws Exception
 	{
 		String data = "";
-		String encrypted = Base64.encode(data);
-		String encrypted2 = Base64.encode(data.getBytes("UTF-8"));
+		String encrypted = StreamableBase64.encode(data);
+		String encrypted2 = StreamableBase64.encode(data.getBytes("UTF-8"));
 		assertEquals("Not the same?", encrypted, encrypted2);
-		byte[] decrypted = Base64.decode(encrypted);
+		byte[] decrypted = StreamableBase64.decode(encrypted);
 		assertEquals("decoded enpty data not equal?", data, new String(decrypted));
 	}
 }

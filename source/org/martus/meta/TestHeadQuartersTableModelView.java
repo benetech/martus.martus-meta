@@ -35,7 +35,7 @@ import org.martus.common.HQKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
-import org.martus.util.Base64.InvalidBase64Exception;
+import org.martus.util.StreamableBase64.InvalidBase64Exception;
 
 public class TestHeadQuartersTableModelView extends TestCaseEnhanced 
 {
