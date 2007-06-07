@@ -29,9 +29,9 @@ import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
 
 
-public class TestBase64 extends TestCaseEnhanced
+public class TestStreamableBase64 extends TestCaseEnhanced
 {
-	public TestBase64(String name)
+	public TestStreamableBase64(String name)
 	{
 		super(name);
 	}

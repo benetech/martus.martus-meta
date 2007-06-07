@@ -54,7 +54,7 @@ public class TestMetaQuick extends TestCaseEnhanced
 		TestSuite suite= new TestSuite("Meta Tests");
 
 		suite.addTestSuite(TestBackgroundUploader.class);
-		suite.addTestSuite(TestBase64.class);
+		suite.addTestSuite(TestStreamableBase64.class);
 		suite.addTestSuite(TestDatabase.class);
 		suite.addTestSuite(TestDatabaseHiddenRecords.class);
 		suite.addTestSuite(TestDeleteDraftsTableModel.class);
