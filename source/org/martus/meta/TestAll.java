@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.martus.amplifier.test.TestAllAmplifier;
-import org.martus.client.core.MartusLogger;
+import org.martus.common.MartusLogger;
 import org.martus.common.TestFieldCollectionMemoryUsage;
 
 import junit.framework.Test;

@@ -31,9 +31,9 @@ import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.martus.client.core.MartusLogger;
 import org.martus.client.test.TestClient;
 import org.martus.clientside.test.TestClientside;
+import org.martus.common.MartusLogger;
 import org.martus.common.test.TestCommon;
 import org.martus.server.main.TestServer;
 import org.martus.util.TestUtil;
