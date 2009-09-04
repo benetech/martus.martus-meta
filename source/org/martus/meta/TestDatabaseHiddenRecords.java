@@ -237,9 +237,6 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		if(key.isDraft())
 			visibleKey.setDraft();
 		
-		db.writeRecord(visibleKey, "some data");
-		writeAndHideRecord(db, key);
-		
 		class Visitor implements Database.PacketVisitor
 		{
 			Visitor(DatabaseKey hiddenKeyToUse)
@@ -249,6 +246,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 			
 			public void visit(DatabaseKey thisKey)
 			{
+				assertNull("Found more than one visible key?", visitedKey);
 				assertNotEquals("Visited hidden key?", hiddenKey, thisKey);
 				visitedKey = thisKey;
 			}
@@ -256,12 +254,30 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 			public DatabaseKey visitedKey;
 		}
 		
-		Visitor visitor = new Visitor(key);
-		db.visitAllRecords(visitor);
-		assertEquals(visibleKey.toString(), visitor.visitedKey.toString());
-		visitor.visitedKey = null;
-		db.visitAllRecordsForAccount(visitor, accountId);
-		assertEquals(visibleKey, visitor.visitedKey);
+		{
+			Visitor visitor = new Visitor(key);
+			db.visitAllRecords(visitor);
+			assertNull("Bulletin already exists?", visitor.visitedKey);
+		}
+		
+		db.writeRecord(visibleKey, "some data");
+		{
+			Visitor visitor = new Visitor(key);
+			db.visitAllRecords(visitor);
+			assertEquals("written bulletin not visible?", visibleKey, visitor.visitedKey);
+		}
+		
+		writeAndHideRecord(db, key);
+		{
+			Visitor visitor = new Visitor(key);
+			db.visitAllRecords(visitor);
+			assertEquals("visible bulletin got hidden?", visibleKey, visitor.visitedKey);
+			visitor.visitedKey = null;
+			db.visitAllRecordsForAccount(visitor, accountId);
+			assertEquals("visible bulletin not found in account?", visibleKey, visitor.visitedKey);
+		}
+		
+		db.deleteAllData();
 	}
 	
 	
