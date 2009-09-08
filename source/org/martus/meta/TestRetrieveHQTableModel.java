@@ -33,12 +33,12 @@ import java.util.Vector;
 import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
-import org.martus.clientside.UiLocalization;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.BulletinSummary;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
@@ -386,7 +386,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	static MockMartusApp fieldApp1;
 	static MockMartusApp fieldApp2;
 	static MockMartusApp hqApp;
-	static UiLocalization localization;
+	static MiniLocalization localization;
 	
 	static Bulletin b0;
 	static Bulletin b1;

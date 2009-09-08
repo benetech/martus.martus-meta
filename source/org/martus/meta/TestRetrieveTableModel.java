@@ -40,12 +40,12 @@ import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
-import org.martus.clientside.UiLocalization;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.BulletinSummary;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MiniLocalization;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.BulletinSummary.WrongValueCount;
 import org.martus.common.MartusUtilities.FileTooLargeException;
@@ -132,14 +132,14 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		super.tearDown();
 	}
 	
-	MockModel createMockModel(UiLocalization localizationToUse) throws Exception
+	MockModel createMockModel(MiniLocalization localizationToUse) throws Exception
 	{
 		return new MockModel(MockMartusApp.create(), localizationToUse);
 	}
 	
 	class MockModel extends RetrieveTableModel
 	{
-		MockModel(MockMartusApp appToUse, UiLocalization localizationToUse) throws Exception
+		MockModel(MockMartusApp appToUse, MiniLocalization localizationToUse) throws Exception
 		{
 			super(appToUse, localizationToUse);
 			app = appToUse;
@@ -1036,7 +1036,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	String title1 = "This is a cool title";
 	String title2 = "Even cooler";
 
-	static UiLocalization localization;
+	static MiniLocalization localization;
 	private static MockMartusSecurity mockSecurityForApp;
 	private static MockMartusSecurity mockSecurityForServer;
 

@@ -31,9 +31,9 @@ import java.util.Vector;
 
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
-import org.martus.clientside.UiLocalization;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.BulletinSummary;
+import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -284,7 +284,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	NonSSLNetworkAPI testServerInterface;
 	NetworkInterface testSSLServerInterface;
 	MockMartusApp app;
-	UiLocalization localization;
+	MiniLocalization localization;
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
