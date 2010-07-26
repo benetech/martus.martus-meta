@@ -509,7 +509,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("result ok?", NetworkInterfaceConstants.INVALID_DATA, uploaderWithServer.uploadBulletin(b));
 
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(oldSSLServer);
-		appWithServer.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
+		appWithServer.serverChunkSize = NetworkInterfaceConstants.CLIENT_MAX_CHUNK_SIZE;
 		
 		server.deleteAllFiles();
 	}
@@ -687,7 +687,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		ClientBulletinStore store = appWithServer.getStore();
 		appWithServer.retrieveOneBulletinToFolder(b.getUniversalId(), store.getFolderDiscarded(), null);
 		
-		appWithServer.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
+		appWithServer.serverChunkSize = NetworkInterfaceConstants.CLIENT_MAX_CHUNK_SIZE;
 		
 		TRACE_END();
 	}
