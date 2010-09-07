@@ -50,8 +50,8 @@ import org.martus.common.packet.AttachmentPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
-import org.martus.util.StreamableBase64;
 import org.martus.util.Stopwatch;
+import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeWriter;
@@ -247,7 +247,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testXmlPlain() throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(security.getPublicKeyString(), "localId");
-		FieldDataPacket fdp = new FieldDataPacket(uid, StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
+		FieldDataPacket fdp = new FieldDataPacket(uid, StandardFieldSpecs.getDefaultTopSetionFieldSpecs());
 		
 		Writer writerPlain = new StringWriter();
 		
@@ -269,7 +269,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testXmlEncrypted() throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(security.getPublicKeyString(), "localId");
-		FieldDataPacket fdp = new FieldDataPacket(uid, StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
+		FieldDataPacket fdp = new FieldDataPacket(uid, StandardFieldSpecs.getDefaultTopSetionFieldSpecs());
 		
 		Writer writerEncrypted = new StringWriter();
 		
