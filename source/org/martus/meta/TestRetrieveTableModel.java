@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
 import java.util.Vector;
+
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.MartusApp;
@@ -71,7 +72,6 @@ import org.martus.server.forclients.ServerForClientsInterface;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.SummaryCollector;
 import org.martus.util.TestCaseEnhanced;
-import org.martus.util.StreamableBase64.InvalidBase64Exception;
 
 public class TestRetrieveTableModel extends TestCaseEnhanced
 {
@@ -949,7 +949,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		return b;
 	}
 
-	Bulletin createClone(MockMartusApp app, Bulletin original, String summary) throws CryptoException, InvalidPacketException, SignatureVerificationException, WrongPacketTypeException, IOException, InvalidBase64Exception
+	Bulletin createClone(MockMartusApp app, Bulletin original, String summary) throws Exception
 	{
 		Bulletin clone = app.createBulletin();
 		clone.createDraftCopyOf(original, app.getWriteableDatabase());
