@@ -34,6 +34,7 @@ import junit.framework.TestSuite;
 import org.martus.client.test.TestClient;
 import org.martus.clientside.test.TestClientside;
 import org.martus.common.MartusLogger;
+import org.martus.common.TestFieldCollectionMemoryUsage;
 import org.martus.common.test.TestCommon;
 import org.martus.server.main.TestServer;
 import org.martus.util.TestUtil;
@@ -84,6 +85,7 @@ public class TestAllQuick extends java.lang.Object
 		suite.addTest(TestServer.suite());
 		suite.addTest(TestClient.suite());
 		suite.addTest(TestClientside.suite());
+		suite.addTestSuite(TestFieldCollectionMemoryUsage.class);
 	    return suite;
 	}
 }
