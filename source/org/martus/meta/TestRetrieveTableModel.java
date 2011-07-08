@@ -770,16 +770,17 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	public void testGetFieldOfficeSummaries() throws Exception
 	{
-		MockMartusSecurity hq2Security = MockMartusSecurity.createHQ();	
-		MockMartusApp hq2App = MockMartusApp.create(hq2Security);
-		hq2App.setServerInfo("mock", mockServer.getAccountId(), "");
-		hq2App.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-
 		MockMartusSecurity hqSecurity = MockMartusSecurity.createHQ();	
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
+		
+		MockMartusSecurity hq2Security = MockMartusSecurity.createHQ();	
+		MockMartusApp hq2App = MockMartusApp.create(hq2Security);
+		hq2App.setServerInfo("mock", mockServer.getAccountId(), "");
+		hq2App.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+
 		HQKeys keys = new HQKeys();
 		HQKey key1 = new HQKey(hqApp.getAccountId());
 		keys.add(key1);
@@ -791,87 +792,94 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Bulletin b2 = createAndUploadPublicSealed(appWithServer, sampleSummary2);
 		Bulletin b3 = createAndUploadPublicDraft(appWithServer, sampleSummary3);
 
-		Vector desiredSealedResult = new Vector();
-		desiredSealedResult.add(NetworkInterfaceConstants.OK);
-		Vector list = new Vector();
-		list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId()+"=2000");
-		list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId()+"=2000");
-		desiredSealedResult.add(list);
-		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredSealedResult;	
-
-		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
-		model.initialize(null);
-		model.checkIfErrorOccurred();
-		Vector returnedSealedResults = model.getDownloadableSummaries();
-		assertEquals("Wrong size?", 2, returnedSealedResults.size());
-		BulletinSummary s1 = (BulletinSummary)returnedSealedResults.get(0);
-		BulletinSummary s2 = (BulletinSummary)returnedSealedResults.get(1);
-		boolean found1 = false;
-		boolean found2 = false;
-		found1 = s1.getLocalId().equals(b1.getLocalId());
-		if(!found1)
-			found1 = s2.getLocalId().equals(b1.getLocalId());
-		found2 = s1.getLocalId().equals(b2.getLocalId());
-		if(!found2)
-			found2 = s2.getLocalId().equals(b2.getLocalId());
-		assertTrue("not found S1?", found1);
-		assertTrue("not found S2?", found2);
-
-		Vector desiredDraftResult = new Vector();
-		desiredDraftResult.add(NetworkInterfaceConstants.OK);
-		Vector list2 = new Vector();
-		list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
-		desiredDraftResult.add(list2);
-		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredDraftResult;	
-
-		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, localization);
-		model2.initialize(null);
-		model2.checkIfErrorOccurred();
-		Vector returnedDraftResults = model2.getDownloadableSummaries();
-		assertEquals("Wrong draft size?", 1, returnedDraftResults.size());
-		BulletinSummary s3 = (BulletinSummary)returnedDraftResults.get(0);
-		boolean found3 = false;
-		found3 = s3.getLocalId().equals(b3.getLocalId());
-		assertTrue("not found S3?", found3);
-		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
-		hqApp.deleteAllFiles();
-
+		{
+			Vector desiredSealedResult = new Vector();
+			desiredSealedResult.add(NetworkInterfaceConstants.OK);
+			Vector list = new Vector();
+			list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId()+"=2000");
+			list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId()+"=2000");
+			desiredSealedResult.add(list);
+			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredSealedResult;	
 	
-		RetrieveHQTableModel modelhq2 = new RetrieveHQTableModel(hq2App, localization);
-		modelhq2.initialize(null);
-		modelhq2.checkIfErrorOccurred();
-		Vector returnedSealedResults2 = modelhq2.getDownloadableSummaries();
-		assertEquals("Wrong size for HQ2?", 2, returnedSealedResults2.size());
-		BulletinSummary bs1 = (BulletinSummary)returnedSealedResults2.get(0);
-		BulletinSummary bs2 = (BulletinSummary)returnedSealedResults2.get(1);
-		boolean foundItem1 = false;
-		boolean foundItem2 = false;
-		foundItem1 = bs1.getLocalId().equals(b1.getLocalId());
-		if(!foundItem1)
-			foundItem1 = bs2.getLocalId().equals(b1.getLocalId());
-		foundItem2 = bs1.getLocalId().equals(b2.getLocalId());
-		if(!foundItem2)
-			foundItem2 = bs2.getLocalId().equals(b2.getLocalId());
-		assertTrue("not found S1?", foundItem1);
-		assertTrue("not found S2?", foundItem2);
+			RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
+			model.initialize(null);
+			model.checkIfErrorOccurred();
+			Vector returnedSealedResults = model.getDownloadableSummaries();
+			assertEquals("Wrong size?", 2, returnedSealedResults.size());
+			BulletinSummary s1 = (BulletinSummary)returnedSealedResults.get(0);
+			BulletinSummary s2 = (BulletinSummary)returnedSealedResults.get(1);
+			boolean found1 = false;
+			boolean found2 = false;
+			found1 = s1.getLocalId().equals(b1.getLocalId());
+			if(!found1)
+				found1 = s2.getLocalId().equals(b1.getLocalId());
+			found2 = s1.getLocalId().equals(b2.getLocalId());
+			if(!found2)
+				found2 = s2.getLocalId().equals(b2.getLocalId());
+			assertTrue("not found S1?", found1);
+			assertTrue("not found S2?", found2);
+		}
 
-		Vector desired2DraftResult = new Vector();
-		desired2DraftResult.add(NetworkInterfaceConstants.OK);
-		Vector listOfData = new Vector();
-		listOfData.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
-		desired2DraftResult.add(listOfData);
-		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desired2DraftResult;	
+		{
+			Vector desiredDraftResult = new Vector();
+			desiredDraftResult.add(NetworkInterfaceConstants.OK);
+			Vector list2 = new Vector();
+			list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
+			desiredDraftResult.add(list2);
+			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredDraftResult;	
+	
+			RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, localization);
+			model2.initialize(null);
+			model2.checkIfErrorOccurred();
+			Vector returnedDraftResults = model2.getDownloadableSummaries();
+			assertEquals("Wrong draft size?", 1, returnedDraftResults.size());
+			BulletinSummary s3 = (BulletinSummary)returnedDraftResults.get(0);
+			boolean found3 = false;
+			found3 = s3.getLocalId().equals(b3.getLocalId());
+			assertTrue("not found S3?", found3);
+			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
 
-		RetrieveHQDraftsTableModel draftHQ2Model = new RetrieveHQDraftsTableModel(hqApp, localization);
-		draftHQ2Model.initialize(null);
-		draftHQ2Model.checkIfErrorOccurred();
-		Vector returnedHQ2DraftResults = draftHQ2Model.getDownloadableSummaries();
-		assertEquals("Wrong draft size for HQ2?", 1, returnedHQ2DraftResults.size());
-		BulletinSummary bsDraft3 = (BulletinSummary)returnedHQ2DraftResults.get(0);
-		boolean foundItems2 = false;
-		foundItems2 = bsDraft3.getLocalId().equals(b3.getLocalId());
-		assertTrue("not found S3 for HQ2?", foundItems2);
-		((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
+			hqApp.deleteAllFiles();
+
+			RetrieveHQTableModel modelhq2 = new RetrieveHQTableModel(hq2App, localization);
+			modelhq2.initialize(null);
+			modelhq2.checkIfErrorOccurred();
+			Vector returnedSealedResults2 = modelhq2.getDownloadableSummaries();
+			assertEquals("Wrong size for HQ2?", 2, returnedSealedResults2.size());
+			BulletinSummary bs1 = (BulletinSummary)returnedSealedResults2.get(0);
+			BulletinSummary bs2 = (BulletinSummary)returnedSealedResults2.get(1);
+			boolean foundItem1 = false;
+			boolean foundItem2 = false;
+			foundItem1 = bs1.getLocalId().equals(b1.getLocalId());
+			if(!foundItem1)
+				foundItem1 = bs2.getLocalId().equals(b1.getLocalId());
+			foundItem2 = bs1.getLocalId().equals(b2.getLocalId());
+			if(!foundItem2)
+				foundItem2 = bs2.getLocalId().equals(b2.getLocalId());
+			assertTrue("not found S1?", foundItem1);
+			assertTrue("not found S2?", foundItem2);
+		}
+
+		{
+			Vector desired2DraftResult = new Vector();
+			desired2DraftResult.add(NetworkInterfaceConstants.OK);
+			Vector listOfData = new Vector();
+			listOfData.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
+			desired2DraftResult.add(listOfData);
+			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desired2DraftResult;	
+	
+			RetrieveHQDraftsTableModel draftHQ2Model = new RetrieveHQDraftsTableModel(hqApp, localization);
+			draftHQ2Model.initialize(null);
+			draftHQ2Model.checkIfErrorOccurred();
+			Vector returnedHQ2DraftResults = draftHQ2Model.getDownloadableSummaries();
+			assertEquals("Wrong draft size for HQ2?", 1, returnedHQ2DraftResults.size());
+			BulletinSummary bsDraft3 = (BulletinSummary)returnedHQ2DraftResults.get(0);
+			boolean foundItems2 = false;
+			foundItems2 = bsDraft3.getLocalId().equals(b3.getLocalId());
+			assertTrue("not found S3 for HQ2?", foundItems2);
+			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = null;
+		}
+		
 		hqApp.deleteAllFiles();
 		hq2App.deleteAllFiles();
 	}
