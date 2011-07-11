@@ -82,38 +82,38 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());
 
-		b0 = fieldApp1.createBulletin();
-		b0.set(Bulletin.TAGTITLE, title0);
-		b0.set(Bulletin.TAGAUTHOR, author0);
-		b0.setAllPrivate(true);
+		normalBulletin = fieldApp1.createBulletin();
+		normalBulletin.set(Bulletin.TAGTITLE, title0);
+		normalBulletin.set(Bulletin.TAGAUTHOR, author0);
+		normalBulletin.setAllPrivate(true);
 		HQKeys hqKey = new HQKeys();
 		HQKey key = new HQKey(hqApp.getAccountId());
 		hqKey.add(key);
-		b0.setAuthorizedToReadKeys(hqKey);
-		store1.saveBulletin(b0);
-		b0Size = MartusUtilities.getBulletinSize(store1.getDatabase(), b0.getBulletinHeaderPacket());
+		normalBulletin.setAuthorizedToReadKeys(hqKey);
+		store1.saveBulletin(normalBulletin);
+		normalBulletinSize = MartusUtilities.getBulletinSize(store1.getDatabase(), normalBulletin.getBulletinHeaderPacket());
 
-		b1 = fieldApp1.createBulletin();
-		b1.set(Bulletin.TAGTITLE, title1);
-		b1.set(Bulletin.TAGAUTHOR, author1);
-		b1.setAllPrivate(false);
-		b1.setAuthorizedToReadKeys(hqKey);
-		b1.setSealed();
-		store1.saveBulletin(b1);
-		b1Size = MartusUtilities.getBulletinSize(store1.getDatabase(), b1.getBulletinHeaderPacket());
+		bulletinVersion1 = fieldApp1.createBulletin();
+		bulletinVersion1.set(Bulletin.TAGTITLE, title1);
+		bulletinVersion1.set(Bulletin.TAGAUTHOR, author1);
+		bulletinVersion1.setAllPrivate(false);
+		bulletinVersion1.setAuthorizedToReadKeys(hqKey);
+		bulletinVersion1.setSealed();
+		store1.saveBulletin(bulletinVersion1);
 
-		b2 = fieldApp2.createBulletin();
-		b2.set(Bulletin.TAGTITLE, title2);
-		b2.set(Bulletin.TAGAUTHOR, author2);
-		b2.setAllPrivate(true);
-		b2.setAuthorizedToReadKeys(hqKey);
+		bulletinVersion2 = fieldApp2.createBulletin();
+		bulletinVersion2.set(Bulletin.TAGTITLE, title2);
+		bulletinVersion2.set(Bulletin.TAGAUTHOR, author2);
+		bulletinVersion2.setAllPrivate(true);
+		bulletinVersion2.setAuthorizedToReadKeys(hqKey);
 		BulletinHistory history2 = new BulletinHistory();
-		history2.add(b1.getLocalId());
-		historyId = UniversalId.createFromAccountAndLocalId(b2.getAccount(), b1.getLocalId());
-		b2.setHistory(history2);
-		b2.setDraft();
-		store2.saveBulletin(b2);
-		b2Size = 2300;
+		history2.add(bulletinVersion1.getLocalId());
+		historyId = UniversalId.createFromAccountAndLocalId(bulletinVersion2.getAccount(), bulletinVersion1.getLocalId());
+		bulletinVersion2.setHistory(history2);
+		bulletinVersion2.setDraft();
+		store2.saveBulletin(bulletinVersion2);
+		bulletinVersion2Size = MartusUtilities.getBulletinSize(store2.getDatabase(), bulletinVersion2.getBulletinHeaderPacket());
+
 		testServer = new MockServer();
 		testServer.verifyAndLoadConfigurationFiles();
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer.serverForClients);
@@ -121,12 +121,16 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp,localization);
 		modelWithData.initialize(null);
 		
-		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
-		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
-		importBulletinFromFieldOfficeToHq(db2, b2, fieldSecurity2);
+		importBulletinFromFieldOfficeToHq(db1, normalBulletin, fieldSecurity1);
+		importBulletinFromFieldOfficeToHq(db1, bulletinVersion1, fieldSecurity1);
+		importBulletinFromFieldOfficeToHq(db2, bulletinVersion2, fieldSecurity2);
 		
 		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp, localization);
 		modelWithoutData.initialize(null);
+
+		store2.saveBulletin(bulletinVersion2);
+		modelWithOlderDraft = new RetrieveHQDraftsTableModel(hqApp, localization);
+		modelWithOlderDraft.initialize(null);
 	}
 	
 	void importBulletinFromFieldOfficeToHq(ReadableDatabase db, Bulletin b, MartusCrypto sigVerifier) throws Exception
@@ -165,6 +169,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	public void testGetRowCount()
 	{
 		assertEquals(0, modelWithoutData.getRowCount());
+		assertEquals(1, modelWithOlderDraft.getRowCount());
 		assertEquals(2, modelWithData.getRowCount());
 	}
 	
@@ -191,8 +196,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		Vector authors = new Vector();
 		authors.add(modelWithData.getValueAt(0,2));
 		authors.add(modelWithData.getValueAt(1,2));
-		assertContains("Author 0 missing?", b0.get(Bulletin.TAGAUTHOR), authors);
-		assertContains("Author 2 missing?", b2.get(Bulletin.TAGAUTHOR), authors);
+		assertContains("Author 0 missing?", normalBulletin.get(Bulletin.TAGAUTHOR), authors);
+		assertContains("Author 2 missing?", bulletinVersion2.get(Bulletin.TAGAUTHOR), authors);
 		
 		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 		modelWithData.setValueAt(new Boolean(true), 0,0);
@@ -209,7 +214,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt("some date1", 0,modelWithData.COLUMN_LAST_DATE_SAVED);
 		assertEquals("keep date1", "", modelWithData.getValueAt(0,modelWithData.COLUMN_LAST_DATE_SAVED));
 
-		String expectedDateSaved = localization.formatDateTime(BulletinSummary.getLastDateTimeSaved(dateSavedInMillis2));
+		String expectedDateSaved = localization.formatDateTime(bulletinVersion2.getLastSavedTime());
 		assertEquals("start date2", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
 		modelWithData.setValueAt("some date2", 1,modelWithData.COLUMN_LAST_DATE_SAVED);
 		assertEquals("keep date2", expectedDateSaved, modelWithData.getValueAt(1,modelWithData.COLUMN_LAST_DATE_SAVED));
@@ -229,6 +234,13 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 			assertEquals("all false" + allFalseCounter, f, modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG));
 	}
 	
+	public void testGetIdListWithUpdatedDraft()
+	{
+		modelWithOlderDraft.setAllFlags(true);
+		Vector fullList = modelWithOlderDraft.getSelectedUidsLatestVersion();
+		assertEquals("Modified draft not included?", 1, fullList.size());
+	}
+	
 	public void testGetIdList()
 	{
 		modelWithData.setAllFlags(false);
@@ -244,8 +256,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		assertNotEquals("hq account ID0?", hqApp.getAccountId(), ((UniversalId)fullList.get(0)).getAccountId());
 		assertNotEquals("hq account ID2?", hqApp.getAccountId(), ((UniversalId)fullList.get(1)).getAccountId());
 
-		assertContains("b0 Uid not in list?", b0.getUniversalId(), fullList);
-		assertContains("b2 Uid not in list?", b2.getUniversalId(), fullList);
+		assertContains("b0 Uid not in list?", normalBulletin.getUniversalId(), fullList);
+		assertContains("b2 Uid not in list?", bulletinVersion2.getUniversalId(), fullList);
 		Vector fullVersionList = modelWithData.getSelectedUidsFullHistory();
 		assertEquals(3, fullVersionList.size());
 		assertContains("History Uid not in list?", historyId, fullVersionList);
@@ -288,20 +300,25 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 				Vector result = new Vector();
 				result.add(NetworkInterfaceConstants.OK);
 				Vector list = new Vector();
-				if(authorAccountId.equals(b0.getAccount()))
-					list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
-				if(authorAccountId.equals(b2.getAccount()))
-					list.add(b2.getLocalId() + BulletinSummary.fieldDelimeter + 
-						b2.getFieldDataPacket().getLocalId() +
-						BulletinSummary.fieldDelimeter + 
-						b2Size + 
-						BulletinSummary.fieldDelimeter + 
-						dateSavedInMillis2 +
-						BulletinSummary.fieldDelimeter +
-						b2.getHistory().get(0));
+				if(authorAccountId.equals(fieldApp1.getAccountId()))
+					list.add(normalBulletin.getLocalId() + "=" + normalBulletin.getFieldDataPacket().getLocalId() + "=" + normalBulletinSize);
+				if(authorAccountId.equals(fieldApp2.getAccountId()))
+					list.add(createSummaryString(bulletinVersion2));
 
 				result.add(list);
 				return result;
+			}
+
+			private String createSummaryString(Bulletin bulletin) 
+			{
+				return bulletin.getLocalId() + BulletinSummary.fieldDelimeter + 
+					bulletin.getFieldDataPacket().getLocalId() +
+					BulletinSummary.fieldDelimeter + 
+					bulletinVersion2Size + 
+					BulletinSummary.fieldDelimeter + 
+					bulletin.getLastSavedTime() +
+					BulletinSummary.fieldDelimeter +
+					bulletin.getHistory().get(0);
 			}
 
 		}
@@ -323,13 +340,13 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, packetLocalId);
 				FieldDataPacket fdp = null;
 				MartusCrypto security = fieldApp1.getSecurity();
-				if(uid.equals(b0.getFieldDataPacket().getUniversalId()))
-					fdp = b0.getFieldDataPacket();
-				if(uid.equals(b1.getFieldDataPacket().getUniversalId()))
-					fdp = b1.getFieldDataPacket();
-				if(uid.equals(b2.getFieldDataPacket().getUniversalId()))
+				if(uid.equals(normalBulletin.getFieldDataPacket().getUniversalId()))
+					fdp = normalBulletin.getFieldDataPacket();
+				if(uid.equals(bulletinVersion1.getFieldDataPacket().getUniversalId()))
+					fdp = bulletinVersion1.getFieldDataPacket();
+				if(uid.equals(bulletinVersion2.getFieldDataPacket().getUniversalId()))
 				{
-					fdp = b2.getFieldDataPacket();
+					fdp = bulletinVersion2.getFieldDataPacket();
 					security = fieldApp2.getSecurity();
 				}
 
@@ -347,30 +364,31 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		}
 	}
 	
-	final static String title0 = "cool title";
-	final static String title1 = "This is a cool title";
-	final static String title2 = "Even cooler";
-	final static String dateSavedInMillis2 = "1083873923190";
+	private final static String title0 = "cool title";
+	private final static String title1 = "This is a cool title";
+	private final static String title2 = "Even cooler";
 
-	final static String author0 = "Fred 0";
-	final static String author1 = "Betty 1";
-	final static String author2 = "Donna 2";
+	private final static String author0 = "Fred 0";
+	private final static String author1 = "Betty 1";
+	private final static String author2 = "Donna 2";
 
-	static int b0Size;
-	static int b1Size;
-	static int b2Size;
+	private static MockMartusServer testServer;
+	private static NetworkInterface testSSLServerInterface;
+	private static MockMartusApp hqApp;
+	private static MockUiLocalization localization;
 
-	static MockMartusServer testServer;
-	static NetworkInterface testSSLServerInterface;
+	private static UniversalId historyId;
+	private static RetrieveHQDraftsTableModel modelWithData;
+	private static RetrieveHQDraftsTableModel modelWithoutData;
+	private static RetrieveHQDraftsTableModel modelWithOlderDraft;
+
+	// NOTE: The following must be non-private to avoid Java warnings
+	static int normalBulletinSize;
+	static int bulletinVersion2Size;
 	static MockMartusApp fieldApp1;
 	static MockMartusApp fieldApp2;
-	static MockMartusApp hqApp;
-	static MockUiLocalization localization;
-	
-	static Bulletin b0;
-	static Bulletin b1;
-	static Bulletin b2;
-	static UniversalId historyId;
-	static RetrieveHQDraftsTableModel modelWithData;
-	static RetrieveHQDraftsTableModel modelWithoutData;
+	static Bulletin normalBulletin;
+	static Bulletin bulletinVersion1;
+	static Bulletin bulletinVersion2;
+
 }
