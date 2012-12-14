@@ -26,11 +26,13 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
+import java.io.PrintStream;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPublicKey;
 
+import org.martus.common.MartusLogger;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.MartusSecureWebServer;
@@ -107,6 +109,8 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 
 		SimpleX509TrustManager tm = new SimpleX509TrustManager();
 		tm.setExpectedPublicCode(MartusCrypto.computePublicCode(martusServerSecurity.getPublicKeyString()));
+		PrintStream loggingDestination = MartusLogger.getDestination();
+		MartusLogger.disableLogging();
 		try 
 		{
 			tm.checkServerTrusted(chain0, "RSA");
@@ -114,6 +118,10 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		} 
 		catch (CertificateException expectedException) 
 		{
+		}
+		finally
+		{
+			MartusLogger.setDestination(loggingDestination);
 		}
 		
 	}
@@ -134,6 +142,8 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 	{
 		SimpleX509TrustManager tm = new SimpleX509TrustManager();
 		tm.setExpectedPublicKey(martusServerSecurity.getPublicKeyString());
+		PrintStream loggingDestination = MartusLogger.getDestination();
+		MartusLogger.disableLogging();
 		try 
 		{
 			tm.checkServerTrusted(chain, authType);
@@ -141,6 +151,10 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		} 
 		catch (CertificateException expectedException) 
 		{
+		}
+		finally
+		{
+			MartusLogger.setDestination(loggingDestination);
 		}
 		
 		verifyCheckClientTrustedThrowsForSunBugIn141_01(chain, authType);
@@ -150,6 +164,8 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 	{
 		SimpleX509TrustManager tm = new SimpleX509TrustManager();
 		tm.setExpectedPublicKey(martusServerSecurity.getPublicKeyString());
+		PrintStream loggingDestination = MartusLogger.getDestination();
+		MartusLogger.disableLogging();
 		try
 		{
 			tm.checkClientTrusted(chain, authType);
@@ -157,6 +173,10 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		}
 		catch (CertificateException expectedException)
 		{
+		}
+		finally
+		{
+			MartusLogger.setDestination(loggingDestination);
 		}
 	}
 
