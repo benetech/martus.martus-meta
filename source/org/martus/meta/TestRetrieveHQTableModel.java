@@ -320,7 +320,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 							BulletinSummary.fieldDelimeter + 
 							b2.getHistory().get(0)
 							);
-				result.add(list);
+				result.add(list.toArray());
 				return result;
 			}
 			

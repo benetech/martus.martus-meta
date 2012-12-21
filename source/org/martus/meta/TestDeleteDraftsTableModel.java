@@ -193,7 +193,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 							BulletinSummary.fieldDelimeter + 
 							"3200");
 				}
-				result.add(list);
+				result.add(list.toArray());
 				return result;
 			}
 			

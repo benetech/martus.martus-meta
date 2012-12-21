@@ -40,28 +40,28 @@ import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.ClientSideNetworkGateway;
 import org.martus.clientside.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
+import org.martus.common.Exceptions.ServerCallFailedException;
+import org.martus.common.Exceptions.ServerNotAvailableException;
 import org.martus.common.HQKey;
 import org.martus.common.HQKeys;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.VersionBuildDate;
-import org.martus.common.Exceptions.ServerCallFailedException;
-import org.martus.common.Exceptions.ServerNotAvailableException;
-import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
-import org.martus.common.network.NonSSLNetworkAPI;
+import org.martus.common.network.NonSSLNetworkAPIWithHelpers;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
-import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.WrongAccountException;
+import org.martus.common.packet.UniversalId;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.MockServerForClients;
 import org.martus.server.forclients.ServerForClientsInterface;
@@ -203,7 +203,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		
 		Vector noNews = new Vector();
 		noNews.add(NetworkInterfaceConstants.OK);
-		noNews.add(new Vector());
+		noNews.add(new Object[0]);
 		MockServerForClients mockServerForClients = (MockServerForClients) mockServer.serverForClients;
 		mockServerForClients.newsResponse = noNews;
 		mockServerForClients.newsVersionLabelToCheck = UiConstants.versionLabel;
@@ -214,7 +214,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		badNews.add("Bad Response");
 		Vector badNewsItems = new Vector();
 		badNewsItems.add("news for you NOT");
-		badNews.add(badNewsItems);
+		badNews.add(badNewsItems.toArray());
 		mockServerForClients.newsResponse = badNews;
 		
 		
@@ -228,7 +228,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Vector twoNewsItems = new Vector();
 		twoNewsItems.add(firstNewsItem);
 		twoNewsItems.add(secondNewsItem);
-		twoNews.add(twoNewsItems);
+		twoNews.add(twoNewsItems.toArray());
 		mockServerForClients.newsResponse = twoNews;
 		
 		Vector twoNewsResponseWithVersionLabelValid = appWithServer.getNewsFromServer();
@@ -265,7 +265,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		result.add(NetworkInterfaceConstants.OK);
 		Vector compliance = new Vector();
 		compliance.add(sampleCompliance);
-		result.add(compliance);
+		result.add(compliance.toArray());
 		mockServer.complianceResponse = result;
 
 		String complianceResponse = appWithServer.getServerCompliance(appWithServer.getCurrentNetworkInterfaceGateway());
@@ -354,7 +354,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		try
 		{
-			NonSSLNetworkAPI noServer = new NoServerNetworkInterfaceForNonSSLHandler();
+			NoServerNetworkInterfaceForNonSSLHandler noServer = new NoServerNetworkInterfaceForNonSSLHandler();
 			appWithoutServer.getServerPublicKey(noServer);
 			fail("Should have thrown");
 		}
@@ -1316,7 +1316,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private MockMartusApp appWithServer;
 
 	private MockMartusServer mockServer;
-	private NonSSLNetworkAPI mockNonSSLServerHandler;
+	private NonSSLNetworkAPIWithHelpers mockNonSSLServerHandler;
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
 	private BackgroundUploader uploaderWithServer;

@@ -228,7 +228,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 						b2.getHistory().get(0));
 
 				
-				result.add(list);
+				result.add(list.toArray());
 				return result;
 			}
 

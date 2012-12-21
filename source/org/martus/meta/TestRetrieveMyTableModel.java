@@ -231,7 +231,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 						BulletinSummary.fieldDelimeter + 
 						b2.getHistory().get(0)
 					);
-				result.add(list);
+				result.add(list.toArray());
 				Vector sizes = new Vector();
 				if(retrieveTags.size() == 1)
 				{

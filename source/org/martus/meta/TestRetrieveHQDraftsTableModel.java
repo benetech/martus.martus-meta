@@ -305,7 +305,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 				if(authorAccountId.equals(fieldApp2.getAccountId()))
 					list.add(createSummaryString(bulletinVersion2));
 
-				result.add(list);
+				result.add(list.toArray());
 				return result;
 			}
 
