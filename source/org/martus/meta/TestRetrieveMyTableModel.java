@@ -37,9 +37,9 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NonSSLNetworkAPI;
+import org.martus.common.network.ServerSideNetworkInterface;
 import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
@@ -282,7 +282,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 
 	MockMartusServer testServer;
 	NonSSLNetworkAPI testServerInterface;
-	NetworkInterface testSSLServerInterface;
+	ServerSideNetworkInterface testSSLServerInterface;
 	MockMartusApp app;
 	MiniLocalization localization;
 	Bulletin b0;

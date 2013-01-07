@@ -54,7 +54,7 @@ import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.ClientSideNetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
 import org.martus.common.network.NonSSLNetworkAPIWithHelpers;
@@ -99,7 +99,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		if(appWithoutServer == null)
 		{
 			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
-			NetworkInterface noServer = new NoServerNetworkInterfaceHandler();
+			ClientSideNetworkInterface noServer = new NoServerNetworkInterfaceHandler();
 			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(noServer);
 		}
 		
@@ -490,7 +490,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	
 	public void testUploadBulletinUsesChunks() throws Exception
 	{
-		NetworkInterface oldSSLServer = appWithServer.currentNetworkInterfaceHandler;
+		ClientSideNetworkInterface oldSSLServer = appWithServer.currentNetworkInterfaceHandler;
 		MockMartusServerChunks server = new MockMartusServerChunks();
 		server.verifyAndLoadConfigurationFiles();
 		server.setSecurity(mockSecurityForServer);

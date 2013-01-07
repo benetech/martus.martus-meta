@@ -45,8 +45,8 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
-import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.ServerSideNetworkInterface;
 import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
@@ -382,7 +382,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	static int b2Size;
 
 	static MockMartusServer testServer;
-	static NetworkInterface testSSLServerInterface;
+	static ServerSideNetworkInterface testSSLServerInterface;
 	static MockMartusApp fieldApp1;
 	static MockMartusApp fieldApp2;
 	static MockMartusApp hqApp;
