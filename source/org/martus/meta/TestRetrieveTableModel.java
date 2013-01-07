@@ -798,7 +798,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector list = new Vector();
 			list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId()+"=2000");
 			list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId()+"=2000");
-			desiredSealedResult.add(list);
+			desiredSealedResult.add(list.toArray());
 			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredSealedResult;	
 	
 			RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
@@ -825,7 +825,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			desiredDraftResult.add(NetworkInterfaceConstants.OK);
 			Vector list2 = new Vector();
 			list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
-			desiredDraftResult.add(list2);
+			desiredDraftResult.add(list2.toArray());
 			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desiredDraftResult;	
 	
 			RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, localization);
@@ -865,7 +865,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			desired2DraftResult.add(NetworkInterfaceConstants.OK);
 			Vector listOfData = new Vector();
 			listOfData.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
-			desired2DraftResult.add(listOfData);
+			desired2DraftResult.add(listOfData.toArray());
 			((MockServerForClients)mockServer.serverForClients).listFieldOfficeSummariesResponse = desired2DraftResult;	
 	
 			RetrieveHQDraftsTableModel draftHQ2Model = new RetrieveHQDraftsTableModel(hqApp, localization);

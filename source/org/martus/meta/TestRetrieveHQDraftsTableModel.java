@@ -44,8 +44,8 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
-import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.ServerSideNetworkInterface;
 import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
@@ -305,7 +305,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 				if(authorAccountId.equals(fieldApp2.getAccountId()))
 					list.add(createSummaryString(bulletinVersion2));
 
-				result.add(list);
+				result.add(list.toArray());
 				return result;
 			}
 
@@ -373,7 +373,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	private final static String author2 = "Donna 2";
 
 	private static MockMartusServer testServer;
-	private static NetworkInterface testSSLServerInterface;
+	private static ServerSideNetworkInterface testSSLServerInterface;
 	private static MockMartusApp hqApp;
 	private static MockUiLocalization localization;
 

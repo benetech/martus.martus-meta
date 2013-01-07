@@ -29,6 +29,7 @@ package org.martus.meta;
 import java.util.Vector;
 
 import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
+import org.martus.common.MartusLogger;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -79,23 +80,35 @@ public class TestSSL extends TestCaseEnhanced
 	}
 
 	
-	public void testBasics()
+	public void testBasics() throws Exception
 	{
 		verifyBadCertBeforeGoodCertHasBeenAccepted();
 		verifyGoodCertAndItWillNotBeReverifiedThisSession();
 
 	}
 	
-	public void verifyBadCertBeforeGoodCertHasBeenAccepted()
+	public void verifyBadCertBeforeGoodCertHasBeenAccepted() throws Exception
 	{
 		SimpleX509TrustManager trustManager = proxy1.getSimpleX509TrustManager();
 		assertNull("Already trusted?", trustManager.getExpectedPublicKey());
 
 		proxy1.getSimpleX509TrustManager().setExpectedPublicCode("Not a valid code");
 		trustManager.clearCalledCheckServerTrusted();
-		System.out.println("Ignore the following SSLHandshakeException (from " + getClass().toString() + "):");
-		assertNull("accepted bad cert?", proxy1.getServerInfo(new Vector()));
-		assertTrue("Never checked ssl cert!", trustManager.wasCheckServerTrustedCalled());
+		MartusLogger.temporarilyDisableLogging();
+		try
+		{
+			System.out.println("---------------------------------------");
+			System.out.println("Ignore the following exceptions (from " + getClass().toString() + "):");
+			assertNull("accepted bad cert?", proxy1.getServerInfo(new Vector()));
+			assertTrue("Never checked ssl cert!", trustManager.wasCheckServerTrustedCalled());
+			Thread.sleep(1000);
+			System.err.flush();
+			System.out.println("---------------------------------------");
+		}
+		finally
+		{
+			MartusLogger.reEnableLogging();
+		}
 	}
 	
 	public void verifyGoodCertAndItWillNotBeReverifiedThisSession()

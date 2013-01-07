@@ -32,8 +32,8 @@ import java.util.Vector;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.BackgroundUploader;
-import org.martus.client.core.MartusApp;
 import org.martus.client.core.BackgroundUploader.UploadResult;
+import org.martus.client.core.MartusApp;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
@@ -41,7 +41,7 @@ import org.martus.common.ProgressMeterInterface;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.ClientSideNetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerForClientsInterface;
@@ -74,7 +74,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		if(appWithoutServer == null)
 		{
 			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
-			NetworkInterface noServer = new NoServerNetworkInterfaceHandler();
+			ClientSideNetworkInterface noServer = new NoServerNetworkInterfaceHandler();
 			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(noServer);
 		}
 		
