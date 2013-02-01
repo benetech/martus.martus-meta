@@ -111,7 +111,7 @@ public class ServerLoader {
             MartusLogger.log("problem sending bulletins");
             MartusLogger.logException(e);
         }
-
+        DirectoryUtils.deleteEntireDirectoryTree(tempDir);
     }
 
     private void createZippedBulletins() throws Exception
