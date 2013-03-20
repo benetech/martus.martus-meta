@@ -342,7 +342,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		MockMartusApp appWithoutServerName = MockMartusApp.create();
 		assertEquals("uninitialized app server available?", false, appWithoutServerName.isSSLServerAvailable());
 
-		ClientSideNetworkGateway gateway = ClientSideNetworkGateway.buildGateway("","");
+		ClientSideNetworkGateway gateway = ClientSideNetworkGateway.buildGateway("", "", null);
 		assertNull("Empty server name", gateway);
 
 		assertNull("No proxy?", appWithoutServerName.currentNetworkInterfaceHandler);

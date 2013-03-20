@@ -35,6 +35,7 @@ import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
 import org.martus.common.network.SimpleX509TrustManager;
+import org.martus.common.network.TorTransportWrapper;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;
@@ -67,7 +68,7 @@ public class TestSSL extends TestCaseEnhanced
 			serverForClients.handleSSL(sslPorts);
 			
 //			XmlRpc.debug = true;
-			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", sslPorts);
+			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", sslPorts, new TorTransportWrapper());
 //			proxy2 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
 		}
 	}
