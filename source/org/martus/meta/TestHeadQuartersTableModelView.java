@@ -54,7 +54,7 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadQuartersTableModelView(localization);
+		modelWithData = new HeadQuartersTableModelView(app);
 		key1 = new HQKey(publicCode1, label1);
 		HQKeys HQKeysAuthorized = new HQKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
@@ -68,7 +68,7 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadQuartersTableModelView(localization);
+		modelWithoutData = new HeadQuartersTableModelView(app);
 	}
 
 	public void tearDown() throws Exception
