@@ -38,10 +38,10 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
 import org.martus.util.TestCaseEnhanced;
 
-public class TestHeadquartersTableModelEdit extends TestCaseEnhanced implements HeadquartersSelectionListener
+public class TestHeadquartersEditorTableModel extends TestCaseEnhanced implements HeadquartersSelectionListener
 {
 
-	public TestHeadquartersTableModelEdit(String name) 
+	public TestHeadquartersEditorTableModel(String name) 
 	{
 		super(name);
 	}
