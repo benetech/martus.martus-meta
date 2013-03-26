@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.HeadquarterEntry;
+import org.martus.client.swingui.SelectableHeadquartersEntry;
 import org.martus.client.swingui.bulletincomponent.HeadquartersTableModelView;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
@@ -34,8 +34,8 @@ import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.util.TestCaseEnhanced;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
+import org.martus.util.TestCaseEnhanced;
 
 public class TestHeadquartersTableModelView extends TestCaseEnhanced 
 {
@@ -59,12 +59,12 @@ public class TestHeadquartersTableModelView extends TestCaseEnhanced
 		HeadquartersKeys HQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
 		app.addHQLabelsWherePossible(HQKeysAuthorized);
-		HeadquarterEntry entry1 = new HeadquarterEntry(key1);
+		SelectableHeadquartersEntry entry1 = new SelectableHeadquartersEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
 		
 		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
-		HeadquarterEntry entry2 = new HeadquarterEntry(key2);
+		SelectableHeadquartersEntry entry2 = new SelectableHeadquartersEntry(key2);
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
