@@ -42,8 +42,8 @@ import org.martus.clientside.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
 import org.martus.common.Exceptions.ServerCallFailedException;
 import org.martus.common.Exceptions.ServerNotAvailableException;
-import org.martus.common.HQKey;
-import org.martus.common.HQKeys;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.ProgressMeterInterface;
@@ -147,8 +147,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
-		HQKeys keys = new HQKeys();
-		HQKey key = new HQKey(hqApp.getAccountId());
+		HeadquartersKeys keys = new HeadquartersKeys();
+		HeadquartersKey key = new HeadquartersKey(hqApp.getAccountId());
 		keys.add(key);
 		appWithServer.setAndSaveHQKeys(keys, keys);
 	

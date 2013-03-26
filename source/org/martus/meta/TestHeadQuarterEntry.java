@@ -29,8 +29,8 @@ package org.martus.meta;
 import org.martus.client.swingui.HeadQuarterEntry;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
-import org.martus.common.HQKey;
-import org.martus.common.HQKeys;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
@@ -61,8 +61,8 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 
 		String publickey = "1234.4363.1233.3432.8823";
 		String label1 = "key1 label";
-		HQKey key1 = new HQKey(publickey, label1);
-		HQKeys HQKeysAuthorized = new HQKeys(key1); 
+		HeadquartersKey key1 = new HeadquartersKey(publickey, label1);
+		HeadquartersKeys HQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		entry1.setSelected(false);
@@ -74,7 +74,7 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		assertEquals(key1, entry1.getKey());
 		assertFalse("Entry is selected?", entry1.isSelected());
 		
-		HQKey key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
+		HeadquartersKey key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		entry2.setSelected(true);

@@ -30,8 +30,8 @@ import org.martus.client.swingui.HeadQuarterEntry;
 import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelView;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
-import org.martus.common.HQKey;
-import org.martus.common.HQKeys;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
@@ -55,15 +55,15 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
 		modelWithData = new HeadQuartersTableModelView(app);
-		key1 = new HQKey(publicCode1, label1);
-		HQKeys HQKeysAuthorized = new HQKeys(key1); 
+		key1 = new HeadquartersKey(publicCode1, label1);
+		HeadquartersKeys HQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
 		app.addHQLabelsWherePossible(HQKeysAuthorized);
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
 		
-		key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
+		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		modelWithData.addNewHeadQuarterEntry(entry2);
@@ -125,6 +125,6 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 	
 	static String publicCode1 = "123.436";
 	static String label1 = "key1 label";
-	static HQKey key1;
-	static HQKey key2;
+	static HeadquartersKey key1;
+	static HeadquartersKey key2;
 }

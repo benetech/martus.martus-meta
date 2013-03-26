@@ -31,8 +31,8 @@ import org.martus.client.swingui.HeadQuartersSelectionListener;
 import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelEdit;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
-import org.martus.common.HQKey;
-import org.martus.common.HQKeys;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
@@ -58,15 +58,15 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 
 		modelWithData = new HeadQuartersTableModelEdit(app);
 		modelWithData.setHQSelectionListener(this);
-		key1 = new HQKey(publicKey1, label1);
-		HQKeys allHQKeys = new HQKeys(key1);
+		key1 = new HeadquartersKey(publicKey1, label1);
+		HeadquartersKeys allHQKeys = new HeadquartersKeys(key1);
 		app.setAndSaveHQKeys(allHQKeys, allHQKeys);
 		app.addHQLabelsWherePossible(allHQKeys);
 		
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
-		key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
+		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
@@ -130,7 +130,7 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 		assertEquals(1, numberOfSelectedHQs);
 		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 
-		HQKeys allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
+		HeadquartersKeys allSelectedHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allSelectedHeadQuarterKeys.size());
 		assertEquals(1, modelWithData.getNumberOfSelectedHQs());
 		assertEquals(key1, allSelectedHeadQuarterKeys.get(0));
@@ -169,7 +169,7 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 	
 	static String publicKey1 = "123.436";
 	static String label1 = "key1 label";
-	static HQKey key1; 
-	static HQKey key2;
+	static HeadquartersKey key1; 
+	static HeadquartersKey key2;
 	static int numberOfSelectedHQs;
 }

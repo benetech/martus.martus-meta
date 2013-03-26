@@ -28,8 +28,8 @@ import org.martus.client.swingui.HeadQuarterEntry;
 import org.martus.client.swingui.HeadQuartersTableModelConfiguration;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
-import org.martus.common.HQKey;
-import org.martus.common.HQKeys;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
@@ -53,15 +53,15 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
 		modelWithData = new HeadQuartersTableModelConfiguration(app);
-		key1 = new HQKey(publicCode1, label1);
-		HQKeys hQKeysAuthorized = new HQKeys(key1); 
+		key1 = new HeadquartersKey(publicCode1, label1);
+		HeadquartersKeys hQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(hQKeysAuthorized, hQKeysAuthorized);
 		app.addHQLabelsWherePossible(hQKeysAuthorized);
 		
 		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
-		key2 = new HQKey(appSecurityAndHQ.getPublicKeyString());
+		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
@@ -131,7 +131,7 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		assertEquals(0, modelWithoutData.getAllSelectedHeadQuarterKeys().size());
 		
 		modelWithData.setValueAt(Boolean.TRUE, 0,0);
-		HQKeys allDefaultHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
+		HeadquartersKeys allDefaultHeadQuarterKeys = modelWithData.getAllSelectedHeadQuarterKeys();
 		assertEquals(1, allDefaultHeadQuarterKeys.size());
 		assertTrue(((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		assertEquals(key1, allDefaultHeadQuarterKeys.get(0));
@@ -169,7 +169,7 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 	
 	public void testRemoveRow()
 	{
-		HQKey key3 = new HQKey("123.public.key.3");
+		HeadquartersKey key3 = new HeadquartersKey("123.public.key.3");
 		String key3Label = "key3";
 		key3.setLabel(key3Label);
 		HeadQuarterEntry newEntry = new HeadQuarterEntry(key3);
@@ -198,8 +198,8 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 	
 	static String publicCode1 = "123.436";
 	static String label1 = "key1 label";
-	static HQKey key1;
-	static HQKey key2;
+	static HeadquartersKey key1;
+	static HeadquartersKey key2;
 }
 
 

@@ -43,8 +43,8 @@ import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.BulletinSummary;
-import org.martus.common.HQKey;
-import org.martus.common.HQKeys;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MiniLocalization;
 import org.martus.common.ProgressMeterInterface;
@@ -359,8 +359,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		HQKeys hqKeys = new HQKeys();
-		hqKeys.add(new HQKey(hqApp.getAccountId()));
+		HeadquartersKeys hqKeys = new HeadquartersKeys();
+		hqKeys.add(new HeadquartersKey(hqApp.getAccountId()));
 
 		MartusApp fieldOfficeApp = appWithServer;
 		fieldOfficeApp.setAndSaveHQKeys(hqKeys, hqKeys);
@@ -398,8 +398,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		HQKeys hqKeys = new HQKeys();
-		hqKeys.add(new HQKey(hqApp.getAccountId()));
+		HeadquartersKeys hqKeys = new HeadquartersKeys();
+		hqKeys.add(new HeadquartersKey(hqApp.getAccountId()));
 
 		MartusApp fieldOfficeApp = appWithServer;
 		fieldOfficeApp.setAndSaveHQKeys(hqKeys, hqKeys);
@@ -781,10 +781,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		hq2App.setServerInfo("mock", mockServer.getAccountId(), "");
 		hq2App.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
-		HQKeys keys = new HQKeys();
-		HQKey key1 = new HQKey(hqApp.getAccountId());
+		HeadquartersKeys keys = new HeadquartersKeys();
+		HeadquartersKey key1 = new HeadquartersKey(hqApp.getAccountId());
 		keys.add(key1);
-		HQKey key2 = new HQKey(hq2App.getAccountId());
+		HeadquartersKey key2 = new HeadquartersKey(hq2App.getAccountId());
 		keys.add(key2);
 		appWithServer.setAndSaveHQKeys(keys, keys);
 		
