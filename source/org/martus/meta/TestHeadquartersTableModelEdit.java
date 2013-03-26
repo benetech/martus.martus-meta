@@ -28,7 +28,7 @@ package org.martus.meta;
 
 import org.martus.client.swingui.HeadquartersSelectionListener;
 import org.martus.client.swingui.SelectableHeadquartersEntry;
-import org.martus.client.swingui.bulletincomponent.HeadquartersTableModelEdit;
+import org.martus.client.swingui.bulletincomponent.HeadquartersEditorTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
@@ -56,7 +56,7 @@ public class TestHeadquartersTableModelEdit extends TestCaseEnhanced implements 
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadquartersTableModelEdit(app);
+		modelWithData = new HeadquartersEditorTableModel(app);
 		modelWithData.setHQSelectionListener(this);
 		key1 = new HeadquartersKey(publicKey1, label1);
 		HeadquartersKeys allHQKeys = new HeadquartersKeys(key1);
@@ -71,7 +71,7 @@ public class TestHeadquartersTableModelEdit extends TestCaseEnhanced implements 
 		SelectableHeadquartersEntry entry2 = new SelectableHeadquartersEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadquartersTableModelEdit(app);
+		modelWithoutData = new HeadquartersEditorTableModel(app);
 	}
 
 	public void tearDown() throws Exception
@@ -164,8 +164,8 @@ public class TestHeadquartersTableModelEdit extends TestCaseEnhanced implements 
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
-	static HeadquartersTableModelEdit modelWithData;
-	static HeadquartersTableModelEdit modelWithoutData;
+	static HeadquartersEditorTableModel modelWithData;
+	static HeadquartersEditorTableModel modelWithoutData;
 	
 	static String publicKey1 = "123.436";
 	static String label1 = "key1 label";

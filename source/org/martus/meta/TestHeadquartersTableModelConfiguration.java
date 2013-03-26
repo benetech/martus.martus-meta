@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.HeadquartersTableModelConfiguration;
+import org.martus.client.swingui.HeadquartersManagementTableModel;
 import org.martus.client.swingui.SelectableHeadquartersEntry;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
@@ -52,7 +52,7 @@ public class TestHeadquartersTableModelConfiguration extends TestCaseEnhanced
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadquartersTableModelConfiguration(app);
+		modelWithData = new HeadquartersManagementTableModel(app);
 		key1 = new HeadquartersKey(publicCode1, label1);
 		HeadquartersKeys hQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(hQKeysAuthorized, hQKeysAuthorized);
@@ -66,7 +66,7 @@ public class TestHeadquartersTableModelConfiguration extends TestCaseEnhanced
 		SelectableHeadquartersEntry entry2 = new SelectableHeadquartersEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadquartersTableModelConfiguration(app);
+		modelWithoutData = new HeadquartersManagementTableModel(app);
 	}
 
 	public void tearDown() throws Exception
@@ -193,8 +193,8 @@ public class TestHeadquartersTableModelConfiguration extends TestCaseEnhanced
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
-	static HeadquartersTableModelConfiguration modelWithData;
-	static HeadquartersTableModelConfiguration modelWithoutData;
+	static HeadquartersManagementTableModel modelWithData;
+	static HeadquartersManagementTableModel modelWithoutData;
 	
 	static String publicCode1 = "123.436";
 	static String label1 = "key1 label";
