@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.HeadQuarterEntry;
+import org.martus.client.swingui.HeadquarterEntry;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
@@ -64,7 +64,7 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		HeadquartersKey key1 = new HeadquartersKey(publickey, label1);
 		HeadquartersKeys HQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
-		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
+		HeadquarterEntry entry1 = new HeadquarterEntry(key1);
 		entry1.setSelected(false);
 		assertEquals(label1, entry1.getLabel());
 		String newLabel = "New Label Key1";
@@ -76,7 +76,7 @@ public class TestHeadQuarterEntry extends TestCaseEnhanced
 		
 		HeadquartersKey key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
+		HeadquarterEntry entry2 = new HeadquarterEntry(key2);
 		entry2.setSelected(true);
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, entry2.getLabel());

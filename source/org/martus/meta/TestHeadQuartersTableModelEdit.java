@@ -26,9 +26,9 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.HeadQuarterEntry;
-import org.martus.client.swingui.HeadQuartersSelectionListener;
-import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelEdit;
+import org.martus.client.swingui.HeadquarterEntry;
+import org.martus.client.swingui.HeadquartersSelectionListener;
+import org.martus.client.swingui.bulletincomponent.HeadquartersTableModelEdit;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
@@ -38,7 +38,7 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
 
-public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements HeadQuartersSelectionListener
+public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements HeadquartersSelectionListener
 {
 
 	public TestHeadQuartersTableModelEdit(String name) 
@@ -56,22 +56,22 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadQuartersTableModelEdit(app);
+		modelWithData = new HeadquartersTableModelEdit(app);
 		modelWithData.setHQSelectionListener(this);
 		key1 = new HeadquartersKey(publicKey1, label1);
 		HeadquartersKeys allHQKeys = new HeadquartersKeys(key1);
 		app.setAndSaveHQKeys(allHQKeys, allHQKeys);
 		app.addHQLabelsWherePossible(allHQKeys);
 		
-		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
+		HeadquarterEntry entry1 = new HeadquarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
 		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
+		HeadquarterEntry entry2 = new HeadquarterEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadQuartersTableModelEdit(app);
+		modelWithoutData = new HeadquartersTableModelEdit(app);
 	}
 
 	public void tearDown() throws Exception
@@ -164,8 +164,8 @@ public class TestHeadQuartersTableModelEdit extends TestCaseEnhanced implements 
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
-	static HeadQuartersTableModelEdit modelWithData;
-	static HeadQuartersTableModelEdit modelWithoutData;
+	static HeadquartersTableModelEdit modelWithData;
+	static HeadquartersTableModelEdit modelWithoutData;
 	
 	static String publicKey1 = "123.436";
 	static String label1 = "key1 label";

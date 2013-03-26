@@ -24,8 +24,8 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.HeadQuarterEntry;
-import org.martus.client.swingui.HeadQuartersTableModelConfiguration;
+import org.martus.client.swingui.HeadquarterEntry;
+import org.martus.client.swingui.HeadquartersTableModelConfiguration;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
@@ -52,21 +52,21 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadQuartersTableModelConfiguration(app);
+		modelWithData = new HeadquartersTableModelConfiguration(app);
 		key1 = new HeadquartersKey(publicCode1, label1);
 		HeadquartersKeys hQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(hQKeysAuthorized, hQKeysAuthorized);
 		app.addHQLabelsWherePossible(hQKeysAuthorized);
 		
-		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
+		HeadquarterEntry entry1 = new HeadquarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
 		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
 		key2.setLabel(app.getHQLabelIfPresent(key2));
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
+		HeadquarterEntry entry2 = new HeadquarterEntry(key2);
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadQuartersTableModelConfiguration(app);
+		modelWithoutData = new HeadquartersTableModelConfiguration(app);
 	}
 
 	public void tearDown() throws Exception
@@ -172,7 +172,7 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 		HeadquartersKey key3 = new HeadquartersKey("123.public.key.3");
 		String key3Label = "key3";
 		key3.setLabel(key3Label);
-		HeadQuarterEntry newEntry = new HeadQuarterEntry(key3);
+		HeadquarterEntry newEntry = new HeadquarterEntry(key3);
 		assertEquals(2, modelWithData.getAllKeys().size());
 		modelWithData.addNewHeadQuarterEntry(newEntry);
 		assertEquals(3, modelWithData.getRowCount());
@@ -193,8 +193,8 @@ public class TestHeadQuartersTableModelConfiguration extends TestCaseEnhanced
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
-	static HeadQuartersTableModelConfiguration modelWithData;
-	static HeadQuartersTableModelConfiguration modelWithoutData;
+	static HeadquartersTableModelConfiguration modelWithData;
+	static HeadquartersTableModelConfiguration modelWithoutData;
 	
 	static String publicCode1 = "123.436";
 	static String label1 = "key1 label";

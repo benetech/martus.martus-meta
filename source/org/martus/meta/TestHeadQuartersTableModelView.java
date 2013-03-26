@@ -26,8 +26,8 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import org.martus.client.swingui.HeadQuarterEntry;
-import org.martus.client.swingui.bulletincomponent.HeadQuartersTableModelView;
+import org.martus.client.swingui.HeadquarterEntry;
+import org.martus.client.swingui.bulletincomponent.HeadquartersTableModelView;
 import org.martus.client.test.MockMartusApp;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
@@ -54,21 +54,21 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization);
 
-		modelWithData = new HeadQuartersTableModelView(app);
+		modelWithData = new HeadquartersTableModelView(app);
 		key1 = new HeadquartersKey(publicCode1, label1);
 		HeadquartersKeys HQKeysAuthorized = new HeadquartersKeys(key1); 
 		app.setAndSaveHQKeys(HQKeysAuthorized, HQKeysAuthorized);
 		app.addHQLabelsWherePossible(HQKeysAuthorized);
-		HeadQuarterEntry entry1 = new HeadQuarterEntry(key1);
+		HeadquarterEntry entry1 = new HeadquarterEntry(key1);
 		modelWithData.addNewHeadQuarterEntry(entry1);
 		
 		
 		key2 = new HeadquartersKey(appSecurityAndHQ.getPublicKeyString());
-		HeadQuarterEntry entry2 = new HeadQuarterEntry(key2);
+		HeadquarterEntry entry2 = new HeadquarterEntry(key2);
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		modelWithData.addNewHeadQuarterEntry(entry2);
 
-		modelWithoutData = new HeadQuartersTableModelView(app);
+		modelWithoutData = new HeadquartersTableModelView(app);
 	}
 
 	public void tearDown() throws Exception
@@ -120,8 +120,8 @@ public class TestHeadQuartersTableModelView extends TestCaseEnhanced
 	static MockUiLocalization localization;
 	static MockMartusApp app;
 	static MartusCrypto appSecurityAndHQ;
-	static HeadQuartersTableModelView modelWithData;
-	static HeadQuartersTableModelView modelWithoutData;
+	static HeadquartersTableModelView modelWithData;
+	static HeadquartersTableModelView modelWithoutData;
 	
 	static String publicCode1 = "123.436";
 	static String label1 = "key1 label";
