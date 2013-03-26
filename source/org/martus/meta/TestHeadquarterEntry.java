@@ -35,10 +35,10 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
 
-public class TestHeadQuarterEntry extends TestCaseEnhanced 
+public class TestHeadquarterEntry extends TestCaseEnhanced 
 {
 
-	public TestHeadQuarterEntry(String name) 
+	public TestHeadquarterEntry(String name) 
 	{
 		super(name);
 	}

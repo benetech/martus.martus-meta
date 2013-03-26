@@ -37,10 +37,10 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
 
-public class TestHeadQuartersTableModelView extends TestCaseEnhanced 
+public class TestHeadquartersTableModelView extends TestCaseEnhanced 
 {
 
-	public TestHeadQuartersTableModelView(String name) 
+	public TestHeadquartersTableModelView(String name) 
 	{
 		super(name);
 	}
