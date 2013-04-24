@@ -120,14 +120,18 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		modelWithData = new RetrieveHQTableModel(hqApp, localization);
 		modelWithData.initialize(null);
 		modelWithData.setAllFlags(false);
+		assertEquals("checkbox not false to start?", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 
 		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db2, b2, fieldSecurity2);
+		assertEquals("checkbox turned true by import?", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 		
 		modelWithoutData = new RetrieveHQTableModel(hqApp, localization);
 		modelWithoutData.initialize(null);
 		assertEquals(0, modelWithoutData.getRowCount());
+
+		assertEquals("checkbox turned true by the other model?", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 	}
 
 	void importBulletinFromFieldOfficeToHq(ReadableDatabase db, Bulletin b, MartusCrypto sigVerifier) throws Exception
@@ -189,6 +193,10 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	
 	public void testGetAndSetValueAt()
 	{
+		// NOTE: There seems to be some data bleeding between test methods
+		// This is a quick hack workaround, safe because of asserts added in setUp
+		modelWithData.setAllFlags(false);
+
 		Vector authors = new Vector();
 		authors.add(modelWithData.getValueAt(0,modelWithData.COLUMN_AUTHOR));
 		authors.add(modelWithData.getValueAt(1,modelWithData.COLUMN_AUTHOR));
@@ -197,7 +205,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertContains("Author 1 missing?", b1.get(Bulletin.TAGAUTHOR), authors);
 		assertContains("Author 2 missing?", b2.get(Bulletin.TAGAUTHOR), authors);
 		
-		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
+		assertEquals("get caused flag to flip to true?", false, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 		modelWithData.setValueAt(new Boolean(true), 0,modelWithData.COLUMN_RETRIEVE_FLAG);
 		assertEquals("setget bool", true, ((Boolean)modelWithData.getValueAt(0,modelWithData.COLUMN_RETRIEVE_FLAG)).booleanValue());
 
