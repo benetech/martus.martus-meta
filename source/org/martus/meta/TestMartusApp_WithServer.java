@@ -38,7 +38,7 @@ import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.ClientSideNetworkGateway;
-import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpcForNonSSL;
+import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpcWithUnverifiedServer;
 import org.martus.clientside.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
 import org.martus.common.Exceptions.ServerCallFailedException;
