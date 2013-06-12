@@ -38,6 +38,7 @@ import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.ClientSideNetworkGateway;
+import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpcForNonSSL;
 import org.martus.clientside.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
 import org.martus.common.Exceptions.ServerCallFailedException;
@@ -367,27 +368,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		Vector response = new Vector();
 		response.add(NetworkInterfaceConstants.OK);
-		response.add("some invalid stuff");
-		response.add("whatever");
-		mockServer.infoResponse = response;
-		try
-		{
-			appWithServer.getServerPublicKey(mockNonSSLServerHandler);
-			fail("Should have thrown");
-		}
-		catch(PublicInformationInvalidException expectedException)
-		{
-		}
-		mockServer.infoResponse = null;
-	}
-	
-	public void testGetServerPublicKeyBadSig() throws Exception
-	{
-		mockSecurityForApp.loadSampleAccount();
-		Vector response = new Vector();
-		response.add(NetworkInterfaceConstants.OK);
-		response.add(mockSecurityForApp.getPublicKeyString());
-		response.add(StreamableBase64.encode("whatever"));
 		mockServer.infoResponse = response;
 		try
 		{
