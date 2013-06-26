@@ -61,8 +61,8 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	{
 		super.setUp();
 		MartusCrypto appSecurity = MockMartusSecurity.createClient();
-		localization = new MockUiLocalization();
-		app = MockMartusApp.create(appSecurity);
+		localization = new MockUiLocalization(getName());
+		app = MockMartusApp.create(appSecurity, getName());
 
 		b0 = app.createBulletin();
 		b0.set(Bulletin.TAGTITLE, title1);

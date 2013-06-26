@@ -56,8 +56,8 @@ public class TestHeadquarterEntry extends TestCaseEnhanced
 	public void testBasics() throws Exception
 	{
 		MartusCrypto appSecurityAndHQ = MockMartusSecurity.createHQ();
-		MockUiLocalization localization = new MockUiLocalization();
-		MockMartusApp app = MockMartusApp.create(appSecurityAndHQ, localization);
+		MockUiLocalization localization = new MockUiLocalization(getName());
+		MockMartusApp app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 
 		String publickey = "1234.4363.1233.3432.8823";
 		String label1 = "key1 label";

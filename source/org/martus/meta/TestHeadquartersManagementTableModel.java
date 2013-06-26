@@ -48,9 +48,9 @@ public class TestHeadquartersManagementTableModel extends TestCaseEnhanced
 		super.setUp();
 		if(localization!=null)
 			return;
-		localization = new MockUiLocalization();
+		localization = new MockUiLocalization(getName());
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
-		app = MockMartusApp.create(appSecurityAndHQ, localization);
+		app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 
 		modelWithData = new HeadquartersManagementTableModel(app);
 		key1 = new HeadquartersKey(publicCode1, label1);

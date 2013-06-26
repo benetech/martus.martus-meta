@@ -38,7 +38,6 @@ import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.ClientSideNetworkGateway;
-import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpcWithUnverifiedServer;
 import org.martus.clientside.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
 import org.martus.common.Exceptions.ServerCallFailedException;
@@ -99,12 +98,12 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		if(appWithoutServer == null)
 		{
-			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
+			appWithoutServer = MockMartusApp.create(mockSecurityForApp, getName());
 			ClientSideNetworkInterface noServer = new NoServerNetworkInterfaceHandler();
 			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(noServer);
 		}
 		
-		appWithServer = MockMartusApp.create(mockSecurityForApp);
+		appWithServer = MockMartusApp.create(mockSecurityForApp, getName());
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
@@ -144,7 +143,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_BEGIN("testDownloadFieldOfficeBulletins");
 	
 		MockMartusSecurity hqSecurity = MockMartusSecurity.createHQ();	
-		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
+		MockMartusApp hqApp = MockMartusApp.create(hqSecurity, getName());
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
@@ -308,7 +307,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		final String serverCompliance1 = "Compliant1";
 		final String serverCompliance2 = "Compliant2";
 		
-		MockMartusApp app = MockMartusApp.create();
+		MockMartusApp app = MockMartusApp.create(getName());
 		app.setServerInfo(server1, key1, serverCompliance1);
 		assertEquals("Didn't set Contactinfo name", server1, app.getConfigInfo().getServerName());
 		assertEquals("Didn't set Contactinfo key", key1, app.getConfigInfo().getServerPublicKey());
@@ -340,7 +339,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		assertEquals(false, appWithoutServer.isSSLServerAvailable());
 		assertEquals(true, appWithServer.isSSLServerAvailable());
-		MockMartusApp appWithoutServerName = MockMartusApp.create();
+		MockMartusApp appWithoutServerName = MockMartusApp.create(getName());
 		assertEquals("uninitialized app server available?", false, appWithoutServerName.isSSLServerAvailable());
 
 		ClientSideNetworkGateway gateway = ClientSideNetworkGateway.buildGateway("", "", null);
@@ -900,7 +899,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		MockGateway gateway = new MockGateway();
 
 		MartusCrypto security = MockMartusSecurity.createClient();
-		MockMartusApp app= MockMartusApp.create(security);
+		MockMartusApp app= MockMartusApp.create(security, getName());
 		app.currentNetworkInterfaceGateway = gateway;
 		
 		Vector uids = new Vector();
@@ -951,7 +950,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		MockGateway gateway = new MockGateway();
 
 		MartusCrypto security = MockMartusSecurity.createClient();
-		MockMartusApp app= MockMartusApp.create(security);
+		MockMartusApp app= MockMartusApp.create(security, getName());
 		app.currentNetworkInterfaceGateway = gateway;
 		
 		Vector contact = new Vector();

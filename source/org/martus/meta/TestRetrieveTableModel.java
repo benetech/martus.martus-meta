@@ -85,7 +85,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		super.setUp();
 		if(localization == null)
-			localization = new MockUiLocalization();
+			localization = new MockUiLocalization(getName());
 	 
 		if(mockSecurityForApp == null)
 			mockSecurityForApp = MockMartusSecurity.createClient();
@@ -104,7 +104,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		
 		if(appWithoutServer == null)
 		{
-			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
+			appWithoutServer = MockMartusApp.create(mockSecurityForApp, getName());
 			mockServerNotAvailable = new MockServerNotAvailable();
 			ServerSideNetworkHandler handler = new ServerSideNetworkHandler(mockServerNotAvailable.serverForClients);
 			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(handler);
@@ -112,7 +112,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		if(appWithServer == null)
 		{
-			appWithServer = MockMartusApp.create(mockSecurityForApp);
+			appWithServer = MockMartusApp.create(mockSecurityForApp, getName());
 			appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 			appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		}
@@ -134,7 +134,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	MockModel createMockModel(MiniLocalization localizationToUse) throws Exception
 	{
-		return new MockModel(MockMartusApp.create(), localizationToUse);
+		return new MockModel(MockMartusApp.create(getName()), localizationToUse);
 	}
 	
 	class MockModel extends RetrieveTableModel
@@ -357,7 +357,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testRetrieveFieldOfficeSealedBulletinsMarksAllAsOnServer() throws Exception
 	{
-		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
+		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ(), getName());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		HeadquartersKeys hqKeys = new HeadquartersKeys();
 		hqKeys.add(new HeadquartersKey(hqApp.getAccountId()));
@@ -396,7 +396,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testRetrieveFieldOfficeDraftBulletinsMarksAllAsOnServer() throws Exception
 	{
-		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ());
+		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecurity.createHQ(), getName());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		HeadquartersKeys hqKeys = new HeadquartersKeys();
 		hqKeys.add(new HeadquartersKey(hqApp.getAccountId()));
@@ -771,13 +771,13 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	public void testGetFieldOfficeSummaries() throws Exception
 	{
 		MockMartusSecurity hqSecurity = MockMartusSecurity.createHQ();	
-		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
+		MockMartusApp hqApp = MockMartusApp.create(hqSecurity, getName());
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
 		
 		MockMartusSecurity hq2Security = MockMartusSecurity.createHQ();	
-		MockMartusApp hq2App = MockMartusApp.create(hq2Security);
+		MockMartusApp hq2App = MockMartusApp.create(hq2Security, getName());
 		hq2App.setServerInfo("mock", mockServer.getAccountId(), "");
 		hq2App.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 

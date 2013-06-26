@@ -52,9 +52,9 @@ public class TestHeadquartersEditorTableModel extends TestCaseEnhanced implement
 		numberOfSelectedHQs = 0;
 		if(localization!=null)
 			return;
-		localization = new MockUiLocalization();
+		localization = new MockUiLocalization(getName());
 		appSecurityAndHQ = MockMartusSecurity.createHQ();
-		app = MockMartusApp.create(appSecurityAndHQ, localization);
+		app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 
 		modelWithData = new HeadquartersEditorTableModel(app);
 		modelWithData.setHQSelectionListener(this);

@@ -68,15 +68,15 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		if(localization != null)
 			return;	
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
-		localization = new MockUiLocalization();
-		hqApp = MockMartusApp.create(hqSecurity);
+		localization = new MockUiLocalization(getName());
+		hqApp = MockMartusApp.create(hqSecurity, getName());
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
-		fieldApp1 = MockMartusApp.create(fieldSecurity1);
+		fieldApp1 = MockMartusApp.create(fieldSecurity1, getName());
 		ReadableDatabase db1 = fieldApp1.getStore().getDatabase();
 
 		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
-		fieldApp2 = MockMartusApp.create(fieldSecurity2);
+		fieldApp2 = MockMartusApp.create(fieldSecurity2, getName());
 		ReadableDatabase db2 = fieldApp2.getStore().getDatabase();
 
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());

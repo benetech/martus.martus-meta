@@ -67,16 +67,16 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		if(localization!=null)
 			return;
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
-		localization = new MockUiLocalization();
-		hqApp = MockMartusApp.create(hqSecurity);
+		localization = new MockUiLocalization(getName());
+		hqApp = MockMartusApp.create(hqSecurity, getName());
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
-		fieldApp1 = MockMartusApp.create(fieldSecurity1);
+		fieldApp1 = MockMartusApp.create(fieldSecurity1, getName());
 		final ClientBulletinStore store1 = fieldApp1.getStore();
 		ReadableDatabase db1 = store1.getDatabase();
 
 		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
-		fieldApp2 = MockMartusApp.create(fieldSecurity2);
+		fieldApp2 = MockMartusApp.create(fieldSecurity2, getName());
 		final ClientBulletinStore store2 = fieldApp2.getStore();
 		ReadableDatabase db2 = store2.getDatabase();
 

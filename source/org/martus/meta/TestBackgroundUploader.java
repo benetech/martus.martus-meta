@@ -73,12 +73,12 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 		if(appWithoutServer == null)
 		{
-			appWithoutServer = MockMartusApp.create(mockSecurityForApp);
+			appWithoutServer = MockMartusApp.create(mockSecurityForApp, getName());
 			ClientSideNetworkInterface noServer = new NoServerNetworkInterfaceHandler();
 			appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(noServer);
 		}
 		
-		appWithServer = MockMartusApp.create(mockSecurityForApp);
+		appWithServer = MockMartusApp.create(mockSecurityForApp, getName());
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
