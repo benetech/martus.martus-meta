@@ -971,7 +971,7 @@ public class TestDatabase extends TestCaseEnhanced
 
 	private void internalTestQuarantine(Database db) throws Exception
 	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
+		UniversalId uid = UniversalIdForTesting.createDummyUniversalId();
 		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
 
 		assertFalse(db.toString()+" draft already in quarantine?", db.isInQuarantine(draftKey));
@@ -1015,7 +1015,7 @@ public class TestDatabase extends TestCaseEnhanced
 	
 	private void internalTestFindDraft(Database db) throws Exception
 	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
+		UniversalId uid = UniversalIdForTesting.createDummyUniversalId();
 		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
 		db.writeRecord(draftKey, smallString);
 		InputStream in = db.openInputStream(draftKey, security);
@@ -1025,7 +1025,7 @@ public class TestDatabase extends TestCaseEnhanced
 
 	private void internalTestFindSealed(Database db) throws Exception
 	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
+		UniversalId uid = UniversalIdForTesting.createDummyUniversalId();
 		DatabaseKey sealedKey = DatabaseKey.createSealedKey(uid);
 		db.writeRecord(sealedKey, smallString);
 		InputStream in = db.openInputStream(sealedKey, security);
@@ -1045,10 +1045,10 @@ public class TestDatabase extends TestCaseEnhanced
 		writer.write(largeString);
 		writer.close();
 
-		UniversalId uid1 = UniversalId.createDummyUniversalId();
+		UniversalId uid1 = UniversalIdForTesting.createDummyUniversalId();
 		DatabaseKey sealedKey1 = DatabaseKey.createSealedKey(uid1);
 		
-		UniversalId uid2 = UniversalId.createDummyUniversalId();
+		UniversalId uid2 = UniversalIdForTesting.createDummyUniversalId();
 		DatabaseKey sealedKey2 = DatabaseKey.createSealedKey(uid2);
 
 		HashMap entries = new HashMap();

@@ -197,7 +197,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 	private void verifyImportHiddenRecord(Database db)
 		throws Exception
 	{
-		UniversalId visibleUid = UniversalId.createDummyUniversalId();
+		UniversalId visibleUid = UniversalIdForTesting.createDummyUniversalId();
 		db.hide(draftUid);
 		db.hide(sealedUid);
 		

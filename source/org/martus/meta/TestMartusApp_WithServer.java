@@ -62,6 +62,7 @@ import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.Packet.WrongAccountException;
 import org.martus.common.packet.UniversalId;
+import org.martus.common.test.UniversalIdForTesting;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.MockServerForClients;
 import org.martus.server.forclients.ServerForClientsInterface;
@@ -538,7 +539,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Vector withBadId = new Vector();
 		withBadId.add(b1.getUniversalId());
 		withBadId.add(b2.getUniversalId());
-		withBadId.add(UniversalId.createDummyUniversalId());
+		withBadId.add(UniversalIdForTesting.createDummyUniversalId());
 		withBadId.add(b3.getUniversalId());
 
 		Retriever retriever = new Retriever(appWithServer, null);	
@@ -615,7 +616,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("justB1 didn't download", 1, store.getBulletinCount());
 
 		Vector nonExistantUidList = new Vector();
-		UniversalId uId1 = UniversalId.createDummyUniversalId();
+		UniversalId uId1 = UniversalIdForTesting.createDummyUniversalId();
 		nonExistantUidList.add(uId1);
 		
 		Vector errorResponse = new Vector();
