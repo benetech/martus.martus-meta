@@ -178,12 +178,15 @@ public class TestHeadquartersManagementTableModel extends TestCaseEnhanced
 		assertEquals(3, modelWithData.getRowCount());
 		assertEquals(3, modelWithData.getAllKeys().size());
 		assertEquals(key3Label, modelWithData.getValueAt(2, modelWithData.COLUMN_LABEL));
-		assertEquals("", modelWithData.getHQKey(1).getLabel());
+		assertEquals(key1.getLabel(), modelWithData.getHQKey(0).getLabel());
+		assertEquals(key2.getLabel(), modelWithData.getHQKey(1).getLabel());
+		assertEquals(key3.getLabel(), modelWithData.getHQKey(2).getLabel());
+		
 		modelWithData.removeRow(1);
 		assertEquals(2, modelWithData.getRowCount());
-		assertEquals(label1, modelWithData.getValueAt(0, modelWithData.COLUMN_LABEL));
-		assertEquals(key3Label, modelWithData.getValueAt(1, modelWithData.COLUMN_LABEL));
-		assertEquals(key3Label, modelWithData.getHQKey(1).getLabel());
+		assertEquals(key1.getLabel(), modelWithData.getValueAt(0, modelWithData.COLUMN_LABEL));
+		assertEquals(key3.getLabel(), modelWithData.getHQKey(1).getLabel());
+		assertEquals(key3.getLabel(), modelWithData.getValueAt(1, modelWithData.COLUMN_LABEL));
 		
 		
 	}
