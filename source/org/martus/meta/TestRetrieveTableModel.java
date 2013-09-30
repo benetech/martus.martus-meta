@@ -26,7 +26,6 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.meta;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
 import java.util.Vector;
@@ -43,28 +42,19 @@ import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.BulletinSummary;
+import org.martus.common.BulletinSummary.WrongValueCount;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.MiniLocalization;
 import org.martus.common.ProgressMeterInterface;
-import org.martus.common.BulletinSummary.WrongValueCount;
-import org.martus.common.MartusUtilities.FileTooLargeException;
-import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.crypto.MartusCrypto.DecryptionException;
-import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
-import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
-import org.martus.common.packet.Packet.InvalidPacketException;
-import org.martus.common.packet.Packet.SignatureVerificationException;
-import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.MockServerForClients;
 import org.martus.server.forclients.ServerForClients;
@@ -968,7 +958,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		return clone;
 	}
 
-	private void uploadBulletin(MartusApp app, Bulletin b) throws InvalidPacketException, WrongPacketTypeException, SignatureVerificationException, DecryptionException, NoKeyPairException, CryptoException, FileNotFoundException, MartusSignatureException, FileTooLargeException, IOException, RecordHiddenException
+	private void uploadBulletin(MartusApp app, Bulletin b) throws Exception
 	{
 		mockServer.allowUploads(app.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b));
