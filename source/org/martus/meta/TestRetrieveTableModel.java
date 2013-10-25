@@ -527,7 +527,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				BulletinSummary s = summaries[j];
 				if(b.getLocalId().equals(s.getLocalId()))
 				{
-					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getStorableTitle());
 					found[i] = true;
 				}
 			}
@@ -561,7 +561,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		
 		assertEquals(b1.getAccount(), s1.getAccountId());
 		assertEquals(b1.getLocalId(), s1.getLocalId());
-		assertEquals(sampleSummary1, s1.getTitle());
+		assertEquals(sampleSummary1, s1.getStorableTitle());
 		assertEquals(b1Size, s1.getSize());
 		assertEquals(BulletinSummary.getLastDateTimeSaved(new Long(b1LastDateSaved).toString()), s1.getDateTimeSaved());
 	}
@@ -622,7 +622,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				BulletinSummary s = summaries[j];
 				if(b.getLocalId().equals(s.getLocalId()))
 				{
-					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getStorableTitle());
 					found[i] = true;
 				}
 				assertTrue("Not downloadable?", s.isDownloadable());
@@ -682,7 +682,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				BulletinSummary s = summaries[j];
 				if(b.getLocalId().equals(s.getLocalId()))
 				{
-					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getStorableTitle());
 					found[i] = true;
 				}
 			}
