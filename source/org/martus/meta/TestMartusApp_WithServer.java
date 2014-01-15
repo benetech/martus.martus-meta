@@ -44,6 +44,8 @@ import org.martus.common.Exceptions.ServerCallFailedException;
 import org.martus.common.Exceptions.ServerNotAvailableException;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
+import org.martus.common.MartusAccountAccessToken;
+import org.martus.common.MartusAccountAccessToken.TokenInvalidException;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.ProgressMeterInterface;
@@ -194,6 +196,54 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	
 		hqApp.deleteAllFiles();
 		TRACE_END();
+	}
+
+
+	public void testGetMartusAccountAccessTokenFromServer() throws TokenInvalidException, ServerNotAvailableException 
+	{
+		try 
+		{
+			appWithoutServer.getMartusAccountAccessTokenFromServer();
+			fail("Should have thrown an exception since we don't have a server");
+		} 
+		catch (ServerNotAvailableException expectedException) 
+		{
+		}
+
+		MockServerForClients mockServerForClients = (MockServerForClients) mockServer.serverForClients;
+		String invalidToken = "12345678";
+
+		Vector invalidTokenResponse = new Vector();
+		invalidTokenResponse.add(NetworkInterfaceConstants.OK);
+		Vector invalidTokenData = new Vector();
+		invalidTokenData.add(invalidToken);
+		invalidTokenResponse.add(invalidTokenData.toArray());
+		mockServerForClients.martusAccountAccessTokenResponse = invalidTokenResponse;
+		try 
+		{
+			appWithServer.getMartusAccountAccessTokenFromServer();
+			fail("Should have thrown an exception since server Has An Invalid Token");
+		} 
+		catch (TokenInvalidException expectedException) 
+		{
+		}
+		
+		Vector validTokenResponse = new Vector();
+		validTokenResponse.add(NetworkInterfaceConstants.OK);
+		Vector validTokenData = new Vector();
+		String validToken = "55638914";
+		validTokenData.add(validToken);
+		validTokenResponse.add(validTokenData.toArray());
+		mockServerForClients.martusAccountAccessTokenResponse = validTokenResponse;
+		try 
+		{
+			MartusAccountAccessToken tokenRetrieved = appWithServer.getMartusAccountAccessTokenFromServer();
+			assertEquals("Not the same token?", validToken, tokenRetrieved.getToken());
+		} 
+		catch (TokenInvalidException expectedException) 
+		{
+			fail("Should not have thrown an exception since server now has a valid token for our account.");
+		}
 	}
 
 
