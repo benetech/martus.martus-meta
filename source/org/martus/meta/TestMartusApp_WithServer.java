@@ -199,7 +199,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	}
 
 
-	public void testGetMartusAccountAccessTokenFromServer() throws TokenInvalidException, ServerNotAvailableException 
+	public void testGetMartusAccountAccessTokenFromServer() throws Exception 
 	{
 		try 
 		{
