@@ -689,6 +689,7 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString()+ " counted interim file?", 2, counter.count);
 		interimFile.delete();
 		
+		//FIXME: This test below doesn't test anything. not doing anything but clearing the counter and asserting will pass this test without doing anything with configinfo.
 		File contactFile = db.getContactInfoFile(security.getPublicKeyString());
 		contactFile.deleteOnExit();
 		contactFile.getParentFile().deleteOnExit();
@@ -697,8 +698,8 @@ public class TestDatabase extends TestCaseEnhanced
 		writer2.write("fake contact info");
 		writer2.close();
 		counter.clear();
-		contactFile.delete();
 		db.visitAllRecords(counter);
+		contactFile.delete();
 		assertEquals(db.toString()+ " counted contact info file?", 2, counter.count);
 	}
 
