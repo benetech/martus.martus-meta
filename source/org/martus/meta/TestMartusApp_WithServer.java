@@ -46,6 +46,7 @@ import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.MartusAccountAccessToken;
 import org.martus.common.MartusAccountAccessToken.TokenInvalidException;
+import org.martus.common.MartusAccountAccessToken.TokenNotFoundException;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.ProgressMeterInterface;
@@ -240,12 +241,54 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			MartusAccountAccessToken tokenRetrieved = appWithServer.getMartusAccountAccessTokenFromServer();
 			assertEquals("Not the same token?", validToken, tokenRetrieved.getToken());
 		} 
-		catch (TokenInvalidException expectedException) 
+		catch (TokenInvalidException e) 
 		{
 			fail("Should not have thrown an exception since server now has a valid token for our account.");
 		}
 	}
 
+	private String createJsonTokenResponse(String accountId, String token)
+	{
+		return "{\""+MartusAccountAccessToken.MARTUS_ACCOUNT_ACCESS_TOKEN_JSON_TAG+"\":{\""+MartusAccountAccessToken.MARTUS_ACCESS_TOKEN_CREATION_DATE_JSON_TAG+"\":\"02/15/2014 13:30:45\",\""+MartusAccountAccessToken.MARTUS_ACCESS_TOKEN_JSON_TAG+"\":\""+token+"\",\""+MartusAccountAccessToken.MARTUS_ACCESS_ACCOUNT_ID_JSON_TAG+"\":\""+accountId+"\"}}}";
+	}
+	
+	public void testGetMartusAccountAccessAccountIdFromServer() throws Exception 
+	{
+		String validTokenString1 = "55638914";
+		MartusAccountAccessToken validToken1 = new MartusAccountAccessToken(validTokenString1);
+		String validTokenString2 = "11223344";
+		MartusAccountAccessToken validToken2 = new MartusAccountAccessToken(validTokenString2);
+		try 
+		{
+			appWithoutServer.getMartusAccountIdFromAccessTokenOnServer(validToken1);
+			fail("Should have thrown an exception since we don't have a server");
+		} 
+		catch (ServerNotAvailableException expectedException) 
+		{
+		}
+
+		MockServerForClients mockServerForClients = (MockServerForClients) mockServer.serverForClients;
+		String clientId = appWithServer.getAccountId();
+		mockServerForClients.martusAccountAccessJsonTokenResponse = createJsonTokenResponse(clientId, validTokenString1);
+		try 
+		{
+			String accountIdRetrieved = appWithServer.getMartusAccountIdFromAccessTokenOnServer(validToken1);
+			assertEquals("Not the same Id?", clientId, accountIdRetrieved);
+		} 
+		catch (TokenNotFoundException e) 
+		{
+			fail("Should not have thrown an exception since server now has a valid token for our account.");
+		}
+		
+		try 
+		{
+			appWithServer.getMartusAccountIdFromAccessTokenOnServer(validToken2);
+			fail("Should  have thrown an exception since we were looking for a Token that doesn't exist.");
+		} 
+		catch (TokenNotFoundException e) 
+		{
+		}
+	}
 
 	public void testGetNewsFromServer() throws Exception
 	{
