@@ -329,6 +329,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		FieldCollection defaultFieldsTopSection = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
 		FieldCollection defaultFieldsBottomSection = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
 		CustomFieldTemplate template = new CustomFieldTemplate(formTemplateTitle, formTemplateDescription, defaultFieldsTopSection, defaultFieldsBottomSection);
+		mockServer.allowUploads(appWithServer.getAccountId());
 		appWithServer.putFormTemplateOnServer(template);
 		Vector returnedListOfTemplatesFromServer = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
 		assertEquals("Did not return 2 items in the Vector? the title and description for this template?",2 , returnedListOfTemplatesFromServer.size());
