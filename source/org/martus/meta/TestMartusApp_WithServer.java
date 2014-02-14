@@ -293,49 +293,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		}
 	}
 
-	public void testPutAndGetListOfFormTemplates() throws Exception 
-	{
-		CustomFieldTemplate emptyTemplate = new CustomFieldTemplate();
-		try 
-		{
-			appWithoutServer.putFormTemplateOnServer(emptyTemplate);
-			fail("Should have thrown an exception since we don't have a server");
-		} 
-		catch (ServerNotAvailableException expectedException) 
-		{
-		}
-		try 
-		{
-			appWithoutServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
-			fail("Should have also thrown an exception since we don't have a server");
-		} 
-		catch (ServerNotAvailableException expectedException) 
-		{
-		}
-
-/* Should this throw an exception??
-  		try 
- 		{
-			appWithServer.putFormTemplateOnServer(emptyTemplate);
-			fail("Should have thrown an exception since the template is empty.");
-		} 
-		catch (Exception expected) 
-		{
-		}
-*/		
-		String formTemplateTitle = "New Form Title";
-		String formTemplateDescription = "New Form Description";
-		FieldCollection defaultFieldsTopSection = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
-		FieldCollection defaultFieldsBottomSection = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
-		CustomFieldTemplate template = new CustomFieldTemplate(formTemplateTitle, formTemplateDescription, defaultFieldsTopSection, defaultFieldsBottomSection);
-		appWithServer.putFormTemplateOnServer(template);
-		Vector returnedListOfTemplatesFromServer = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
-		assertEquals("Did not return 2 items in the Vector? the title and description for this template?",2 , returnedListOfTemplatesFromServer.size());
-		assertEquals("Did not return the title for this template?",formTemplateTitle , returnedListOfTemplatesFromServer.get(0));
-		assertEquals("Did not return the description for this template?",formTemplateDescription , returnedListOfTemplatesFromServer.get(1));
-			
-	}	
-	
 	public void testGetNewsFromServer() throws Exception
 	{
 		Vector noServerResult = appWithoutServer.getNewsFromServer();
