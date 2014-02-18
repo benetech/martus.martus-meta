@@ -341,7 +341,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		FieldCollection defaultFieldsTopSection2 = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
 		FieldCollection defaultFieldsBottomSection2 = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
 		CustomFieldTemplate template2 = new CustomFieldTemplate(formTemplateTitle2, formTemplateDescription2, defaultFieldsTopSection2, defaultFieldsBottomSection2);
-		mockServer.allowUploads(appWithServer.getAccountId());
 		appWithServer.putFormTemplateOnServer(template2);
 		Vector returnedListOfTemplatesFromServer2 = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
 		assertEquals("Did not return 4 items in the Vector? the title and description for both templates?",4 , returnedListOfTemplatesFromServer2.size());
@@ -353,6 +352,21 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertTrue("Did not return the title for the 2nd template?",returnedTitles.contains(formTemplateTitle2));
 		assertTrue("Did not return the description for the first template?",returnedDescritions.contains(formTemplateDescription1));
 		assertTrue("Did not return the description for the 2nd template?",returnedDescritions.contains(formTemplateDescription2));
+		
+		String formTemplateDescription1New = "Form 1's new description";
+		CustomFieldTemplate template1Updated = new CustomFieldTemplate(formTemplateTitle1, formTemplateDescription1New, defaultFieldsTopSection1, defaultFieldsBottomSection1);
+		appWithServer.putFormTemplateOnServer(template1Updated);
+		Vector returnedListOfTemplatesFromServer3 = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
+		assertEquals("Did not return 4 items in the Vector? the title and description for both templates?",4 , returnedListOfTemplatesFromServer2.size());
+		
+		Vector returnedTitles3 = getTitlesFromResults(returnedListOfTemplatesFromServer3);
+		Vector returnedDescritions3 = getDescriptionsFromResults(returnedListOfTemplatesFromServer3);
+		
+		assertTrue("Did not return the same title for the first template?",returnedTitles3.contains(formTemplateTitle1));
+		assertTrue("Did not return the same title for the 2nd template?",returnedTitles3.contains(formTemplateTitle2));
+		assertFalse("Returned the old description for the first template?",returnedDescritions3.contains(formTemplateDescription1));
+		assertTrue("Did not return the updated description for the first template?",returnedDescritions3.contains(formTemplateDescription1New));
+		assertTrue("Did not return the same description for the 2nd template?",returnedDescritions3.contains(formTemplateDescription2));
 		
 		
 	}
