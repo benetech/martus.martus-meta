@@ -324,19 +324,59 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		}
 		*/
 	
-		String formTemplateTitle = "New Form Title";
-		String formTemplateDescription = "New Form Description";
-		FieldCollection defaultFieldsTopSection = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
-		FieldCollection defaultFieldsBottomSection = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
-		CustomFieldTemplate template = new CustomFieldTemplate(formTemplateTitle, formTemplateDescription, defaultFieldsTopSection, defaultFieldsBottomSection);
+		String formTemplateTitle1 = "New Form Title";
+		String formTemplateDescription1 = "New Form Description";
+		FieldCollection defaultFieldsTopSection1 = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
+		FieldCollection defaultFieldsBottomSection1 = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
+		CustomFieldTemplate template1 = new CustomFieldTemplate(formTemplateTitle1, formTemplateDescription1, defaultFieldsTopSection1, defaultFieldsBottomSection1);
 		mockServer.allowUploads(appWithServer.getAccountId());
-		appWithServer.putFormTemplateOnServer(template);
+		appWithServer.putFormTemplateOnServer(template1);
 		Vector returnedListOfTemplatesFromServer = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
 		assertEquals("Did not return 2 items in the Vector? the title and description for this template?",2 , returnedListOfTemplatesFromServer.size());
-		assertEquals("Did not return the title for this template?",formTemplateTitle , returnedListOfTemplatesFromServer.get(0));
-		assertEquals("Did not return the description for this template?",formTemplateDescription , returnedListOfTemplatesFromServer.get(1));
+		assertEquals("Did not return the title for this template?",formTemplateTitle1 , returnedListOfTemplatesFromServer.get(0));
+		assertEquals("Did not return the description for this template?",formTemplateDescription1 , returnedListOfTemplatesFromServer.get(1));
+		
+		String formTemplateTitle2 = "New Form Title 2";
+		String formTemplateDescription2 = "New Form Description 2";
+		FieldCollection defaultFieldsTopSection2 = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
+		FieldCollection defaultFieldsBottomSection2 = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
+		CustomFieldTemplate template2 = new CustomFieldTemplate(formTemplateTitle2, formTemplateDescription2, defaultFieldsTopSection2, defaultFieldsBottomSection2);
+		mockServer.allowUploads(appWithServer.getAccountId());
+		appWithServer.putFormTemplateOnServer(template2);
+		Vector returnedListOfTemplatesFromServer2 = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
+		assertEquals("Did not return 4 items in the Vector? the title and description for both templates?",4 , returnedListOfTemplatesFromServer2.size());
+		
+		Vector returnedTitles = getTitlesFromResults(returnedListOfTemplatesFromServer2);
+		Vector returnedDescritions = getDescriptionsFromResults(returnedListOfTemplatesFromServer2);
+		
+		assertTrue("Did not return the title for the first template?",returnedTitles.contains(formTemplateTitle1));
+		assertTrue("Did not return the title for the 2nd template?",returnedTitles.contains(formTemplateTitle2));
+		assertTrue("Did not return the description for the first template?",returnedDescritions.contains(formTemplateDescription1));
+		assertTrue("Did not return the description for the 2nd template?",returnedDescritions.contains(formTemplateDescription2));
+		
+		
 	}
 	
+	private Vector getTitlesFromResults(Vector formTemplatesTitlesDescriptionsList)
+	{
+		Vector titlesOnly = new Vector();
+		for(int i=0;i<formTemplatesTitlesDescriptionsList.size(); i+=2)
+		{
+			titlesOnly.add(formTemplatesTitlesDescriptionsList.get(i));
+		}
+		return titlesOnly;
+	}
+	
+	private Vector getDescriptionsFromResults(Vector formTemplatesTitlesDescriptionsList)
+	{
+		Vector descriptionsOnly = new Vector();
+		for(int i=1;i<formTemplatesTitlesDescriptionsList.size(); i+=2)
+		{
+			descriptionsOnly.add(formTemplatesTitlesDescriptionsList.get(i));
+		}
+		return descriptionsOnly;
+	}
+
 	public void testGetNewsFromServer() throws Exception
 	{
 		Vector noServerResult = appWithoutServer.getNewsFromServer();
