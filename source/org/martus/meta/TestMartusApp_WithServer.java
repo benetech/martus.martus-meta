@@ -82,13 +82,13 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
     public TestMartusApp_WithServer(String name) throws Exception
     {
         super(name);
-    	VERBOSE = false;
+        VERBOSE = false;
 	}
 
     public void setUp() throws Exception
     {
-    	super.setUp();
-    	TRACE_BEGIN("setUp");
+    		super.setUp();
+    		TRACE_BEGIN("setUp");
 		
 		if(mockSecurityForApp == null)
 			mockSecurityForApp = MockMartusSecurity.createClient();
@@ -313,7 +313,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		{
 		}
 	
-		/* Should this throw an exception??
 		try 
 		{
 			appWithServer.putFormTemplateOnServer(emptyTemplate);
@@ -322,7 +321,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		catch (Exception expected) 
 		{
 		}
-		*/
 	
 		String formTemplateTitle1 = "New Form Title";
 		String formTemplateDescription1 = "New Form Description";
@@ -368,6 +366,24 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertTrue("Did not return the updated description for the first template?",returnedDescritions3.contains(formTemplateDescription1New));
 		assertTrue("Did not return the same description for the 2nd template?",returnedDescritions3.contains(formTemplateDescription2));
 		
+		String formTemplateTitleEmpty = "";
+		String formTemplateDescriptionEmpty = "";
+		FieldCollection defaultFieldsTopSection3 = new FieldCollection(StandardFieldSpecs.getDefaultTopSetionFieldSpecs().asArray());
+		FieldCollection defaultFieldsBottomSection3 = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
+		CustomFieldTemplate template3 = new CustomFieldTemplate(formTemplateTitleEmpty, formTemplateDescriptionEmpty, defaultFieldsTopSection3, defaultFieldsBottomSection3);
+		appWithServer.putFormTemplateOnServer(template3);
+		Vector returnedListOfTemplatesFromServer4 = appWithServer.getListOfFormTemplatesOnServer(appWithoutServer.getAccountId());
+		assertEquals("Did not return 6 items in the Vector? the title and description for all 3 templates?",6 , returnedListOfTemplatesFromServer4.size());
+		
+		Vector returnedTitles2 = getTitlesFromResults(returnedListOfTemplatesFromServer4);
+		Vector returnedDescritions2 = getDescriptionsFromResults(returnedListOfTemplatesFromServer4);
+		
+		assertTrue("Did not return the title for the first template?",returnedTitles2.contains(formTemplateTitle1));
+		assertTrue("Did not return the title for the 2nd template?",returnedTitles2.contains(formTemplateTitle2));
+		assertTrue("Did not return the empty title for the 3rd template?",returnedTitles2.contains(formTemplateTitleEmpty));
+		assertTrue("Did not return the description for the first template?",returnedDescritions2.contains(formTemplateDescription1New));
+		assertTrue("Did not return the description for the 2nd template?",returnedDescritions2.contains(formTemplateDescription2));
+		assertTrue("Did not return the empty description for the 3rd template?",returnedDescritions2.contains(formTemplateDescriptionEmpty));
 		
 	}
 	
