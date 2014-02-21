@@ -419,14 +419,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		
 		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherClient();	
 		MockMartusApp otherClient = MockMartusApp.create(otherSecurity, "new Client");
-		try 
-		{
-			appWithServer.getListOfFormTemplatesOnServer(otherClient.getAccountId());
-			fail("Should have thrown no Forms Available Exception.");
-		} 
-		catch (NoFormsAvailableException expectedException)
-		{
-		}
+		Vector emptyListOfForms = appWithServer.getListOfFormTemplatesOnServer(otherClient.getAccountId());
+		assertEquals("Should not have any forms", 0, emptyListOfForms.size());
 		
 		try 
 		{
