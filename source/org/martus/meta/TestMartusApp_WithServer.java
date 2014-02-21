@@ -349,10 +349,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		String accountId = appWithServer.getAccountId();
 		mockServer.allowUploads(accountId);
 		appWithServer.putFormTemplateOnServer(template1);
-		Vector returnedListOfTemplatesFromServer = appWithServer.getListOfFormTemplatesOnServer(accountId);
-		assertEquals("Did not return 2 items in the Vector? the title and description for this template?",2 , returnedListOfTemplatesFromServer.size());
-		assertEquals("Did not return the title for this template?",formTemplateTitle1 , returnedListOfTemplatesFromServer.get(0));
-		assertEquals("Did not return the description for this template?",formTemplateDescription1 , returnedListOfTemplatesFromServer.get(1));
+		Vector returnedVectorListOfTemplatesFromServer = appWithServer.getListOfFormTemplatesOnServer(accountId);
+		assertEquals("Did not return 1 item in the Vector? the title and description for this template?",1 , returnedVectorListOfTemplatesFromServer.size());
+		Vector listOfTemplatesFromServer = (Vector)returnedVectorListOfTemplatesFromServer.get(0);
+		assertEquals("Did not return the title for this template?",formTemplateTitle1, listOfTemplatesFromServer.get(0));
+		assertEquals("Did not return the description for this template?",formTemplateDescription1, listOfTemplatesFromServer.get(1));
 	
 		CustomFieldTemplate templateReturned = appWithServer.getFormTemplateOnServer(accountId, formTemplateTitle1);
 		assertEquals("Form title not what we asked for?",formTemplateTitle1 , templateReturned.getTitle());
@@ -365,11 +366,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		FieldCollection defaultFieldsBottomSection2 = new FieldCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
 		CustomFieldTemplate template2 = new CustomFieldTemplate(formTemplateTitle2, formTemplateDescription2, defaultFieldsTopSection2, defaultFieldsBottomSection2);
 		appWithServer.putFormTemplateOnServer(template2);
-		Vector returnedListOfTemplatesFromServer2 = appWithServer.getListOfFormTemplatesOnServer(accountId);
-		assertEquals("Did not return 4 items in the Vector? the title and description for both templates?",4 , returnedListOfTemplatesFromServer2.size());
+		Vector returnedVectorListOfTemplatesFromServer2 = appWithServer.getListOfFormTemplatesOnServer(accountId);
+		assertEquals("Did not return 2 items in the Vector? the title and description for both templates?",2 , returnedVectorListOfTemplatesFromServer2.size());
 		
-		Vector returnedTitles = getTitlesFromResults(returnedListOfTemplatesFromServer2);
-		Vector returnedDescritions = getDescriptionsFromResults(returnedListOfTemplatesFromServer2);
+		Vector returnedTitles = getTitlesFromResults(returnedVectorListOfTemplatesFromServer2);
+		Vector returnedDescritions = getDescriptionsFromResults(returnedVectorListOfTemplatesFromServer2);
 		
 		assertTrue("Did not return the title for the first template?",returnedTitles.contains(formTemplateTitle1));
 		assertTrue("Did not return the title for the 2nd template?",returnedTitles.contains(formTemplateTitle2));
@@ -383,7 +384,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		CustomFieldTemplate template1Updated = new CustomFieldTemplate(formTemplateTitle1, formTemplateDescription1New, defaultFieldsTopSection1, defaultFieldsBottomSection1);
 		appWithServer.putFormTemplateOnServer(template1Updated);
 		Vector returnedListOfTemplatesFromServer3 = appWithServer.getListOfFormTemplatesOnServer(accountId);
-		assertEquals("Did not return 4 items in the Vector? the title and description for both templates?",4 , returnedListOfTemplatesFromServer2.size());
+		assertEquals("Did not return 2 items in the Vector? the title and description for both templates?",2 , returnedListOfTemplatesFromServer3.size());
 		
 		Vector returnedTitles3 = getTitlesFromResults(returnedListOfTemplatesFromServer3);
 		Vector returnedDescritions3 = getDescriptionsFromResults(returnedListOfTemplatesFromServer3);
@@ -404,7 +405,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		CustomFieldTemplate template3 = new CustomFieldTemplate(formTemplateTitleEmpty, formTemplateDescriptionEmpty, defaultFieldsTopSection3, defaultFieldsBottomSection3);
 		appWithServer.putFormTemplateOnServer(template3);
 		Vector returnedListOfTemplatesFromServer4 = appWithServer.getListOfFormTemplatesOnServer(accountId);
-		assertEquals("Did not return 6 items in the Vector? the title and description for all 3 templates?",6 , returnedListOfTemplatesFromServer4.size());
+		assertEquals("Did not return 3 items in the Vector? the title and description for all 3 templates?",3 , returnedListOfTemplatesFromServer4.size());
 		
 		Vector returnedTitles2 = getTitlesFromResults(returnedListOfTemplatesFromServer4);
 		Vector returnedDescritions2 = getDescriptionsFromResults(returnedListOfTemplatesFromServer4);
@@ -440,9 +441,10 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private Vector getTitlesFromResults(Vector formTemplatesTitlesDescriptionsList)
 	{
 		Vector titlesOnly = new Vector();
-		for(int i=0;i<formTemplatesTitlesDescriptionsList.size(); i+=2)
+		for(int i=0;i<formTemplatesTitlesDescriptionsList.size(); ++i)
 		{
-			titlesOnly.add(formTemplatesTitlesDescriptionsList.get(i));
+			Vector titleAndDescripton = (Vector)formTemplatesTitlesDescriptionsList.get(i);
+			titlesOnly.add(titleAndDescripton.get(0));
 		}
 		return titlesOnly;
 	}
@@ -450,9 +452,10 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private Vector getDescriptionsFromResults(Vector formTemplatesTitlesDescriptionsList)
 	{
 		Vector descriptionsOnly = new Vector();
-		for(int i=1;i<formTemplatesTitlesDescriptionsList.size(); i+=2)
+		for(int i=0;i<formTemplatesTitlesDescriptionsList.size(); ++i)
 		{
-			descriptionsOnly.add(formTemplatesTitlesDescriptionsList.get(i));
+			Vector titleAndDescripton = (Vector)formTemplatesTitlesDescriptionsList.get(i);
+			descriptionsOnly.add(titleAndDescripton.get(1));
 		}
 		return descriptionsOnly;
 	}
