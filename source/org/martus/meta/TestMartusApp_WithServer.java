@@ -653,10 +653,10 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockSecurityForApp.loadSampleAccount();
 		mockServer.serverForClients.addMagicWordForTesting(sampleMagicWord, null);
 		
-		assertEquals("can upload already?", false, mockServer.canClientUpload(clientId));
+		assertEquals("can upload already?", true, mockServer.canClientUpload(clientId));
 		assertEquals("wrong word worked?", false, appWithServer.requestServerUploadRights("wrong word"));
-		assertEquals("empty word worked?", false, appWithServer.requestServerUploadRights(""));
-		assertEquals("can upload?", false, mockServer.canClientUpload(clientId));
+		assertEquals("empty word worked?", true, appWithServer.requestServerUploadRights(""));
+		assertEquals("can upload?", true, mockServer.canClientUpload(clientId));
 		
 		mockServer.subtractMaxFailedUploadAttemptsFromServerCounter();
 		
