@@ -40,6 +40,7 @@ import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.ClientSideNetworkGateway;
 import org.martus.clientside.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.clientside.test.NoServerNetworkInterfaceHandler;
+import org.martus.common.Exceptions.AccountNotFoundException;
 import org.martus.common.Exceptions.NoFormsAvailableException;
 import org.martus.common.Exceptions.ServerCallFailedException;
 import org.martus.common.Exceptions.ServerNotAvailableException;
@@ -419,8 +420,13 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		
 		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherClient();	
 		MockMartusApp otherClient = MockMartusApp.create(otherSecurity, "new Client");
-		Vector emptyListOfForms = appWithServer.getListOfFormTemplatesOnServer(otherClient.getAccountId());
-		assertEquals("Should not have any forms", 0, emptyListOfForms.size());
+		try 
+		{
+			appWithServer.getListOfFormTemplatesOnServer(otherClient.getAccountId());
+		} 
+		catch (AccountNotFoundException expectedException) 
+		{
+		}
 		
 		try 
 		{
