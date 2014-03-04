@@ -423,6 +423,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		try 
 		{
 			appWithServer.getListOfFormTemplatesOnServer(otherClient.getAccountId());
+			fail("Should have thrown the Account Not Found Exception.");
 		} 
 		catch (AccountNotFoundException expectedException) 
 		{
