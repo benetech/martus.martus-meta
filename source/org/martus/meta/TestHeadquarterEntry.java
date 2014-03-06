@@ -70,7 +70,7 @@ public class TestHeadquarterEntry extends TestCaseEnhanced
 		String newLabel = "New Label Key1";
 		entry1.setLabel(newLabel);
 		assertEquals(newLabel, entry1.getLabel());
-		assertEquals(key1.getPublicCode(), entry1.getPublicCode());
+		assertEquals(key1.getFormattedPublicCode(), entry1.getPublicCode());
 		assertEquals(key1, entry1.getKey());
 		assertFalse("Entry is selected?", entry1.isSelected());
 		
@@ -80,7 +80,7 @@ public class TestHeadquarterEntry extends TestCaseEnhanced
 		entry2.setSelected(true);
 		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, entry2.getLabel());
-		assertEquals(key2.getPublicCode(), entry2.getPublicCode());
+		assertEquals(key2.getFormattedPublicCode(), entry2.getPublicCode());
 		assertEquals(key2, entry2.getKey());
 		assertTrue("Entry is not selected?", entry2.isSelected());
 		app.deleteAllFiles();

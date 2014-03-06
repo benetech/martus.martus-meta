@@ -119,10 +119,10 @@ public class TestHeadquartersManagementTableModel extends TestCaseEnhanced
 	
 	public void testKeyPublicCodes() throws InvalidBase64Exception
 	{
-		assertEquals(key1.getPublicCode(), modelWithData.getValueAt(0,1));
-		assertEquals(key1.getPublicCode(), modelWithData.getPublicCode(0));
-		assertEquals(key2.getPublicCode(), modelWithData.getValueAt(1,1));
-		assertEquals(key2.getPublicCode(), modelWithData.getPublicCode(1));
+		assertEquals(key1.getFormattedPublicCode(), modelWithData.getValueAt(0,1));
+		assertEquals(key1.getFormattedPublicCode(), modelWithData.getPublicCode(0));
+		assertEquals(key2.getFormattedPublicCode(), modelWithData.getValueAt(1,1));
+		assertEquals(key2.getFormattedPublicCode(), modelWithData.getPublicCode(1));
 	}
 
 	public void testGetAllSelectedHeadQuarterKeys()
