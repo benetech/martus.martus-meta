@@ -78,7 +78,7 @@ public class TestHeadquarterEntry extends TestCaseEnhanced
 		key2.setLabel(app.getHQLabelIfPresent(key2));
 		SelectableHeadquartersEntry entry2 = new SelectableHeadquartersEntry(key2);
 		entry2.setSelected(true);
-		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
+		String label2 = MartusCrypto.computeFormattedPublicCode40(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, entry2.getLabel());
 		assertEquals(key2.getFormattedPublicCode(), entry2.getPublicCode());
 		assertEquals(key2, entry2.getKey());
