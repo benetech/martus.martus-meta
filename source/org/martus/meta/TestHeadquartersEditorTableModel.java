@@ -110,10 +110,10 @@ public class TestHeadquartersEditorTableModel extends TestCaseEnhanced implement
 		assertEquals(String.class, modelWithData.getColumnClass(modelWithData.COLUMN_LABEL));
 	}
 	
-	public void testKeyLabelNames() throws InvalidBase64Exception
+	public void testKeyLabelNames() throws Exception
 	{
 		assertEquals(label1, modelWithData.getValueAt(0,1));
-		String label2 = MartusCrypto.computeFormattedPublicCode(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
+		String label2 = MartusCrypto.computeFormattedPublicCode40(appSecurityAndHQ.getPublicKeyString()) + " " + localization.getFieldLabel("HQNotConfigured");
 		assertEquals(label2, modelWithData.getValueAt(1,1));
 	}
 	
