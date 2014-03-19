@@ -34,7 +34,6 @@ import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.util.StreamableBase64.InvalidBase64Exception;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestHeadquartersListTableModel extends TestCaseEnhanced 
