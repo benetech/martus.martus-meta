@@ -68,7 +68,7 @@ public class TestSSL extends TestCaseEnhanced
 			serverForClients.handleSSL(sslPorts);
 			
 //			XmlRpc.debug = true;
-			TorTransportWrapper torTransport = TorTransportWrapper.create();
+			TorTransportWrapper torTransport = TorTransportWrapper.createWithoutPersistentStore();
 			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", sslPorts, torTransport);
 //			proxy2 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
 		}
